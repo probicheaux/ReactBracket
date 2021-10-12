@@ -13,7 +13,7 @@ export default function BracketBox({
 }) {
   return (
     <Pressable
-      onPress={() => navigation.navigate("Modal")}
+      onPress={() => navigation.navigate("Tournament", { name: name })}
       style={({ pressed }) => ({
         opacity: pressed ? 0.5 : 1,
       })}

@@ -18,7 +18,7 @@ import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
 import ModalScreen from "../screens/ModalScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
-import TabOneScreen from "../screens/TabOneScreen";
+import BracketScreen from "../screens/TabOneScreen";
 import TabTwoScreen from "../screens/TabTwoScreen";
 import {
   RootStackParamList,
@@ -79,16 +79,17 @@ function BottomTabNavigator() {
 
   return (
     <BottomTab.Navigator
-      initialRouteName="TabOne"
+      initialRouteName="Brackets"
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme].tint,
       }}
     >
       <BottomTab.Screen
-        name="TabOne"
-        component={TabOneScreen}
-        options={({ navigation }: RootTabScreenProps<"TabOne">) => ({
+        name="Brackets"
+        component={BracketScreen}
+        options={({ navigation }: RootTabScreenProps<"Brackets">) => ({
           title: "Brackets",
+          headerShown: false,
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="rocket-launch" color={color} />
           ),
@@ -113,6 +114,7 @@ function BottomTabNavigator() {
         name="TabTwo"
         component={TabTwoScreen}
         options={{
+          headerShown: false,
           title: "Account",
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="account-outline" color={color} />

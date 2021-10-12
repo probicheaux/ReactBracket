@@ -1,14 +1,36 @@
 import * as React from "react";
 import { StyleSheet } from "react-native";
 
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Text, FlatList, View } from "../components/Themed";
-import { RootTabScreenProps } from "../types";
 import BracketBox from "../components/bracket";
 
 const backgroundColor = "darkslategrey";
-export default function TabOneScreen({
-  navigation,
-}: RootTabScreenProps<"TabOne">) {
+const Stack = createNativeStackNavigator<RootStackParamList>();
+import Tournament from "../screens/TournamentScreen";
+import {
+  RootStackParamList,
+  RootTabParamList,
+  RootTabScreenProps,
+} from "../types";
+export default function BracketScreen({ navigation }): RootTabScreenProps {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="BracketList"
+        component={BracketList}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Tournament"
+        component={Tournament}
+        options={{ title: "not found" }}
+        initialParams={{ name: "NotFound" }}
+      />
+    </Stack.Navigator>
+  );
+}
+export function BracketList({ navigation }: RootTabScreenProps<"Brackets">) {
   var names = [
     "yeet",
     "yeet1",
@@ -36,7 +58,9 @@ export default function TabOneScreen({
     index: number;
     separators: Object;
   }) {
-    return <BracketBox navigation={navigation} name={item} />;
+    return (
+      <BracketBox navigation={navigation} name={item} key={index.toString()} />
+    );
   }
   return (
     <FlatList
