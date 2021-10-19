@@ -12,6 +12,7 @@ import {
   ScrollView as DefaultScrollView,
   FlatList as DefaultFlatList,
   TouchableOpacity as DefaultTouchableOpacity,
+  Pressable as DefaultPressable,
 } from "react-native";
 
 import Colors from "../constants/Colors";
@@ -42,6 +43,7 @@ export type ButtonProps = ThemeProps & DefaultButton["props"];
 export type ViewProps = ThemeProps & DefaultView["props"];
 export type ScrollViewProps = ThemeProps & DefaultScrollView["props"];
 export type FlatListProps = ThemeProps & DefaultFlatList["props"];
+export type PressableProps = ThemeProps & DefaultPressable["props"];
 export type TouchableOpacityProps = ThemeProps &
   DefaultTouchableOpacity["props"];
 
