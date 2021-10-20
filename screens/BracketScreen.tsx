@@ -4,8 +4,8 @@ import { StyleSheet } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Text, FlatList, View } from "../components/Themed";
 import BracketBox from "../components/bracket";
+import useColorScheme from "../hooks/useColorScheme";
 
-const backgroundColor = "darkslategrey";
 const Stack = createNativeStackNavigator<RootStackParamList>();
 import Tournament from "../screens/TournamentScreen";
 import {
@@ -62,6 +62,7 @@ export function BracketList({ navigation }: RootTabScreenProps<"Brackets">) {
       <BracketBox navigation={navigation} name={item} key={index.toString()} />
     );
   }
+  const colorScheme = useColorScheme();
   return (
     <FlatList
       style={styles.scrollContainer}
@@ -84,7 +85,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   scrollContainer: {
-    backgroundColor: backgroundColor,
     padding: 20,
   },
   title: {

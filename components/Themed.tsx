@@ -12,9 +12,9 @@ import {
   ScrollView as DefaultScrollView,
   FlatList as DefaultFlatList,
   TouchableOpacity as DefaultTouchableOpacity,
-  Pressable as DefaultPressable,
 } from "react-native";
 
+import { MaterialCommunityIcons as DefaultMaterialCommunityIcons } from "@expo/vector-icons";
 import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
 
@@ -43,9 +43,10 @@ export type ButtonProps = ThemeProps & DefaultButton["props"];
 export type ViewProps = ThemeProps & DefaultView["props"];
 export type ScrollViewProps = ThemeProps & DefaultScrollView["props"];
 export type FlatListProps = ThemeProps & DefaultFlatList["props"];
-export type PressableProps = ThemeProps & DefaultPressable["props"];
 export type TouchableOpacityProps = ThemeProps &
   DefaultTouchableOpacity["props"];
+export type MaterialCommunityIconsProps = ThemeProps &
+  DefaultMaterialCommunityIcons["props"];
 
 export function Text(props: TextProps) {
   const { style, lightColor, darkColor, ...otherProps } = props;
@@ -56,9 +57,32 @@ export function Text(props: TextProps) {
 export function TextInput(props: TextInputProps) {
   const { style, lightColor, darkColor, ...otherProps } = props;
   const color = useThemeColor({ light: lightColor, dark: darkColor }, "text");
+  const placeholderTextColor = useThemeColor(
+    { light: lightColor, dark: darkColor },
+    "placeholderTextColor"
+  );
 
-  return <DefaultTextInput style={[{ color }, style]} {...otherProps} />;
+  return (
+    <DefaultTextInput
+      style={[{ color }, style]}
+      placeholderTextColor={placeholderTextColor}
+      {...otherProps}
+    />
+  );
 }
+
+export function MaterialCommunityIcons(props: MaterialCommunityIconsProps) {
+  const { style, lightColor, darkColor, ...otherProps } = props;
+  const color = useThemeColor(
+    { light: lightColor, dark: darkColor },
+    "tabIconDefault"
+  );
+
+  return (
+    <DefaultMaterialCommunityIcons style={[{ color }, style]} {...otherProps} />
+  );
+}
+
 export function Button(props: ButtonProps) {
   return <DefaultButton {...props} />;
 }
@@ -77,7 +101,7 @@ export function TouchableOpacity(props: TouchableOpacityProps) {
   const { style, lightColor, darkColor, ...otherProps } = props;
   const backgroundColor = useThemeColor(
     { light: lightColor, dark: darkColor },
-    "background"
+    "touchableColor"
   );
 
   return (
