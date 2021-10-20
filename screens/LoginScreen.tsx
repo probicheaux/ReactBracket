@@ -3,24 +3,53 @@ import React, { useState } from "react";
 import { Platform, StyleSheet } from "react-native";
 
 import { Text, View, TextInput, TouchableOpacity } from "../components/Themed";
+import apiPath from "../constants/Api";
 
 export default function LoginScreen({ setToken }: { setToken: Function }) {
-  const [username, setUserName] = useState();
-  const [password, setPassword] = useState();
+  const [username, setUserName] = useState("");
+  const [password, setPassword] = useState("");
+  function getToken() {
+    return fetch(apiPath + "/api/login/", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: username,
+        password: password,
+      }),
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        setToken(json.token);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
   return (
     <View style={styles.container}>
-      <TextInput style={styles.textField} placeholder="Username" />
+      <TextInput
+        style={styles.textField}
+        placeholder="Username"
+        onChangeText={(username) => setUserName(username)}
+      />
       <View style={styles.margin} />
       <TextInput
         style={styles.textField}
         secureTextEntry={true}
         placeholder="Password"
+        onChangeText={(password) => setPassword(password)}
+        value={password}
       />
       <View style={styles.bigMargin} />
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
-          setToken(1);
+          getToken();
+          setPassword("");
         }}
       >
         <Text style={styles.button_text}>LOGIN</Text>

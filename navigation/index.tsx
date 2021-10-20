@@ -11,7 +11,7 @@ import {
   DarkTheme,
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import { ColorSchemeName, Pressable } from "react-native";
 
 import Colors from "../constants/Colors";
@@ -27,6 +27,7 @@ import {
   RootTabScreenProps,
 } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
+import AppContext from "../components/AppContext";
 
 export default function Navigation({
   colorScheme,
@@ -77,9 +78,9 @@ const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
 function BottomTabNavigator() {
   const colorScheme = useColorScheme();
-  const [token, setToken] = useState();
-  if (!token) {
-    return <LoginScreen setToken={setToken} />;
+  const userContext = useContext(AppContext);
+  if (!userContext.token) {
+    return <LoginScreen setToken={userContext.setToken} />;
   }
 
   return (

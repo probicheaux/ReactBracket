@@ -1,15 +1,22 @@
-import * as React from 'react';
-import {StyleSheet} from 'react-native';
+import * as React from "react";
+import { useContext } from "react";
+import { StyleSheet } from "react-native";
 
-import EditScreenInfo from '../components/EditScreenInfo';
-import {Text, View} from '../components/Themed';
+import { Text, View } from "../components/Themed";
+import AppContext from "../components/AppContext";
 
 export default function TabTwoScreen() {
+  const context = useContext(AppContext);
+  const token = context.token;
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Tab Two</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="/screens/TabTwoScreen.tsx" />
+      <View
+        style={styles.separator}
+        lightColor="#eee"
+        darkColor="rgba(255,255,255,0.1)"
+      />
+      <Text style={styles.title}>Your token is {token}</Text>
     </View>
   );
 }
@@ -17,16 +24,16 @@ export default function TabTwoScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
+    alignItems: "center",
+    justifyContent: "flex-start",
   },
   title: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   separator: {
     marginVertical: 30,
     height: 1,
-    width: '80%',
+    width: "80%",
   },
 });
