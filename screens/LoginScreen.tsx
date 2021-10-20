@@ -2,19 +2,11 @@ import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import { Platform, StyleSheet } from "react-native";
 
-import EditScreenInfo from "../components/EditScreenInfo";
-import {
-  Text,
-  View,
-  TextInput,
-  Button,
-  TouchableOpacity,
-} from "../components/Themed";
+import { Text, View, TextInput, TouchableOpacity } from "../components/Themed";
 
-export default function LoginScreen({ setToken }) {
+export default function LoginScreen({ setToken }: { setToken: Function }) {
   const [username, setUserName] = useState();
   const [password, setPassword] = useState();
-
   return (
     <View style={styles.container}>
       <TextInput style={styles.textField} placeholder="Username" />
@@ -24,15 +16,18 @@ export default function LoginScreen({ setToken }) {
         secureTextEntry={true}
         placeholder="Password"
       />
-      <View style={styles.margin} />
+      <View style={styles.bigMargin} />
       <TouchableOpacity
+        style={styles.button}
         onPress={() => {
           setToken(1);
         }}
       >
-        <View style={styles.button}>
-          <Text style={styles.button_text}>LOGIN</Text>
-        </View>
+        <Text style={styles.button_text}>LOGIN</Text>
+      </TouchableOpacity>
+      <View style={styles.margin} />
+      <TouchableOpacity style={styles.button} onPress={() => {}}>
+        <Text style={styles.button_text}>SIGN UP</Text>
       </TouchableOpacity>
 
       {/* Use a light status bar on iOS to account for the black space above the modal */}
@@ -56,6 +51,8 @@ const styles = StyleSheet.create({
   },
   button_text: {
     fontSize: 30,
+    alignItems: "center",
+    justifyContent: "center",
   },
   textField: {
     fontSize: 40,
@@ -67,5 +64,8 @@ const styles = StyleSheet.create({
   },
   margin: {
     height: 25,
+  },
+  bigMargin: {
+    height: 75,
   },
 });

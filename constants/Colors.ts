@@ -8,12 +8,16 @@ export default {
     tint: tintColorLight,
     tabIconDefault: "#ccc",
     tabIconSelected: tintColorLight,
+    placeholderTextColor: "#ccc",
+    touchableColor: "#977",
   },
   dark: {
     text: "#fff",
-    background: "#000",
+    background: "#112",
     tint: tintColorDark,
     tabIconDefault: "#ccc",
     tabIconSelected: tintColorDark,
+    placeholderTextColor: "#555",
+    touchableColor: "#002230",
   },
 };

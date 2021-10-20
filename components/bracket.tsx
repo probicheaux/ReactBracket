@@ -1,7 +1,12 @@
 import * as React from "react";
-import { Text, View, TouchableOpacity } from "../components/Themed";
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  MaterialCommunityIcons,
+} from "../components/Themed";
 import { StyleSheet } from "react-native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import useColorScheme from "../hooks/useColorScheme";
 
 export default function BracketBox({
   navigation,
@@ -10,6 +15,7 @@ export default function BracketBox({
   navigation: any;
   name: string;
 }) {
+  const colorScheme = useColorScheme();
   return (
     <TouchableOpacity
       onPress={() => navigation.navigate("Tournament", { name: name })}
