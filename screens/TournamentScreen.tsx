@@ -18,7 +18,7 @@ export default function TournamentScreen({
         ...{ title: name },
       }}
     >
-      <Text style={styles.title}>${name} screen doesn't exist.</Text>
+      <Text style={styles.title}>{name} screen doesn't exist.</Text>
       <TouchableOpacity
         onPress={() => navigation.replace("Root")}
         style={styles.link}

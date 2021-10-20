@@ -1,16 +1,12 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import { Platform, StyleSheet } from "react-native";
-import useColorScheme from "../hooks/useColorScheme";
-import Colors from "../constants/Colors";
 
 import { Text, View, TextInput, TouchableOpacity } from "../components/Themed";
 
 export default function LoginScreen({ setToken }: { setToken: Function }) {
   const [username, setUserName] = useState();
   const [password, setPassword] = useState();
-  const colorScheme = useColorScheme();
-  const backgroundColor = Colors[colorScheme].background;
   return (
     <View style={styles.container}>
       <TextInput style={styles.textField} placeholder="Username" />
@@ -20,7 +16,7 @@ export default function LoginScreen({ setToken }: { setToken: Function }) {
         secureTextEntry={true}
         placeholder="Password"
       />
-      <View style={styles.margin} />
+      <View style={styles.bigMargin} />
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
@@ -28,6 +24,10 @@ export default function LoginScreen({ setToken }: { setToken: Function }) {
         }}
       >
         <Text style={styles.button_text}>LOGIN</Text>
+      </TouchableOpacity>
+      <View style={styles.margin} />
+      <TouchableOpacity style={styles.button} onPress={() => {}}>
+        <Text style={styles.button_text}>SIGN UP</Text>
       </TouchableOpacity>
 
       {/* Use a light status bar on iOS to account for the black space above the modal */}
@@ -51,6 +51,8 @@ const styles = StyleSheet.create({
   },
   button_text: {
     fontSize: 30,
+    alignItems: "center",
+    justifyContent: "center",
   },
   textField: {
     fontSize: 40,
@@ -62,5 +64,8 @@ const styles = StyleSheet.create({
   },
   margin: {
     height: 25,
+  },
+  bigMargin: {
+    height: 75,
   },
 });
