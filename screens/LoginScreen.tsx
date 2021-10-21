@@ -3,30 +3,23 @@ import React, { useState } from "react";
 import { Platform, StyleSheet } from "react-native";
 
 import { Text, View, TextInput, TouchableOpacity } from "../components/Themed";
-import apiPath from "../constants/Api";
+import { postRequest, loginPath } from "../constants/Api";
 
 export default function LoginScreen({ setToken }: { setToken: Function }) {
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
   function getToken() {
-    return fetch(apiPath + "/api/login/", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username: username,
-        password: password,
-      }),
-    })
-      .then((response) => response.json())
-      .then((json) => {
+    let body = JSON.stringify({
+      username: username,
+      password: password,
+    });
+    postRequest({
+      path: loginPath,
+      body: body,
+      callback: (json: JSON) => {
         setToken(json.token);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+      },
+    });
   }
 
   return (

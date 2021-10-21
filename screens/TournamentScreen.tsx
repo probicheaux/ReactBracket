@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import { RootStackScreenProps } from "../types";
@@ -12,160 +12,31 @@ import {
   SingleLineSeed,
 } from "react-brackets";
 
-const winners: RoundProps[] = [
-  {
-    title: "Winner's Semifinals",
-    seeds: [
-      {
-        id: 1,
-        losers: false,
-        date: new Date().toDateString(),
-        teams: [
-          { name: "Spark", game: 3 },
-          { name: "Traplord", game: 0 },
-        ],
-      },
-      {
-        id: 2,
-        losers: false,
-        date: new Date().toDateString(),
-        teams: [
-          { name: "Nickemwit", game: 2 },
-          { name: "Umarth", game: 3 },
-        ],
-      },
-    ],
-  },
-  {
-    title: "Winner's Finals",
-    seeds: [
-      {
-        id: 3,
-        losers: false,
-        date: new Date().toDateString(),
-        teams: [
-          { name: "Spark", game: 3 },
-          { name: "Umarth", game: 0 },
-        ],
-      },
-    ],
-  },
-  {
-    title: "Grand Finals",
-    seeds: [
-      {
-        id: 4,
-        losers: false,
-        date: new Date().toDateString(),
-        teams: [
-          { name: "Spark", game: 3 },
-          { name: "Umarth", game: 0 },
-        ],
-      },
-    ],
-  },
-];
-
-const losers: RoundProps[] = [
-  {
-    title: "Loser's Round One",
-    seeds: [
-      {
-        id: 1,
-        losers: true,
-        date: new Date().toDateString(),
-        teams: [
-          { name: "Notorious", game: 3 },
-          { name: "Typhoon", game: 2 },
-        ],
-      },
-      {
-        id: 2,
-        losers: true,
-        date: new Date().toDateString(),
-        teams: [
-          { name: "soccermom69", game: 3 },
-          { name: "Snap", game: 0 },
-        ],
-      },
-    ],
-  },
-  {
-    title: "Loser's Quarterfinals",
-    seeds: [
-      {
-        id: 3,
-        losers: true,
-        date: new Date().toDateString(),
-        teams: [
-          { name: "Nickemwit", game: 3 },
-          { name: "Notorious", game: 0 },
-        ],
-      },
-      {
-        id: 4,
-        losers: true,
-        date: new Date().toDateString(),
-        teams: [
-          { name: "Traplord", game: 1 },
-          { name: "soccermom69", game: 3 },
-        ],
-      },
-    ],
-  },
-  {
-    title: "Loser's Semifinals",
-    seeds: [
-      {
-        id: 5,
-        losers: true,
-        date: new Date().toDateString(),
-        teams: [
-          { name: "Nickemwit", game: 3 },
-          { name: "soccermom69", game: 0 },
-        ],
-      },
-    ],
-  },
-  {
-    title: "Loser's Finals",
-    seeds: [
-      {
-        id: 6,
-        losers: true,
-        date: new Date().toDateString(),
-        teams: [
-          { name: "Umarth", game: 3 },
-          { name: "Nickemwit", game: 0 },
-        ],
-      },
-    ],
-  },
-];
+import { tournamentPath, postRequest } from "../constants/Api";
 
 const CustomSeed = ({
   seed,
   breakpoint,
   roundIndex,
   seedIndex,
-}: RenderSeedProps) => {
+  rounds,
+}: {
+  seed: RenderSeedProps["seed"];
+  breakpoint: RenderSeedProps["breakpoint"];
+  roundIndex: RenderSeedProps["roundIndex"];
+  seedIndex: RenderSeedProps["seedIndex"];
+  rounds: Array<RenderSeedProps["seed"]>;
+}) => {
   // ------ assuming rounds is the losers brackets rounds ------
   // losers rounds usually got some identical seeds amount like (2 - 2 - 1 - 1)
 
   // We can use seed ID to determine if we're in winners or losers
-  let isLineConnector: boolean = false;
-  if (seed.losers) {
-    isLineConnector =
-      losers[roundIndex].seeds.length === losers[roundIndex + 1]?.seeds.length;
-  } else {
-    isLineConnector =
-      winners[roundIndex].seeds.length ===
-      winners[roundIndex + 1]?.seeds.length;
-  }
-
-  const Wrapper = isLineConnector ? SingleLineSeed : Seed;
 
   // mobileBreakpoint is required to be passed down to a seed
+  const isLineConnector: boolean =
+    rounds[roundIndex].seeds.length === rounds[roundIndex + 1]?.seeds.length;
+
+  const Wrapper = isLineConnector ? SingleLineSeed : Seed;
   return (
     <Wrapper mobileBreakpoint={breakpoint} style={{ fontSize: 12 }}>
       <SeedItem>
@@ -196,6 +67,61 @@ export default function TournamentScreen({
   useEffect(() => {
     navigation.setOptions({ title: name });
   }, []);
+  const [winners, setWinners] = useState([]);
+  const [losers, setLosers] = useState([]);
+  useEffect(() => {
+    postRequest({
+      path: tournamentPath,
+      body: body,
+      callback: (json: JSON) => {
+        setWinners(json.rounds.winners);
+        setLosers(json.rounds.losers);
+      },
+    });
+  }, []);
+
+  let body = JSON.stringify({
+    tourney_id: 69420,
+  });
+
+  function winnersSeedRenderer({
+    seed,
+    breakpoint,
+    roundIndex,
+    seedIndex,
+  }: {
+    seed: RenderSeedProps["seed"];
+    breakpoint: RenderSeedProps["breakpoint"];
+    roundIndex: RenderSeedProps["roundIndex"];
+    seedIndex: RenderSeedProps["seedIndex"];
+  }) {
+    return CustomSeed({
+      seed,
+      breakpoint,
+      roundIndex,
+      seedIndex,
+      rounds: winners,
+    });
+  }
+  function losersSeedRenderer({
+    seed,
+    breakpoint,
+    roundIndex,
+    seedIndex,
+  }: {
+    seed: RenderSeedProps["seed"];
+    breakpoint: RenderSeedProps["breakpoint"];
+    roundIndex: RenderSeedProps["roundIndex"];
+    seedIndex: RenderSeedProps["seedIndex"];
+  }) {
+    return CustomSeed({
+      seed,
+      breakpoint,
+      roundIndex,
+      seedIndex,
+      rounds: losers,
+    });
+  }
   return (
     <View
       style={{
@@ -211,7 +137,7 @@ export default function TournamentScreen({
             <div style={{ textAlign: "center", color: "red" }}>{title}</div>
           );
         }}
-        renderSeedComponent={CustomSeed}
+        renderSeedComponent={winnersSeedRenderer}
       />
       <Bracket
         rounds={losers}
@@ -220,7 +146,7 @@ export default function TournamentScreen({
             <div style={{ textAlign: "center", color: "red" }}>{title}</div>
           );
         }}
-        renderSeedComponent={CustomSeed}
+        renderSeedComponent={losersSeedRenderer}
       />
     </View>
   );

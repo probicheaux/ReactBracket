@@ -20,4 +20,31 @@ if (Platform.OS === "web") {
   baseUri = "127.0.0.1:8000";
 }
 
-export default "http://" + baseUri;
+let apiPath = "http://" + baseUri;
+
+export default apiPath;
+export type postRequestType = {
+  path: string;
+  body: string;
+  callback: Function;
+};
+export async function postRequest({ path, body, callback }: postRequestType) {
+  return fetch(apiPath + path, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: body,
+  })
+    .then((response) => response.json())
+    .then((json) => {
+      callback(json);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}
+
+export var loginPath = "/api/login/";
+export var tournamentPath = "/api/tournament/";
