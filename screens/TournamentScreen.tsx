@@ -14,6 +14,7 @@ import {
 
 import { tournamentPath, postRequest } from "../constants/Api";
 
+type RoundsProp = Array<RenderSeedProps["seed"]>;
 const CustomSeed = ({
   seed,
   breakpoint,
@@ -25,13 +26,13 @@ const CustomSeed = ({
   breakpoint: RenderSeedProps["breakpoint"];
   roundIndex: RenderSeedProps["roundIndex"];
   seedIndex: RenderSeedProps["seedIndex"];
-  tourney: Array<Array<RenderSeedProps["seed"]>>;
+  tourney: { winners: RoundsProp; losers: RoundsProp };
 }) => {
   // ------ assuming rounds is the losers brackets rounds ------
   // losers rounds usually got some identical seeds amount like (2 - 2 - 1 - 1)
 
   // mobileBreakpoint is required to be passed down to a seed
-  let rounds = tourney[seed.losers? "losers" : "winners"]
+  let rounds = tourney[seed.losers ? "losers" : "winners"];
 
   const isLineConnector: boolean =
     rounds[roundIndex].seeds.length === rounds[roundIndex + 1]?.seeds.length;
@@ -74,7 +75,7 @@ export default function TournamentScreen({
       path: tournamentPath,
       body: body,
       callback: (json: JSON) => {
-        console.log(json)
+        console.log(json);
         setWinners(json.rounds.winners);
         setLosers(json.rounds.losers);
       },
@@ -101,7 +102,7 @@ export default function TournamentScreen({
       breakpoint,
       roundIndex,
       seedIndex,
-      tourney: {winners: winners, losers: losers},
+      tourney: { winners: winners, losers: losers },
     });
   }
   return (
