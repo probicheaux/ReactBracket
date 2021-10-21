@@ -6,10 +6,10 @@ export default {
     text: "#000",
     background: "#fff",
     tint: tintColorLight,
-    tabIconDefault: "#ccc",
+    tabIconDefault: "#666",
     tabIconSelected: tintColorLight,
-    placeholderTextColor: "#ccc",
-    touchableColor: "#977",
+    placeholderTextColor: "#666",
+    touchableColor: "#eee",
   },
   dark: {
     text: "#fff",
