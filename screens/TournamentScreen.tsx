@@ -19,20 +19,20 @@ const CustomSeed = ({
   breakpoint,
   roundIndex,
   seedIndex,
-  rounds,
+  tourney,
 }: {
   seed: RenderSeedProps["seed"];
   breakpoint: RenderSeedProps["breakpoint"];
   roundIndex: RenderSeedProps["roundIndex"];
   seedIndex: RenderSeedProps["seedIndex"];
-  rounds: Array<RenderSeedProps["seed"]>;
+  tourney: Array<Array<RenderSeedProps["seed"]>>;
 }) => {
   // ------ assuming rounds is the losers brackets rounds ------
   // losers rounds usually got some identical seeds amount like (2 - 2 - 1 - 1)
 
-  // We can use seed ID to determine if we're in winners or losers
-
   // mobileBreakpoint is required to be passed down to a seed
+  let rounds = tourney[seed.losers? "losers" : "winners"]
+
   const isLineConnector: boolean =
     rounds[roundIndex].seeds.length === rounds[roundIndex + 1]?.seeds.length;
 
@@ -74,6 +74,7 @@ export default function TournamentScreen({
       path: tournamentPath,
       body: body,
       callback: (json: JSON) => {
+        console.log(json)
         setWinners(json.rounds.winners);
         setLosers(json.rounds.losers);
       },
@@ -84,7 +85,7 @@ export default function TournamentScreen({
     tourney_id: 69420,
   });
 
-  function winnersSeedRenderer({
+  function seedRenderer({
     seed,
     breakpoint,
     roundIndex,
@@ -100,26 +101,7 @@ export default function TournamentScreen({
       breakpoint,
       roundIndex,
       seedIndex,
-      rounds: winners,
-    });
-  }
-  function losersSeedRenderer({
-    seed,
-    breakpoint,
-    roundIndex,
-    seedIndex,
-  }: {
-    seed: RenderSeedProps["seed"];
-    breakpoint: RenderSeedProps["breakpoint"];
-    roundIndex: RenderSeedProps["roundIndex"];
-    seedIndex: RenderSeedProps["seedIndex"];
-  }) {
-    return CustomSeed({
-      seed,
-      breakpoint,
-      roundIndex,
-      seedIndex,
-      rounds: losers,
+      tourney: {winners: winners, losers: losers},
     });
   }
   return (
@@ -137,7 +119,7 @@ export default function TournamentScreen({
             <div style={{ textAlign: "center", color: "red" }}>{title}</div>
           );
         }}
-        renderSeedComponent={winnersSeedRenderer}
+        renderSeedComponent={seedRenderer}
       />
       <Bracket
         rounds={losers}
@@ -146,7 +128,7 @@ export default function TournamentScreen({
             <div style={{ textAlign: "center", color: "red" }}>{title}</div>
           );
         }}
-        renderSeedComponent={losersSeedRenderer}
+        renderSeedComponent={seedRenderer}
       />
     </View>
   );
