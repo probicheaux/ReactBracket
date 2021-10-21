@@ -41,7 +41,7 @@ const CustomSeed = ({
   return (
     <Wrapper mobileBreakpoint={breakpoint} style={{ fontSize: 12 }}>
       <SeedItem>
-        <div>
+        <View>
           <SeedTeam>
             {seed.teams[0]?.name || "NO TEAM "}
             <span style={{ backgroundColor: "red" }}>
@@ -54,7 +54,7 @@ const CustomSeed = ({
               {seed.teams[1]?.game}
             </span>
           </SeedTeam>
-        </div>
+        </View>
       </SeedItem>
     </Wrapper>
   );
@@ -121,7 +121,7 @@ export default function TournamentScreen({
         rounds={tourney.winners}
         roundTitleComponent={(title: React.ReactNode, roundIndex: number) => {
           return (
-            <div style={{ textAlign: "center", color: "red" }}>{title}</div>
+            <View style={{ textAlign: "center", color: "red" }}>{title}</View>
           );
         }}
         renderSeedComponent={seedRenderer}
@@ -130,7 +130,7 @@ export default function TournamentScreen({
         rounds={tourney.losers}
         roundTitleComponent={(title: React.ReactNode, roundIndex: number) => {
           return (
-            <div style={{ textAlign: "center", color: "red" }}>{title}</div>
+            <View style={{ textAlign: "center", color: "red" }}>{title}</View>
           );
         }}
         renderSeedComponent={seedRenderer}
