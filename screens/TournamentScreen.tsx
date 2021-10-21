@@ -73,7 +73,7 @@ export default function TournamentScreen({
   const emptyTourney: TourneyProps = {
     winners: [] as RoundProps[],
     losers: [] as RoundProps[],
-  } as TourneyProps;
+  };
   const [tourney, setTourney] = useState(emptyTourney);
 
   useEffect(() => {
