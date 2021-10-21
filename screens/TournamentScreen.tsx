@@ -14,7 +14,6 @@ import {
 
 import { tournamentPath, postRequest } from "../constants/Api";
 
-type RoundsProp = Array<RenderSeedProps["seed"]>;
 const CustomSeed = ({
   seed,
   breakpoint,
@@ -26,7 +25,7 @@ const CustomSeed = ({
   breakpoint: RenderSeedProps["breakpoint"];
   roundIndex: RenderSeedProps["roundIndex"];
   seedIndex: RenderSeedProps["seedIndex"];
-  tourney: { winners: RoundsProp; losers: RoundsProp };
+  tourney: { winners: RoundProps; losers: RoundProps };
 }) => {
   // ------ assuming rounds is the losers brackets rounds ------
   // losers rounds usually got some identical seeds amount like (2 - 2 - 1 - 1)
