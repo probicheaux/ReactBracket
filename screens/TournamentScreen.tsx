@@ -14,6 +14,7 @@ import {
 
 import { tournamentPath, postRequest } from "../constants/Api";
 
+type TourneyProps = { winners: RoundProps[]; losers: RoundProps[] };
 const CustomSeed = ({
   seed,
   breakpoint,
@@ -25,7 +26,7 @@ const CustomSeed = ({
   breakpoint: RenderSeedProps["breakpoint"];
   roundIndex: RenderSeedProps["roundIndex"];
   seedIndex: RenderSeedProps["seedIndex"];
-  tourney: { winners: RoundProps; losers: RoundProps };
+  tourney: TourneyProps;
 }) => {
   // ------ assuming rounds is the losers brackets rounds ------
   // losers rounds usually got some identical seeds amount like (2 - 2 - 1 - 1)
@@ -67,16 +68,20 @@ export default function TournamentScreen({
   useEffect(() => {
     navigation.setOptions({ title: name });
   }, []);
-  const [winners, setWinners] = useState([]);
-  const [losers, setLosers] = useState([]);
+
+  // TypeScript fuckery
+  const emptyTourney: TourneyProps = {
+    winners: [] as RoundProps[],
+    losers: [] as RoundProps[],
+  } as TourneyProps;
+  const [tourney, setTourney] = useState(emptyTourney);
+
   useEffect(() => {
     postRequest({
       path: tournamentPath,
       body: body,
-      callback: (json: JSON) => {
-        console.log(json);
-        setWinners(json.rounds.winners);
-        setLosers(json.rounds.losers);
+      callback: (json: { rounds: TourneyProps }) => {
+        setTourney(json.rounds);
       },
     });
   }, []);
@@ -101,7 +106,7 @@ export default function TournamentScreen({
       breakpoint,
       roundIndex,
       seedIndex,
-      tourney: { winners: winners, losers: losers },
+      tourney: tourney,
     });
   }
   return (
@@ -113,7 +118,7 @@ export default function TournamentScreen({
     >
       <Text style={styles.title}>{name} screen doesn't exist.</Text>
       <Bracket
-        rounds={winners}
+        rounds={tourney.winners}
         roundTitleComponent={(title: React.ReactNode, roundIndex: number) => {
           return (
             <div style={{ textAlign: "center", color: "red" }}>{title}</div>
@@ -122,7 +127,7 @@ export default function TournamentScreen({
         renderSeedComponent={seedRenderer}
       />
       <Bracket
-        rounds={losers}
+        rounds={tourney.losers}
         roundTitleComponent={(title: React.ReactNode, roundIndex: number) => {
           return (
             <div style={{ textAlign: "center", color: "red" }}>{title}</div>

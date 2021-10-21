@@ -20,7 +20,7 @@ if (Platform.OS === "web") {
   baseUri = "127.0.0.1:8000";
 }
 
-let apiPath = "https://smus.club";
+let apiPath = "http://" + baseUri;
 
 export default apiPath;
 export type postRequestType = {
