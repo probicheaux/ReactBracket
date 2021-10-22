@@ -39,24 +39,24 @@ const CustomSeed = ({
 
   const Wrapper = isLineConnector ? SingleLineSeed : Seed;
   return (
-    <Wrapper mobileBreakpoint={breakpoint} style={{ fontSize: 12 }}>
-      <SeedItem>
+    <View style={isLineConnector? styles.singleLineSeed : styles.seed}>
+      <View style={styles.seedItem}>
         <View>
-          <SeedTeam>
+          <View style={styles.seedTeam}>
             {seed.teams[0]?.name || "NO TEAM "}
             <span style={{ backgroundColor: "red" }}>
               {seed.teams[0]?.game}
             </span>
-          </SeedTeam>
-          <SeedTeam>
+          </View>
+          <View style={styles.seedTeam}>
             {seed.teams[1]?.name || "NO TEAM "}
             <span style={{ backgroundColor: "red" }}>
               {seed.teams[1]?.game}
             </span>
-          </SeedTeam>
+          </View>
         </View>
-      </SeedItem>
-    </Wrapper>
+      </View>
+    </View>
   );
 };
 
@@ -159,4 +159,44 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#2e78b7",
   },
+  seedItem: {
+    color: "#fff",
+    width: "100%",
+    backgroundColor: "#1a1d2e",
+    padding: 0,
+    borderRadius: 5,
+    textAlign: "center",
+    position: "relative",
+  },
+  seedTeam: {
+    padding: "0.3rem 0.5rem",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    borderRadius: 3,
+  },
+  seed: {
+    padding: "1em 1.5em",
+    minWidth: 225,
+    width: "100%",
+    position: "relative",
+    display: "flex",
+    alignItems: "center",
+    flex: 1,
+    flexDirection: "column",
+    justifyContent: "center",
+    fontSize: 14,
+  },
+  singleLineSeed: {
+    padding: "1em 1.5em",
+    minWidth: 225,
+    width: "100%",
+    position: "relative",
+    display: "flex",
+    alignItems: "center",
+    flex: 1,
+    flexDirection: "column",
+    justifyContent: "center",
+    fontSize: 14,
+  }
 });

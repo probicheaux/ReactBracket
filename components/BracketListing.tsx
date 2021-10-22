@@ -4,7 +4,7 @@ import {
   View,
   TouchableOpacity,
   MaterialCommunityIcons,
-} from "../components/Themed";
+} from "./Themed";
 import { StyleSheet } from "react-native";
 import useColorScheme from "../hooks/useColorScheme";
 
