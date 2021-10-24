@@ -22,6 +22,61 @@ function View(props: ViewProps) {
   );
 }
 type TourneyProps = { winners: RoundProps[]; losers: RoundProps[] };
+
+type SingleEliminationProps = {
+  // Array of rounds matching RoundProps shape,
+  rounds: RoundProps[];
+  // Single round className
+  roundClassName?: string;
+  /** @default 992, if you don't want a mobile breakpoint, pass 0 */
+  mobileBreakpoint?: number;
+  // The whole bracket className
+  bracketClassName?: string;
+  /**
+   * @param {ReactNode} title string or component passed with each round
+   * @param {number} round the current round index
+   */
+  roundTitleComponent?: (title: string, roundIdx: number) => any;
+  /**
+   * @param {object} seed the current seed
+   * @param {number} breakpoint the breakpoint used to determine responsive size
+   * @param {number} roundIdx the current round index
+   */
+  renderSeedComponent?: ({ seed, breakpoint, roundIndex, seedIndex }: RenderSeedProps) => any;
+}
+
+const SingleElimination = ({
+  rounds,
+  roundClassName,
+  bracketClassName,
+  mobileBreakpoint = 992,
+  renderSeedComponent,
+  roundTitleComponent,
+}: SingleEliminationProps) => {
+  // Checking responsive size
+
+  if (roundTitleComponent == undefined || renderSeedComponent == undefined){
+    return <View>Bad props</View>
+  }
+  const data = rounds.map((round, roundIdx) => (
+    <View style={styles.round} key={roundIdx}>
+      {round.title && roundTitleComponent(round.title, roundIdx)}
+      <View style={styles.seedList}>
+        {round.seeds.map((seed, idx) => (
+          <View key={idx}>
+            {renderSeedComponent({ seed, breakpoint: mobileBreakpoint, roundIndex: roundIdx, seedIndex: idx })}
+          </View>
+        ))}
+      </View>
+    </View>
+  ));
+  return (
+    <View style={styles.bracket}>
+      {data}
+    </View>
+  );
+};
+
 const CustomSeed = ({
   seed,
   breakpoint,
@@ -126,7 +181,7 @@ export default function TournamentScreen({
   return (
     <BackgroundView style={styles.container}>
       <BackgroundView style={styles.container}>
-        <Bracket
+        <SingleElimination
           rounds={tourney.winners}
           roundTitleComponent={(title: React.ReactNode, roundIndex: number) => {
             return (
@@ -137,7 +192,7 @@ export default function TournamentScreen({
           }}
           renderSeedComponent={seedRenderer}
         />
-        <Bracket
+        <SingleElimination
           rounds={tourney.losers}
           roundTitleComponent={(title: React.ReactNode, roundIndex: number) => {
             return (
@@ -238,4 +293,23 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  bracket: {
+    display: "flex",
+    flexDirection: "row",
+  },
+  seedList: {
+    margin: 0,
+    padding: 0,
+    display: "flex",
+    flexDirection: "column",
+    flexFlow: "row wrap",
+    justifyContent: "center",
+    height: "100%",
+    listStyle: "none",
+  },
+  round: {
+    flex: 0,
+    display: "flex",
+    flexDirection: "column",
+  }
 });
