@@ -4,6 +4,7 @@ import { Text, View as BackgroundView, ViewProps } from "../components/Themed";
 import Colors from "../constants/Colors";
 import Svg, { Path, Polyline, Line, Circle } from "react-native-svg";
 
+const strokeColor = "#b00";
 import { RootStackScreenProps } from "../types";
 import {
   Bracket,
@@ -37,7 +38,14 @@ type TourneyProps = { winners: RoundProps[]; losers: RoundProps[] };
 function BracketLine() {
   return (
     <Svg style={{ width: 30, height: 30, backgroundColor: "transparent" }}>
-      <Line x1="0" y1="50%" x2="100" y2="50%" stroke="red" strokeWidth="1" />
+      <Line
+        x1="0"
+        y1="50%"
+        x2="100"
+        y2="50%"
+        stroke={strokeColor}
+        strokeWidth="1"
+      />
     </Svg>
   );
 }
@@ -55,10 +63,17 @@ function Junction({ isLineConnector }: { isLineConnector: boolean }) {
         y1={start.toString() + "%"}
         x2="0"
         y2={end.toString() + "%"}
-        stroke="red"
+        stroke={strokeColor}
         strokeWidth="2"
       />
-      <Line x1="0" y1="50%" x2="100" y2="50%" stroke="red" strokeWidth="1" />
+      <Line
+        x1="0"
+        y1="50%"
+        x2="100"
+        y2="50%"
+        stroke={strokeColor}
+        strokeWidth="1"
+      />
     </Svg>
   );
 }
@@ -268,6 +283,7 @@ const styles = StyleSheet.create({
     position: "relative",
     flexDirection: "column",
     margin: "5%",
+    borderRadius: 6,
   },
   seedTeam: {
     padding: "1.5rem 1.5rem",
@@ -289,6 +305,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     fontSize: 14,
+    borderRadius: 4,
   },
   separator: {
     marginVertical: 3,
@@ -302,6 +319,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     alignContent: "center",
+    borderRadius: 3,
   },
   text: {
     height: "1em",
