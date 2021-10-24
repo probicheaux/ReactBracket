@@ -62,7 +62,6 @@ export function BracketList({ navigation }: RootTabScreenProps<"Brackets">) {
       <BracketBox navigation={navigation} name={item} key={index.toString()} />
     );
   }
-  const colorScheme = useColorScheme();
   return (
     <FlatList
       style={styles.scrollContainer}

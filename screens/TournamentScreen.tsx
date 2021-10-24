@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity } from "react-native";
+import { Text, View as BackgroundView, ViewProps } from "../components/Themed";
+import Colors from "../constants/Colors";
 
 import { RootStackScreenProps } from "../types";
 import {
@@ -14,6 +16,11 @@ import {
 
 import { tournamentPath, postRequest } from "../constants/Api";
 
+function View(props: ViewProps) {
+  return (
+    <BackgroundView darkColor={Colors["dark"]["touchableColor"]} {...props} />
+  );
+}
 type TourneyProps = { winners: RoundProps[]; losers: RoundProps[] };
 const CustomSeed = ({
   seed,
@@ -39,24 +46,31 @@ const CustomSeed = ({
 
   const Wrapper = isLineConnector ? SingleLineSeed : Seed;
   return (
-    <View style={isLineConnector? styles.singleLineSeed : styles.seed}>
+    <BackgroundView
+      style={isLineConnector ? styles.singleLineSeed : styles.seed}
+    >
       <View style={styles.seedItem}>
         <View>
           <View style={styles.seedTeam}>
-            {seed.teams[0]?.name || "NO TEAM "}
-            <span style={{ backgroundColor: "red" }}>
-              {seed.teams[0]?.game}
-            </span>
+            <Text style={styles.seedText}>
+              {seed.teams[0]?.name || "NO TEAM "}
+            </Text>
+            <Text style={styles.scoreText}>{seed.teams[0]?.game}</Text>
           </View>
+          <View
+            style={styles.separator}
+            lightColor="#eee"
+            darkColor="rgba(255,255,255,0.1)"
+          />
           <View style={styles.seedTeam}>
-            {seed.teams[1]?.name || "NO TEAM "}
-            <span style={{ backgroundColor: "red" }}>
-              {seed.teams[1]?.game}
-            </span>
+            <Text style={styles.seedText}>
+              {seed.teams[1]?.name || "NO TEAM "}
+            </Text>
+            <Text style={styles.scoreText}>{seed.teams[1]?.game}</Text>
           </View>
         </View>
       </View>
-    </View>
+    </BackgroundView>
   );
 };
 
@@ -110,46 +124,46 @@ export default function TournamentScreen({
     });
   }
   return (
-    <View
-      style={{
-        ...styles.container,
-        ...{ title: name },
-      }}
-    >
-      <Text style={styles.title}>{name} screen doesn't exist.</Text>
-      <Bracket
-        rounds={tourney.winners}
-        roundTitleComponent={(title: React.ReactNode, roundIndex: number) => {
-          return (
-            <View style={{ textAlign: "center", color: "red" }}>{title}</View>
-          );
-        }}
-        renderSeedComponent={seedRenderer}
-      />
-      <Bracket
-        rounds={tourney.losers}
-        roundTitleComponent={(title: React.ReactNode, roundIndex: number) => {
-          return (
-            <View style={{ textAlign: "center", color: "red" }}>{title}</View>
-          );
-        }}
-        renderSeedComponent={seedRenderer}
-      />
-    </View>
+    <BackgroundView style={styles.container}>
+      <BackgroundView style={styles.container}>
+        <Bracket
+          rounds={tourney.winners}
+          roundTitleComponent={(title: React.ReactNode, roundIndex: number) => {
+            return (
+              <BackgroundView style={{ margin: "2px", alignItems: "center" }}>
+                <Text style={styles.title}>{title}</Text>
+              </BackgroundView>
+            );
+          }}
+          renderSeedComponent={seedRenderer}
+        />
+        <Bracket
+          rounds={tourney.losers}
+          roundTitleComponent={(title: React.ReactNode, roundIndex: number) => {
+            return (
+              <BackgroundView style={{ margin: "2px", alignItems: "center" }}>
+                <Text style={styles.title}>{title}</Text>
+              </BackgroundView>
+            );
+          }}
+          renderSeedComponent={seedRenderer}
+        />
+      </BackgroundView>
+    </BackgroundView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
-    padding: 20,
+    flexDirection: "column",
+    flex: 1,
   },
   title: {
     fontSize: 20,
     fontWeight: "bold",
+    marginVertical: 5,
   },
   link: {
     marginTop: 15,
@@ -160,20 +174,21 @@ const styles = StyleSheet.create({
     color: "#2e78b7",
   },
   seedItem: {
-    color: "#fff",
     width: "100%",
-    backgroundColor: "#1a1d2e",
-    padding: 0,
-    borderRadius: 5,
+    padding: 2,
     textAlign: "center",
     position: "relative",
+    flexDirection: "column",
+    margin: 2,
   },
   seedTeam: {
-    padding: "0.3rem 0.5rem",
+    padding: "1.5rem 1.5rem",
     display: "flex",
+    flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    borderRadius: 3,
+    marginHorizontal: "10px",
+    marginVertical: 5,
   },
   seed: {
     padding: "1em 1.5em",
@@ -186,6 +201,8 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     fontSize: 14,
+    margin: "5px",
+    marginHorizontal: "40px",
   },
   singleLineSeed: {
     padding: "1em 1.5em",
@@ -198,5 +215,27 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     fontSize: 14,
-  }
+    margin: "1px",
+  },
+  separator: {
+    marginVertical: 3,
+    height: 1,
+    width: "100%",
+  },
+  scoreText: {
+    backgroundColor: "#702",
+    padding: 2,
+    textAlign: "center",
+    width: "1.5em",
+    height: "1.5em",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  seedText: {
+    padding: 2,
+    textAlign: "center",
+    height: "1.5em",
+    alignItems: "center",
+    justifyContent: "center",
+  },
 });
