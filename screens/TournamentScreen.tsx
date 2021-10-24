@@ -49,7 +49,7 @@ function Junction({ isLineConnector }: { isLineConnector: boolean }) {
   let start = 0; //100 * (25 / total);
   let end = 100; //(100 * (total - 25)) / total;
   return (
-    <Svg style={{ width: 30, height: 120, backgroundColor: "transparent" }}>
+    <Svg style={{ width: 30, height: 93, backgroundColor: "transparent" }}>
       <Line
         x1="0"
         y1={start.toString() + "%"}
@@ -268,7 +268,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     marginHorizontal: "10px",
-    marginVertical: "5%",
+    marginVertical: "2%",
   },
   seed: {
     padding: "1em 1.5em",
