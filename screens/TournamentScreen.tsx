@@ -124,10 +124,14 @@ const CustomSeed = ({
         <View style={styles.seedItem}>
           <View>
             <View style={styles.seedTeam}>
-              <Text style={styles.seedText}>
-                {seed.teams[0]?.name || "NO TEAM "}
-              </Text>
-              <Text style={styles.scoreText}>{seed.teams[0]?.game}</Text>
+              <View style={styles.seedTextContainer}>
+                <Text style={styles.text}>
+                  {seed.teams[0]?.name || "NO TEAM "}
+                </Text>
+              </View>
+              <View style={styles.scoreTextContainer}>
+                <Text style={styles.text}>{seed.teams[0]?.game}</Text>
+              </View>
             </View>
             <View
               style={styles.separator}
@@ -135,10 +139,14 @@ const CustomSeed = ({
               darkColor="rgba(255,255,255,0.1)"
             />
             <View style={styles.seedTeam}>
-              <Text style={styles.seedText}>
-                {seed.teams[1]?.name || "NO TEAM "}
-              </Text>
-              <Text style={styles.scoreText}>{seed.teams[1]?.game}</Text>
+              <View style={styles.seedTextContainer}>
+                <Text style={styles.text}>
+                  {seed.teams[1]?.name || "NO TEAM "}
+                </Text>
+              </View>
+              <View style={styles.scoreTextContainer}>
+                <Text style={styles.text}>{seed.teams[1]?.game}</Text>
+              </View>
             </View>
           </View>
         </View>
@@ -235,10 +243,10 @@ export default function TournamentScreen({
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "column",
-    flex: 1,
   },
   title: {
     fontSize: 20,
@@ -266,9 +274,9 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
     marginHorizontal: "10px",
     marginVertical: "2%",
+    flex: 1,
   },
   seed: {
     padding: "1em 1.5em",
@@ -287,20 +295,21 @@ const styles = StyleSheet.create({
     height: 1,
     width: "100%",
   },
-  scoreText: {
-    backgroundColor: "#702",
-    padding: 2,
-    textAlign: "center",
+  scoreTextContainer: {
     width: "1.5em",
     height: "1.5em",
+    backgroundColor: "#701",
     alignItems: "center",
     justifyContent: "center",
+    alignContent: "center",
   },
-  seedText: {
-    padding: 2,
-    textAlign: "center",
-    height: "1.5em",
-    alignItems: "center",
+  text: {
+    height: "1em",
+  },
+  seedTextContainer: {
+    flex: 1,
+    alignItems: "flex-start",
     justifyContent: "center",
+    flexDirection: "column",
   },
 });
