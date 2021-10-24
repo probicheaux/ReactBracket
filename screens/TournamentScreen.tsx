@@ -44,7 +44,7 @@ const CustomSeed = ({
   const isLineConnector: boolean =
     rounds[roundIndex].seeds.length === rounds[roundIndex + 1]?.seeds.length;
 
-  const Wrapper = isLineConnector ? SingleLineSeed : Seed;
+  //const Wrapper = isLineConnector ? SingleLineSeed : Seed;
   return (
     <BackgroundView
       style={isLineConnector ? styles.singleLineSeed : styles.seed}
