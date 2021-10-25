@@ -225,6 +225,7 @@ function SingleElimination({
                 breakpoint={mobileBreakpoint}
                 roundIndex={roundIdx}
                 seedIndex={idx}
+                key={idx}
               />
             );
           })}
@@ -289,25 +290,27 @@ export default function TournamentScreen({
     );
   }
   return (
-    <BackgroundView style={{ flex: 1 }}>
-      <ScrollView horizontal={true} contentContainerStyle={{}}>
-        <ScrollView
-          contentContainerStyle={{ flexDirection: "column" }}
-          nestedScrollEnabled={true}
-        >
-          <SingleElimination
-            rounds={tourney.winners}
-            RoundTitleComponent={TitleComponent}
-            RenderSeedComponent={SeedRenderer}
-          />
-          <SingleElimination
-            rounds={tourney.losers}
-            RoundTitleComponent={TitleComponent}
-            RenderSeedComponent={SeedRenderer}
-          />
-        </ScrollView>
+    <ScrollView contentContainerStyle={{ width: ScreenWidth }}>
+      <ScrollView
+        contentContainerStyle={{
+          flexDirection: "column",
+          height: 0.9 * ScreenHeight,
+        }}
+        horizontal={true}
+        nestedScrollEnabled={true}
+      >
+        <SingleElimination
+          rounds={tourney.winners}
+          RoundTitleComponent={TitleComponent}
+          RenderSeedComponent={SeedRenderer}
+        />
+        <SingleElimination
+          rounds={tourney.losers}
+          RoundTitleComponent={TitleComponent}
+          RenderSeedComponent={SeedRenderer}
+        />
       </ScrollView>
-    </BackgroundView>
+    </ScrollView>
   );
 }
 
@@ -320,12 +323,12 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     flex: 1,
-    marginVertical: 30,
+    marginVertical: 10,
+    alignSelf: "flex-start",
     flexDirection: "row",
   },
   title: {
     fontWeight: "bold",
-    flex: 1,
   },
   link: {
     marginTop: 15,
@@ -338,25 +341,23 @@ const styles = StyleSheet.create({
   bracket: {
     flex: 1,
     flexDirection: "row",
-    alignItems: "flex-start",
-    justifyContent: "flex-start",
-    height: "100%",
-    marginVertical: 30,
+    alignItems: "center",
+    height: "80%",
   },
   round: {
     flexDirection: "column",
     alignItems: "flex-start",
-    justifyContent: "space-between",
+    justifyContent: "center",
     flex: 1,
     minWidth: seedListWidth + 2 * svgWidth,
     maxWidth: seedListWidth + 2 * svgWidth,
-    height: "100%",
+    height: "80%",
   },
   seedList: {
-    display: "flex",
+    flex: 1,
     flexDirection: "column",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "space-around",
     width: "100%",
     height: "100%",
   },
@@ -367,6 +368,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: "100%",
     height: "100%",
+    marginVertical: 20,
   },
   seedItem: {
     flexDirection: "column",
@@ -377,7 +379,7 @@ const styles = StyleSheet.create({
     height: 60,
     flex: 1,
     padding: 5,
-    marginVertical: 10,
+    marginVertical: 20,
   },
   seedTeam: {
     flexDirection: "row",
@@ -404,6 +406,6 @@ const styles = StyleSheet.create({
     height: 15,
     width: 15,
   },
-  svgStyle: { width: svgWidth, height: 80 },
+  svgStyle: { width: svgWidth, height: 60 },
   text: {},
 });
