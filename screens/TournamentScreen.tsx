@@ -15,6 +15,7 @@ import { tournamentPath, postRequest } from "../constants/Api";
 
 const strokeColor = "#b00";
 const svgWidth = 30;
+const seedListWidth = 150;
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
 type RoundProps = {
@@ -84,9 +85,7 @@ function TitleComponent({ title, roundIdx }: { title: any; roundIdx: number }) {
 
 function BracketLine() {
   return (
-    <Svg
-      style={{ width: svgWidth, height: 30, backgroundColor: "transparent" }}
-    >
+    <Svg style={styles.svgStyle}>
       <Line
         x1="0"
         y1="50%"
@@ -105,16 +104,7 @@ function Junction({ isLineConnector }: { isLineConnector: boolean }) {
   let start = 0; //100 * (25 / total);
   let end = 100; //(100 * (total - 25)) / total;
   return (
-    <Svg
-      style={{
-        width: svgWidth,
-        height: 80,
-        backgroundColor: "transparent",
-        flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
+    <Svg style={styles.svgStyle}>
       <Line
         x1="0"
         y1={start.toString() + "%"}
@@ -176,45 +166,31 @@ const CustomSeed = ({
     }
   }
   return (
-    <BackgroundView
-      style={{
-        flexDirection: "row",
-        alignItems: "center",
-        flex: 1,
-      }}
-    >
+    <BackgroundView style={styles.seedWithLines}>
       <LineComp />
-      <BackgroundView style={styles.seed}>
-        <View style={styles.seedItem}>
-          <View>
-            <View style={styles.seedTeam}>
-              <View style={styles.seedTextContainer}>
-                <Text style={styles.text}>
-                  {seed.teams[0]?.name || "NO TEAM "}
-                </Text>
-              </View>
-              <View style={styles.scoreTextContainer}>
-                <Text style={styles.text}>{seed.teams[0]?.game}</Text>
-              </View>
-            </View>
-            <View
-              style={styles.separator}
-              lightColor="#eee"
-              darkColor="rgba(255,255,255,0.1)"
-            />
-            <View style={styles.seedTeam}>
-              <View style={styles.seedTextContainer}>
-                <Text style={styles.text}>
-                  {seed.teams[1]?.name || "NO TEAM "}
-                </Text>
-              </View>
-              <View style={styles.scoreTextContainer}>
-                <Text style={styles.text}>{seed.teams[1]?.game}</Text>
-              </View>
-            </View>
+      <View style={styles.seedItem}>
+        <View style={styles.seedTeam}>
+          <View style={styles.seedTextContainer}>
+            <Text style={styles.text}>{seed.teams[0]?.name || "NO TEAM "}</Text>
+          </View>
+          <View style={styles.scoreTextContainer} darkColor="#701">
+            <Text style={styles.text}>{seed.teams[0]?.game}</Text>
           </View>
         </View>
-      </BackgroundView>
+        <View
+          style={styles.separator}
+          lightColor="#eee"
+          darkColor="rgba(255,255,255,0.1)"
+        />
+        <View style={styles.seedTeam}>
+          <View style={styles.seedTextContainer}>
+            <Text style={styles.text}>{seed.teams[1]?.name || "NO TEAM "}</Text>
+          </View>
+          <View style={styles.scoreTextContainer} darkColor="#701">
+            <Text style={styles.text}>{seed.teams[1]?.game}</Text>
+          </View>
+        </View>
+      </View>
       <EndComp />
     </BackgroundView>
   );
@@ -244,14 +220,12 @@ function SingleElimination({
         <BackgroundView style={styles.seedList}>
           {round.seeds.map((seed, idx) => {
             return (
-              <BackgroundView key={idx} style={styles.container}>
-                <RenderSeedComponent
-                  seed={seed}
-                  breakpoint={mobileBreakpoint}
-                  roundIndex={roundIdx}
-                  seedIndex={idx}
-                />
-              </BackgroundView>
+              <RenderSeedComponent
+                seed={seed}
+                breakpoint={mobileBreakpoint}
+                roundIndex={roundIdx}
+                seedIndex={idx}
+              />
             );
           })}
         </BackgroundView>
@@ -315,33 +289,25 @@ export default function TournamentScreen({
     );
   }
   return (
-    <ScrollView
-      horizontal={true}
-      contentContainerStyle={{
-        flexGrow: 1,
-        alignItems: "flex-start",
-        justifyContent: "flex-start",
-      }}
-    >
-      <ScrollView
-        contentContainerStyle={{
-          flexGrow: 1,
-          alignItems: "flex-start",
-          justifyContent: "flex-start",
-        }}
-      >
-        <SingleElimination
-          rounds={tourney.winners}
-          RoundTitleComponent={TitleComponent}
-          RenderSeedComponent={SeedRenderer}
-        />
-        <SingleElimination
-          rounds={tourney.losers}
-          RoundTitleComponent={TitleComponent}
-          RenderSeedComponent={SeedRenderer}
-        />
+    <BackgroundView style={{ flex: 1 }}>
+      <ScrollView horizontal={true} contentContainerStyle={{}}>
+        <ScrollView
+          contentContainerStyle={{ flexDirection: "column" }}
+          nestedScrollEnabled={true}
+        >
+          <SingleElimination
+            rounds={tourney.winners}
+            RoundTitleComponent={TitleComponent}
+            RenderSeedComponent={SeedRenderer}
+          />
+          <SingleElimination
+            rounds={tourney.losers}
+            RoundTitleComponent={TitleComponent}
+            RenderSeedComponent={SeedRenderer}
+          />
+        </ScrollView>
       </ScrollView>
-    </ScrollView>
+    </BackgroundView>
   );
 }
 
@@ -354,9 +320,8 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     flex: 1,
-    width: 175,
-    height: 60,
     marginVertical: 10,
+    flexDirection: "row",
   },
   title: {
     fontWeight: "bold",
@@ -370,34 +335,67 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#2e78b7",
   },
-  seedItem: {
+  bracket: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
+    height: "100%",
+  },
+  round: {
+    flexDirection: "column",
+    alignItems: "flex-start",
+    justifyContent: "space-between",
+    flex: 1,
+    minWidth: seedListWidth + 2 * svgWidth,
+    maxWidth: seedListWidth + 2 * svgWidth,
+    height: "100%",
+  },
+  seedList: {
     display: "flex",
     flexDirection: "column",
-    borderRadius: 6,
-    marginVertical: 10,
     alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
+    height: "100%",
+  },
+  seedWithLines: {
+    flexDirection: "row",
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
+    height: "100%",
+  },
+  seedItem: {
+    flexDirection: "column",
+    borderRadius: 6,
+    alignItems: "center",
+    justifyContent: "center",
+    width: seedListWidth,
     height: 60,
+    flex: 1,
+    padding: 5,
+    marginVertical: 10,
   },
   seedTeam: {
-    display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    width: "100%",
     flex: 1,
-    width: 165,
-    margin: 10,
   },
-  seed: {
+  seedTextContainer: {
+    flex: 1,
+    alignItems: "flex-start",
+    justifyContent: "center",
     flexDirection: "column",
-    justifyContent: "flex-start",
-    alignItems: "center",
-    borderRadius: 4,
   },
   separator: {
     height: 1,
+    width: "100%",
   },
   scoreTextContainer: {
-    backgroundColor: "#701",
     alignItems: "center",
     justifyContent: "center",
     alignContent: "center",
@@ -405,29 +403,6 @@ const styles = StyleSheet.create({
     height: 15,
     width: 15,
   },
+  svgStyle: { width: svgWidth, height: 80 },
   text: {},
-  seedTextContainer: {
-    alignItems: "center",
-    justifyContent: "center",
-    flexDirection: "column",
-    height: 15,
-  },
-  bracket: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "flex-start",
-    justifyContent: "flex-start",
-    flex: 1,
-  },
-  seedList: {
-    display: "flex",
-    flexDirection: "column",
-    flex: 1,
-  },
-  round: {
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "space-evenly",
-    width: 175 + 2 * svgWidth,
-  },
 });
