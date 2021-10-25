@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "BracketReact",
-    "slug": "BracketReact",
+    "name": "ReactBracket",
+    "slug": "ReactBracket",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",

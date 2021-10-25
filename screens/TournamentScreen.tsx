@@ -1,34 +1,34 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, TouchableOpacity } from "react-native";
-import { Text, View as BackgroundView, ViewProps } from "../components/Themed";
+import Svg, { Line } from "react-native-svg";
+import {
+  Text,
+  View as BackgroundView,
+  ScrollView,
+  ViewProps,
+} from "../components/Themed";
+import { StyleSheet, Dimensions } from "react-native";
 import Colors from "../constants/Colors";
-import Svg, { Path, Polyline, Line, Circle } from "react-native-svg";
 
 import { RootStackScreenProps } from "../types";
-import {
-  Bracket,
-  RoundProps,
-  Seed,
-  SeedItem,
-  SeedTeam,
-  RenderSeedProps,
-  SingleLineSeed,
-} from "react-brackets";
 
 import { tournamentPath, postRequest } from "../constants/Api";
 
 const strokeColor = "#b00";
 const svgWidth = 30;
-class DefaultDict {
-  constructor(defaultVal) {
-    return new Proxy(
-      {},
-      {
-        get: (target, name) => (name in target ? target[name] : defaultVal),
-      }
-    );
-  }
-}
+let ScreenHeight = Dimensions.get("window").height;
+let ScreenWidth = Dimensions.get("window").width;
+type RoundProps = {
+  seeds: any[];
+  title: string;
+  [key: string]: any;
+};
+
+type RenderSeedProps = {
+  seed: any;
+  breakpoint: number;
+  roundIndex: number;
+  seedIndex: number;
+};
 
 function View(props: ViewProps) {
   return (
@@ -50,13 +50,19 @@ type SingleEliminationProps = {
    * @param {ReactNode} title string or component passed with each round
    * @param {number} round the current round index
    */
-  roundTitleComponent?: (title: string, roundIdx: number) => any;
+  RoundTitleComponent?: ({
+    title,
+    roundIdx,
+  }: {
+    title: string;
+    roundIdx: number;
+  }) => any;
   /**
    * @param {object} seed the current seed
    * @param {number} breakpoint the breakpoint used to determine responsive size
    * @param {number} roundIdx the current round index
    */
-  renderSeedComponent?: ({
+  RenderSeedComponent?: ({
     seed,
     breakpoint,
     roundIndex,
@@ -64,38 +70,17 @@ type SingleEliminationProps = {
   }: RenderSeedProps) => any;
 };
 
-const SingleElimination = ({
-  rounds,
-  roundClassName,
-  bracketClassName,
-  mobileBreakpoint = 992,
-  renderSeedComponent,
-  roundTitleComponent,
-}: SingleEliminationProps) => {
-  // Checking responsive size
-
-  if (roundTitleComponent == undefined || renderSeedComponent == undefined) {
-    return <View>Bad props</View>;
-  }
-  const data = rounds.map((round, roundIdx) => (
-    <BackgroundView style={styles.round} key={roundIdx}>
-      {round.title && roundTitleComponent(round.title, roundIdx)}
-      <BackgroundView style={styles.seedList}>
-        {round.seeds.map((seed, idx) => (
-          <BackgroundView key={idx}>
-            {renderSeedComponent({
-              seed,
-              breakpoint: mobileBreakpoint,
-              roundIndex: roundIdx,
-              seedIndex: idx,
-            })}
-          </BackgroundView>
-        ))}
+function TitleComponent({ title, roundIdx }: { title: any; roundIdx: number }) {
+  return (
+    <BackgroundView style={styles.titleContainer}>
+      <BackgroundView style={{ width: svgWidth }} />
+      <BackgroundView style={styles.container}>
+        <Text style={styles.title}>{title}</Text>
       </BackgroundView>
+      <BackgroundView style={{ width: svgWidth }} />
     </BackgroundView>
-  ));
-  return <BackgroundView style={styles.bracket}>{data}</BackgroundView>;
-};
+  );
+}
 
 function BracketLine() {
   return (
@@ -117,12 +102,18 @@ function Junction({ isLineConnector }: { isLineConnector: boolean }) {
   if (!isLineConnector) {
     return <BracketLine />;
   }
-  let total = 100 + 2 * VerticalMargin;
   let start = 0; //100 * (25 / total);
   let end = 100; //(100 * (total - 25)) / total;
   return (
     <Svg
-      style={{ width: svgWidth, height: 93, backgroundColor: "transparent" }}
+      style={{
+        width: svgWidth,
+        height: 80,
+        backgroundColor: "transparent",
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+      }}
     >
       <Line
         x1="0"
@@ -151,16 +142,12 @@ const CustomSeed = ({
   roundIndex,
   seedIndex,
   tourney,
-  positionInfo,
-  setPositionInfo,
 }: {
   seed: RenderSeedProps["seed"];
   breakpoint: RenderSeedProps["breakpoint"];
   roundIndex: RenderSeedProps["roundIndex"];
   seedIndex: RenderSeedProps["seedIndex"];
   tourney: TourneyProps;
-  positionInfo: any;
-  setPositionInfo: Function;
 }) => {
   // ------ assuming rounds is the losers brackets rounds ------
   // losers rounds usually got some identical seeds amount like (2 - 2 - 1 - 1)
@@ -173,7 +160,6 @@ const CustomSeed = ({
     rounds[roundIndex].seeds.length === rounds[roundIndex + 1]?.seeds.length;
 
   //const Wrapper = isLineConnector ? SingleLineSeed : Seed;
-  var [x, y, width, height] = positionInfo[bracket][roundIndex];
 
   function LineComp() {
     if (roundIndex === 0) {
@@ -190,16 +176,15 @@ const CustomSeed = ({
     }
   }
   return (
-    <BackgroundView style={{ flexDirection: "row", alignItems: "center" }}>
+    <BackgroundView
+      style={{
+        flexDirection: "row",
+        alignItems: "center",
+        flex: 1,
+      }}
+    >
       <LineComp />
-      <BackgroundView
-        style={styles.seed}
-        onLayout={(event) => {
-          let { x, y, width, height } = event.nativeEvent.layout;
-          positionInfo[bracket][roundIndex] = [x, y, width, height];
-          setPositionInfo(positionInfo);
-        }}
-      >
+      <BackgroundView style={styles.seed}>
         <View style={styles.seedItem}>
           <View>
             <View style={styles.seedTeam}>
@@ -235,21 +220,45 @@ const CustomSeed = ({
   );
 };
 
-function TitleComponent(title: React.ReactNode, roundIndex: number) {
-  return (
-    <BackgroundView
-      style={{
-        ...styles.container,
-        flexDirection: "row",
-      }}
-    >
-      <BackgroundView style={{ width: svgWidth }} />
-      <BackgroundView style={styles.container}>
-        <Text style={styles.title}>{title}</Text>
+function SingleElimination({
+  rounds,
+  roundClassName,
+  bracketClassName,
+  mobileBreakpoint = 992,
+  RoundTitleComponent,
+  RenderSeedComponent,
+}: SingleEliminationProps) {
+  // Checking responsive size
+
+  if (RoundTitleComponent == undefined || RenderSeedComponent == undefined) {
+    return <View>Bad props</View>;
+  }
+
+  if (rounds.length === 0) {
+    return <BackgroundView />;
+  }
+  var Rounds = rounds.map((round, roundIdx) => {
+    return (
+      <BackgroundView style={styles.round} key={roundIdx}>
+        <RoundTitleComponent title={round.title} roundIdx={roundIdx} />
+        <BackgroundView style={styles.seedList}>
+          {round.seeds.map((seed, idx) => {
+            return (
+              <BackgroundView key={idx} style={styles.container}>
+                <RenderSeedComponent
+                  seed={seed}
+                  breakpoint={mobileBreakpoint}
+                  roundIndex={roundIdx}
+                  seedIndex={idx}
+                />
+              </BackgroundView>
+            );
+          })}
+        </BackgroundView>
       </BackgroundView>
-      <BackgroundView style={{ minWidth: svgWidth, height: "full" }} />
-    </BackgroundView>
-  );
+    );
+  });
+  return <BackgroundView style={styles.bracket}>{Rounds}</BackgroundView>;
 }
 
 export default function TournamentScreen({
@@ -268,25 +277,23 @@ export default function TournamentScreen({
   };
   const [tourney, setTourney] = useState(emptyTourney);
 
+  function callback(response: { rounds: TourneyProps }) {
+    setTourney(response.rounds);
+  }
   useEffect(() => {
     postRequest({
       path: tournamentPath,
       body: body,
-      callback: (json: { rounds: TourneyProps }) => {
-        setTourney(json.rounds);
-      },
+      callback: callback,
     });
+    return;
   }, []);
 
   let body = JSON.stringify({
     tourney_id: 69420,
   });
 
-  const [positionInfo, setPositionInfo] = useState({
-    winners: new DefaultDict([0, 0, 0, 0]),
-    losers: new DefaultDict([0, 0, 0, 0]),
-  });
-  function seedRenderer({
+  function SeedRenderer({
     seed,
     breakpoint,
     roundIndex,
@@ -297,31 +304,44 @@ export default function TournamentScreen({
     roundIndex: RenderSeedProps["roundIndex"];
     seedIndex: RenderSeedProps["seedIndex"];
   }) {
-    return CustomSeed({
-      seed,
-      breakpoint,
-      roundIndex,
-      seedIndex,
-      tourney: tourney,
-      positionInfo: positionInfo,
-      setPositionInfo: setPositionInfo,
-    });
+    return (
+      <CustomSeed
+        seed={seed}
+        breakpoint={breakpoint}
+        roundIndex={roundIndex}
+        seedIndex={seedIndex}
+        tourney={tourney}
+      />
+    );
   }
   return (
-    <BackgroundView style={styles.container}>
-      <BackgroundView style={styles.container}>
+    <ScrollView
+      horizontal={true}
+      contentContainerStyle={{
+        flexGrow: 1,
+        alignItems: "flex-start",
+        justifyContent: "flex-start",
+      }}
+    >
+      <ScrollView
+        contentContainerStyle={{
+          flexGrow: 1,
+          alignItems: "flex-start",
+          justifyContent: "flex-start",
+        }}
+      >
         <SingleElimination
           rounds={tourney.winners}
-          roundTitleComponent={TitleComponent}
-          renderSeedComponent={seedRenderer}
+          RoundTitleComponent={TitleComponent}
+          RenderSeedComponent={SeedRenderer}
         />
         <SingleElimination
           rounds={tourney.losers}
-          roundTitleComponent={TitleComponent}
-          renderSeedComponent={seedRenderer}
+          RoundTitleComponent={TitleComponent}
+          RenderSeedComponent={SeedRenderer}
         />
-      </BackgroundView>
-    </BackgroundView>
+      </ScrollView>
+    </ScrollView>
   );
 }
 
@@ -332,10 +352,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     flexDirection: "column",
   },
+  titleContainer: {
+    flex: 1,
+    width: 175,
+    height: 60,
+    marginVertical: 10,
+  },
   title: {
-    fontSize: 20,
     fontWeight: "bold",
-    marginVertical: 5,
+    flex: 1,
   },
   link: {
     marginTop: 15,
@@ -346,77 +371,63 @@ const styles = StyleSheet.create({
     color: "#2e78b7",
   },
   seedItem: {
-    width: "100%",
-    padding: 2,
-    textAlign: "center",
-    position: "relative",
+    display: "flex",
     flexDirection: "column",
-    margin: "5%",
     borderRadius: 6,
+    marginVertical: 10,
+    alignItems: "center",
+    height: 60,
   },
   seedTeam: {
-    padding: "1.5rem 1.5rem",
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
-    marginHorizontal: "10px",
-    marginVertical: "2%",
-    flex: 1,
-  },
-  seed: {
-    padding: "1em 1.5em",
-    minWidth: 225,
-    width: "100%",
-    position: "relative",
-    display: "flex",
     alignItems: "center",
     flex: 1,
+    width: 165,
+    margin: 10,
+  },
+  seed: {
     flexDirection: "column",
-    justifyContent: "center",
-    fontSize: 14,
+    justifyContent: "flex-start",
+    alignItems: "center",
     borderRadius: 4,
   },
   separator: {
-    marginVertical: 3,
     height: 1,
-    width: "100%",
   },
   scoreTextContainer: {
-    width: "1.5em",
-    height: "1.5em",
     backgroundColor: "#701",
     alignItems: "center",
     justifyContent: "center",
     alignContent: "center",
     borderRadius: 3,
+    height: 15,
+    width: 15,
   },
-  text: {
-    height: "1em",
-  },
+  text: {},
   seedTextContainer: {
-    flex: 1,
-    alignItems: "flex-start",
+    alignItems: "center",
     justifyContent: "center",
     flexDirection: "column",
+    height: 15,
   },
   bracket: {
     display: "flex",
     flexDirection: "row",
-    alignItems: "center",
-    margin: "5%",
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
+    flex: 1,
   },
   seedList: {
-    margin: 0,
-    padding: 0,
     display: "flex",
     flexDirection: "column",
-    justifyContent: "center",
-    height: "100%",
+    flex: 1,
   },
   round: {
-    flex: 1,
-    display: "flex",
     flexDirection: "column",
-    width: 300,
+    alignItems: "center",
+    justifyContent: "space-evenly",
+    width: 175 + 2 * svgWidth,
   },
 });
