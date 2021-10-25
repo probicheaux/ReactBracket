@@ -320,7 +320,7 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     flex: 1,
-    marginVertical: 10,
+    marginVertical: 30,
     flexDirection: "row",
   },
   title: {
@@ -341,6 +341,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     justifyContent: "flex-start",
     height: "100%",
+    marginVertical: 30,
   },
   round: {
     flexDirection: "column",
