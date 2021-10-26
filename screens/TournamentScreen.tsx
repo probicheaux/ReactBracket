@@ -148,36 +148,31 @@ const CustomSeed = ({
   seedIndex: RenderSeedProps["seedIndex"];
   tourney: TourneyProps;
 }) => {
-  // ------ assuming rounds is the losers brackets rounds ------
-  // losers rounds usually got some identical seeds amount like (2 - 2 - 1 - 1)
-
-  // mobileBreakpoint is required to be passed down to a seed
   const bracket = seed.losers ? "losers" : "winners";
   let rounds = tourney[bracket];
-
-  //const Wrapper = isLineConnector ? SingleLineSeed : Seed;
-
-  let spacers = [];
 
   let oneSpacerHeight = seedHeight + seedSpacerHeight;
   var spacerHeight;
   var index;
+
+  // Losers seeds will have the same spacing for consectutive rounds
   if (seed.losers) {
     index = Math.floor(roundIndex / 2);
   } else {
     index = roundIndex;
   }
 
-  console.log(rounds[roundIndex].title, index);
+  // Each winning seed eats it's children's spacers
+  // or
+  // The number of seed sized blocks is constant,
+  // the number of actual seeds halves each round
   if (index > 0) {
     let j = Math.pow(2, index - 1);
-    console.log(rounds[roundIndex].title, j);
     spacerHeight = oneSpacerHeight * j;
   } else {
     spacerHeight = 0;
   }
   let junctionHeight = spacerHeight;
-  console.log(rounds[roundIndex].title, spacerHeight);
   function LineComp() {
     if (roundIndex === 0) {
       return <View style={{ width: svgWidth }} />;
@@ -190,9 +185,13 @@ const CustomSeed = ({
       );
     }
   }
+
+  // We want to pad to midpoint, not start of seed
   spacerHeight = spacerHeight - oneSpacerHeight / 2;
+
+  // The spacer height already has the part of the junction
+  // that isn't the seed accounted for
   spacerHeight = spacerHeight - (junctionHeight - seedHeight) / 2;
-  console.log(rounds[roundIndex].title, spacerHeight);
   function EndComp() {
     if (roundIndex === rounds.length - 1) {
       return <View style={{ width: svgWidth }} />;
