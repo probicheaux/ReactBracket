@@ -15,7 +15,10 @@ import { tournamentPath, postRequest } from "../constants/Api";
 
 const strokeColor = "#b00";
 const svgWidth = 30;
-const seedListWidth = 150;
+const svgHeight = 60;
+const seedListWidth = 200;
+const seedHeight = 60;
+const seedSpacerHeight = 20;
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
 type RoundProps = {
@@ -75,7 +78,7 @@ function TitleComponent({ title, roundIdx }: { title: any; roundIdx: number }) {
   return (
     <BackgroundView style={styles.titleContainer}>
       <BackgroundView style={{ width: svgWidth }} />
-      <BackgroundView style={styles.container}>
+      <BackgroundView style={styles.titleTextContainer}>
         <Text style={styles.title}>{title}</Text>
       </BackgroundView>
       <BackgroundView style={{ width: svgWidth }} />
@@ -87,9 +90,9 @@ function BracketLine() {
   return (
     <Svg style={styles.svgStyle}>
       <Line
-        x1="0"
+        x1="0%"
         y1="50%"
-        x2="100"
+        x2="100%"
         y2="50%"
         stroke={strokeColor}
         strokeWidth="1"
@@ -97,26 +100,32 @@ function BracketLine() {
     </Svg>
   );
 }
-function Junction({ isLineConnector }: { isLineConnector: boolean }) {
-  if (!isLineConnector) {
+function Junction({
+  isLineConnector,
+  height,
+}: {
+  isLineConnector: boolean;
+  height: number;
+}) {
+  if (isLineConnector) {
     return <BracketLine />;
   }
   let start = 0; //100 * (25 / total);
   let end = 100; //(100 * (total - 25)) / total;
   return (
-    <Svg style={styles.svgStyle}>
+    <Svg style={{ ...styles.svgStyle, height: height }}>
       <Line
-        x1="0"
-        y1={start.toString() + "%"}
-        x2="0"
-        y2={end.toString() + "%"}
+        x1="0%"
+        y1="0%"
+        x2="0%"
+        y2="100%"
         stroke={strokeColor}
         strokeWidth="2"
       />
       <Line
-        x1="0"
+        x1="0%"
         y1="50%"
-        x2="100"
+        x2="100%"
         y2="50%"
         stroke={strokeColor}
         strokeWidth="1"
@@ -146,18 +155,40 @@ const CustomSeed = ({
   const bracket = seed.losers ? "losers" : "winners";
   let rounds = tourney[bracket];
 
-  const isLineConnector: boolean =
-    rounds[roundIndex].seeds.length === rounds[roundIndex + 1]?.seeds.length;
-
   //const Wrapper = isLineConnector ? SingleLineSeed : Seed;
 
+  let spacers = [];
+
+  let oneSpacerHeight = seedHeight + seedSpacerHeight;
+  var spacerHeight;
+  var index;
+  if (seed.losers) {
+    index = Math.floor(roundIndex / 2);
+  } else {
+    index = roundIndex;
+  }
+
+  if (index > 0) {
+    let j = Math.pow(2, index - 1);
+    spacerHeight = oneSpacerHeight * j;
+  } else {
+    spacerHeight = 0;
+  }
+  let junctionHeight = spacerHeight;
   function LineComp() {
     if (roundIndex === 0) {
       return <View style={{ width: svgWidth }} />;
     } else {
-      return <Junction isLineConnector={isLineConnector} />;
+      let isLineConnector: boolean =
+        rounds[roundIndex - 1].seeds.length ===
+        rounds[roundIndex]?.seeds.length;
+      return (
+        <Junction isLineConnector={isLineConnector} height={junctionHeight} />
+      );
     }
   }
+  spacerHeight = spacerHeight - oneSpacerHeight / 2;
+  spacerHeight = spacerHeight - (junctionHeight - seedHeight) / 2;
   function EndComp() {
     if (roundIndex === rounds.length - 1) {
       return <View style={{ width: svgWidth }} />;
@@ -165,33 +196,42 @@ const CustomSeed = ({
       return <BracketLine />;
     }
   }
+  console.log(rounds[roundIndex].title, spacerHeight);
   return (
-    <BackgroundView style={styles.seedWithLines}>
-      <LineComp />
-      <View style={styles.seedItem}>
-        <View style={styles.seedTeam}>
-          <View style={styles.seedTextContainer}>
-            <Text style={styles.text}>{seed.teams[0]?.name || "NO TEAM "}</Text>
+    <BackgroundView>
+      <BackgroundView style={{ height: spacerHeight }} />
+      <BackgroundView style={styles.seedWithLines}>
+        <LineComp />
+        <View style={styles.seedItem}>
+          <View style={styles.seedTeam}>
+            <View style={styles.seedTextContainer}>
+              <Text style={styles.text}>
+                {seed.teams[0]?.name || "NO TEAM "}
+              </Text>
+            </View>
+            <View style={styles.scoreTextContainer} darkColor="#701">
+              <Text style={styles.text}>{seed.teams[0]?.game}</Text>
+            </View>
           </View>
-          <View style={styles.scoreTextContainer} darkColor="#701">
-            <Text style={styles.text}>{seed.teams[0]?.game}</Text>
+          <View
+            style={styles.separator}
+            lightColor="#eee"
+            darkColor="rgba(255,255,255,0.1)"
+          />
+          <View style={styles.seedTeam}>
+            <View style={styles.seedTextContainer}>
+              <Text style={styles.text}>
+                {seed.teams[1]?.name || "NO TEAM "}
+              </Text>
+            </View>
+            <View style={styles.scoreTextContainer} darkColor="#701">
+              <Text style={styles.text}>{seed.teams[1]?.game}</Text>
+            </View>
           </View>
         </View>
-        <View
-          style={styles.separator}
-          lightColor="#eee"
-          darkColor="rgba(255,255,255,0.1)"
-        />
-        <View style={styles.seedTeam}>
-          <View style={styles.seedTextContainer}>
-            <Text style={styles.text}>{seed.teams[1]?.name || "NO TEAM "}</Text>
-          </View>
-          <View style={styles.scoreTextContainer} darkColor="#701">
-            <Text style={styles.text}>{seed.teams[1]?.game}</Text>
-          </View>
-        </View>
-      </View>
-      <EndComp />
+        <EndComp />
+      </BackgroundView>
+      <BackgroundView style={{ height: spacerHeight }} />
     </BackgroundView>
   );
 };
@@ -213,6 +253,7 @@ function SingleElimination({
   if (rounds.length === 0) {
     return <BackgroundView />;
   }
+
   var Rounds = rounds.map((round, roundIdx) => {
     return (
       <BackgroundView style={styles.round} key={roundIdx}>
@@ -220,13 +261,16 @@ function SingleElimination({
         <BackgroundView style={styles.seedList}>
           {round.seeds.map((seed, idx) => {
             return (
-              <RenderSeedComponent
-                seed={seed}
-                breakpoint={mobileBreakpoint}
-                roundIndex={roundIdx}
-                seedIndex={idx}
-                key={idx}
-              />
+              <BackgroundView>
+                <RenderSeedComponent
+                  seed={seed}
+                  breakpoint={mobileBreakpoint}
+                  roundIndex={roundIdx}
+                  seedIndex={idx}
+                  key={idx}
+                />
+                <BackgroundView style={styles.seedSpacer} />
+              </BackgroundView>
             );
           })}
         </BackgroundView>
@@ -294,7 +338,6 @@ export default function TournamentScreen({
       <ScrollView
         contentContainerStyle={{
           flexDirection: "column",
-          height: 0.9 * ScreenHeight,
         }}
         horizontal={true}
         nestedScrollEnabled={true}
@@ -316,16 +359,20 @@ export default function TournamentScreen({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "column",
+    flex: 1,
   },
   titleContainer: {
-    flex: 1,
     marginVertical: 10,
     alignSelf: "flex-start",
     flexDirection: "row",
+  },
+  titleTextContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "column",
   },
   title: {
     fontWeight: "bold",
@@ -339,36 +386,35 @@ const styles = StyleSheet.create({
     color: "#2e78b7",
   },
   bracket: {
-    flex: 1,
     flexDirection: "row",
-    alignItems: "center",
-    height: "80%",
+    alignItems: "flex-start",
   },
   round: {
     flexDirection: "column",
     alignItems: "flex-start",
     justifyContent: "center",
-    flex: 1,
+    marginVertical: 10,
     minWidth: seedListWidth + 2 * svgWidth,
     maxWidth: seedListWidth + 2 * svgWidth,
-    height: "80%",
+  },
+  seedSpacer: {
+    height: seedSpacerHeight,
+    width: "100%",
   },
   seedList: {
-    flex: 1,
     flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "space-around",
     width: "100%",
-    height: "100%",
+    alignItems: "center",
+  },
+  fakeSeedSpacer: {
+    width: "100%",
+    height: seedHeight / 2 + seedSpacerHeight / 2,
   },
   seedWithLines: {
     flexDirection: "row",
-    flex: 1,
     alignItems: "center",
     justifyContent: "center",
     width: "100%",
-    height: "100%",
-    marginVertical: 20,
   },
   seedItem: {
     flexDirection: "column",
@@ -376,10 +422,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     width: seedListWidth,
-    height: 60,
-    flex: 1,
+    height: seedHeight,
+    minHeight: seedHeight,
     padding: 5,
-    marginVertical: 20,
   },
   seedTeam: {
     flexDirection: "row",
@@ -406,6 +451,6 @@ const styles = StyleSheet.create({
     height: 15,
     width: 15,
   },
-  svgStyle: { width: svgWidth, height: 60 },
+  svgStyle: { width: svgWidth, height: seedHeight },
   text: {},
 });
