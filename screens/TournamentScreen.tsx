@@ -113,7 +113,7 @@ function Junction({
   let start = 0; //100 * (25 / total);
   let end = 100; //(100 * (total - 25)) / total;
   return (
-    <Svg style={{ ...styles.svgStyle, height: height }}>
+    <Svg style={{ ...styles.svgStyle, height: height, width: svgWidth }}>
       <Line
         x1="0%"
         y1="0%"
@@ -168,13 +168,16 @@ const CustomSeed = ({
     index = roundIndex;
   }
 
+  console.log(rounds[roundIndex].title, index);
   if (index > 0) {
     let j = Math.pow(2, index - 1);
+    console.log(rounds[roundIndex].title, j);
     spacerHeight = oneSpacerHeight * j;
   } else {
     spacerHeight = 0;
   }
   let junctionHeight = spacerHeight;
+  console.log(rounds[roundIndex].title, spacerHeight);
   function LineComp() {
     if (roundIndex === 0) {
       return <View style={{ width: svgWidth }} />;
@@ -189,6 +192,7 @@ const CustomSeed = ({
   }
   spacerHeight = spacerHeight - oneSpacerHeight / 2;
   spacerHeight = spacerHeight - (junctionHeight - seedHeight) / 2;
+  console.log(rounds[roundIndex].title, spacerHeight);
   function EndComp() {
     if (roundIndex === rounds.length - 1) {
       return <View style={{ width: svgWidth }} />;
@@ -196,12 +200,12 @@ const CustomSeed = ({
       return <BracketLine />;
     }
   }
-  console.log(rounds[roundIndex].title, spacerHeight);
   return (
     <BackgroundView>
       <BackgroundView style={{ height: spacerHeight }} />
       <BackgroundView style={styles.seedWithLines}>
         <LineComp />
+        <View style={{ minHeight: junctionHeight }} />
         <View style={styles.seedItem}>
           <View style={styles.seedTeam}>
             <View style={styles.seedTextContainer}>
@@ -262,6 +266,7 @@ function SingleElimination({
           {round.seeds.map((seed, idx) => {
             return (
               <BackgroundView>
+                <BackgroundView style={styles.seedSpacer} />
                 <RenderSeedComponent
                   seed={seed}
                   breakpoint={mobileBreakpoint}
@@ -269,7 +274,6 @@ function SingleElimination({
                   seedIndex={idx}
                   key={idx}
                 />
-                <BackgroundView style={styles.seedSpacer} />
               </BackgroundView>
             );
           })}
@@ -388,11 +392,12 @@ const styles = StyleSheet.create({
   bracket: {
     flexDirection: "row",
     alignItems: "flex-start",
+    justifyContent: "flex-start",
   },
   round: {
     flexDirection: "column",
     alignItems: "flex-start",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     marginVertical: 10,
     minWidth: seedListWidth + 2 * svgWidth,
     maxWidth: seedListWidth + 2 * svgWidth,
@@ -404,11 +409,8 @@ const styles = StyleSheet.create({
   seedList: {
     flexDirection: "column",
     width: "100%",
-    alignItems: "center",
-  },
-  fakeSeedSpacer: {
-    width: "100%",
-    height: seedHeight / 2 + seedSpacerHeight / 2,
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
   },
   seedWithLines: {
     flexDirection: "row",
