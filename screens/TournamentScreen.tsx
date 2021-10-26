@@ -371,11 +371,13 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     alignSelf: "flex-start",
     flexDirection: "row",
+    alignItems: "center",
   },
   titleTextContainer: {
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "column",
+    width: seedListWidth,
   },
   title: {
     fontWeight: "bold",
@@ -447,11 +449,10 @@ const styles = StyleSheet.create({
   scoreTextContainer: {
     alignItems: "center",
     justifyContent: "center",
-    alignContent: "center",
     borderRadius: 3,
-    height: 15,
-    width: 15,
+    height: 20,
+    width: 20,
   },
   svgStyle: { width: svgWidth, height: seedHeight },
-  text: {},
+  text: { textAlign: "center", textAlignVertical: "center" },
 });
