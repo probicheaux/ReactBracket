@@ -36,7 +36,7 @@ type RenderSeedProps = {
 
 function View(props: ViewProps) {
   return (
-    <BackgroundView darkColor={Colors["dark"]["touchableColor"]} {...props} />
+    <BackgroundView lightColor={Colors["light"]["touchableColor"]} darkColor={Colors["dark"]["touchableColor"]} {...props} />
   );
 }
 type TourneyProps = { winners: RoundProps[]; losers: RoundProps[] };
@@ -199,6 +199,10 @@ const CustomSeed = ({
       return <BracketLine />;
     }
   }
+
+  let topWin = (seed.teams[0]?.game > seed.teams[1]?.game)
+  let botWin = (seed.teams[1]?.game > seed.teams[0]?.game)
+
   return (
     <BackgroundView>
       <BackgroundView style={{ height: spacerHeight }} />
@@ -212,13 +216,13 @@ const CustomSeed = ({
                 {seed.teams[0]?.name || "NO TEAM "}
               </Text>
             </View>
-            <View style={styles.scoreTextContainer} darkColor="#701">
+            <View style={styles.scoreTextContainer} lightColor={topWin ? "#f65a5a": "#eee"} darkColor="#701">
               <Text style={styles.text}>{seed.teams[0]?.game}</Text>
             </View>
           </View>
           <View
             style={styles.separator}
-            lightColor="#eee"
+            lightColor="rgba(0,0,0,0.1)"
             darkColor="rgba(255,255,255,0.1)"
           />
           <View style={styles.seedTeam}>
@@ -227,7 +231,7 @@ const CustomSeed = ({
                 {seed.teams[1]?.name || "NO TEAM "}
               </Text>
             </View>
-            <View style={styles.scoreTextContainer} darkColor="#701">
+            <View style={styles.scoreTextContainer} lightColor={botWin ? "#f65a5a": "#eee"} darkColor="#701">
               <Text style={styles.text}>{seed.teams[1]?.game}</Text>
             </View>
           </View>
@@ -427,7 +431,7 @@ const styles = StyleSheet.create({
     width: seedListWidth,
     height: seedHeight,
     minHeight: seedHeight,
-    padding: 5,
+    padding: 0,
   },
   seedTeam: {
     flexDirection: "row",
@@ -441,6 +445,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     justifyContent: "center",
     flexDirection: "column",
+    textAlignVertical: "middle",
   },
   separator: {
     height: 1,
