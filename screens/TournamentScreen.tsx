@@ -36,7 +36,11 @@ type RenderSeedProps = {
 
 function View(props: ViewProps) {
   return (
-    <BackgroundView lightColor={Colors["light"]["touchableColor"]} darkColor={Colors["dark"]["touchableColor"]} {...props} />
+    <BackgroundView
+      lightColor={Colors["light"]["touchableColor"]}
+      darkColor={Colors["dark"]["touchableColor"]}
+      {...props}
+    />
   );
 }
 type TourneyProps = { winners: RoundProps[]; losers: RoundProps[] };
@@ -200,9 +204,12 @@ const CustomSeed = ({
     }
   }
 
-  let topWin = (seed.teams[0]?.game > seed.teams[1]?.game)
-  let botWin = (seed.teams[1]?.game > seed.teams[0]?.game)
+  let topWin = seed.teams[0]?.game > seed.teams[1]?.game;
 
+  let darkWin = Colors["dark"]["winColor"];
+  let darkLose = Colors["dark"]["loseColor"];
+  let lightWin = Colors["light"]["winColor"];
+  let lightLose = Colors["light"]["loseColor"];
   return (
     <BackgroundView>
       <BackgroundView style={{ height: spacerHeight }} />
@@ -216,8 +223,14 @@ const CustomSeed = ({
                 {seed.teams[0]?.name || "NO TEAM "}
               </Text>
             </View>
-            <View style={styles.scoreTextContainer} lightColor={topWin ? "#f65a5a": "#eee"} darkColor={topWin ? "#701": "#002230"}>
-              <Text style={styles.text}>{seed.teams[0]?.game}</Text>
+            <View
+              style={styles.scoreTextContainer}
+              darkColor={topWin ? darkWin : darkLose}
+              lightColor={topWin ? lightWin : lightLose}
+            >
+              <Text style={topWin ? styles.scoreTextWin : styles.scoreTextLose}>
+                {seed.teams[0]?.game}
+              </Text>
             </View>
           </View>
           <View
@@ -231,8 +244,14 @@ const CustomSeed = ({
                 {seed.teams[1]?.name || "NO TEAM "}
               </Text>
             </View>
-            <View style={styles.scoreTextContainer} lightColor={botWin ? "#f65a5a": "#eee"} darkColor={botWin ? "#701": "#002230"}>
-              <Text style={styles.text}>{seed.teams[1]?.game}</Text>
+            <View
+              style={styles.scoreTextContainer}
+              darkColor={topWin ? darkLose : darkWin}
+              lightColor={topWin ? lightLose : lightWin}
+            >
+              <Text style={topWin ? styles.scoreTextLose : styles.scoreTextWin}>
+                {seed.teams[1]?.game}
+              </Text>
             </View>
           </View>
         </View>
@@ -446,7 +465,6 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     justifyContent: "center",
     flexDirection: "column",
-    textAlignVertical: "middle",
   },
   separator: {
     height: 1,
@@ -458,6 +476,15 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     height: 20,
     width: 20,
+  },
+  scoreTextWin: {
+    textAlign: "center",
+    textAlignVertical: "center",
+    fontWeight: "bold",
+  },
+  scoreTextLose: {
+    textAlign: "center",
+    textAlignVertical: "center",
   },
   svgStyle: { width: svgWidth, height: seedHeight },
   text: { textAlign: "center", textAlignVertical: "center" },

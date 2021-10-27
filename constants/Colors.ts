@@ -1,6 +1,7 @@
 const tintColorLight = "#2f95dc";
 const tintColorDark = "#fff";
-
+const altLight = "#eee";
+const altDark = "#002230";
 export default {
   light: {
     text: "#000",
@@ -9,7 +10,9 @@ export default {
     tabIconDefault: "#666",
     tabIconSelected: tintColorLight,
     placeholderTextColor: "#666",
-    touchableColor: "#eee",
+    touchableColor: altLight,
+    winColor: "#f65a5a",
+    loseColor: altLight,
   },
   dark: {
     text: "#fff",
@@ -18,6 +21,8 @@ export default {
     tabIconDefault: "#ccc",
     tabIconSelected: tintColorDark,
     placeholderTextColor: "#555",
-    touchableColor: "#002230",
+    touchableColor: altDark,
+    winColor: "#702",
+    loseColor: "#103545",
   },
 };

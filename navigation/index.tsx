@@ -15,7 +15,6 @@ import React, { useContext } from "react";
 import { ColorSchemeName, Pressable } from "react-native";
 
 import Colors from "../constants/Colors";
-import useColorScheme from "../hooks/useColorScheme";
 import ModalScreen from "../screens/ModalScreen";
 import LoginScreen from "../screens/LoginScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
@@ -77,8 +76,8 @@ function RootNavigator() {
 const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
 function BottomTabNavigator() {
-  const colorScheme = useColorScheme();
   const userContext = useContext(AppContext);
+  const colorScheme = userContext.scheme;
   if (!userContext.token) {
     return <LoginScreen setToken={userContext.setToken} />;
   }
@@ -104,13 +103,13 @@ function BottomTabNavigator() {
       <BottomTab.Screen
         name="TabTwo"
         component={TabTwoScreen}
-        options={{
+        options={({ navigation }) => ({
           headerShown: false,
           title: "Account",
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="account-outline" color={color} />
           ),
-        }}
+        })}
       />
     </BottomTab.Navigator>
   );

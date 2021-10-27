@@ -3,7 +3,7 @@
  * https://docs.expo.io/guides/color-schemes/
  */
 
-import * as React from "react";
+import React, { useContext } from "react";
 import {
   Text as DefaultText,
   View as DefaultView,
@@ -16,13 +16,14 @@ import {
 
 import { MaterialCommunityIcons as DefaultMaterialCommunityIcons } from "@expo/vector-icons";
 import Colors from "../constants/Colors";
-import useColorScheme from "../hooks/useColorScheme";
+import AppContext from "../components/AppContext";
 
 export function useThemeColor(
   props: { light?: string; dark?: string },
   colorName: keyof typeof Colors.light & keyof typeof Colors.dark
 ) {
-  const theme = useColorScheme();
+  const context = useContext(AppContext);
+  const theme = context.scheme;
   const colorFromProps = props[theme];
 
   if (colorFromProps) {

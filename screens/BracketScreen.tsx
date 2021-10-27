@@ -4,7 +4,6 @@ import { StyleSheet } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Text, FlatList, View } from "../components/Themed";
 import BracketBox from "../components/BracketListing";
-import useColorScheme from "../hooks/useColorScheme";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 import Tournament from "../screens/TournamentScreen";

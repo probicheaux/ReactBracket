@@ -12,14 +12,20 @@ export default function App() {
   const colorScheme = useColorScheme();
 
   const [token, setToken] = useState("");
-  const userSettings = { token: token, setToken };
+  const [scheme, setScheme] = useState(colorScheme);
+  const userSettings = {
+    token: token,
+    scheme: scheme,
+    setScheme: setScheme,
+    setToken: setToken,
+  };
   if (!isLoadingComplete) {
     return null;
   } else {
     return (
       <SafeAreaProvider>
         <AppContext.Provider value={userSettings}>
-          <Navigation colorScheme={colorScheme} />
+          <Navigation colorScheme={scheme} />
           <StatusBar />
         </AppContext.Provider>
       </SafeAreaProvider>
