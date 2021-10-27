@@ -12,7 +12,7 @@ export default {
     placeholderTextColor: "#666",
     touchableColor: altLight,
     winColor: "#f65a5a",
-    loseColor: altLight,
+    loseColor: "#ddd",
   },
   dark: {
     text: "#fff",
