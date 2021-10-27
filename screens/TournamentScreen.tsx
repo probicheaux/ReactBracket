@@ -219,7 +219,7 @@ const CustomSeed = ({
         <View style={styles.seedItem}>
           <View style={styles.seedTeam}>
             <View style={styles.seedTextContainer}>
-              <Text style={styles.text}>
+              <Text style={topWin ? styles.scoreTextWin : styles.scoreTextLose}>
                 {seed.teams[0]?.name || "NO TEAM "}
               </Text>
             </View>
@@ -240,7 +240,7 @@ const CustomSeed = ({
           />
           <View style={styles.seedTeam}>
             <View style={styles.seedTextContainer}>
-              <Text style={styles.text}>
+              <Text style={topWin ? styles.scoreTextLose : styles.scoreTextWin}>
                 {seed.teams[1]?.name || "NO TEAM "}
               </Text>
             </View>
