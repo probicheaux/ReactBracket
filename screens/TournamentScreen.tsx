@@ -13,6 +13,8 @@ import { RootStackScreenProps } from "../types";
 
 import { tournamentPath, postRequest } from "../constants/Api";
 
+// Need to test with non power of 2 number of entrants
+
 const strokeColor = "#b00";
 const svgWidth = 30;
 const svgHeight = 60;
@@ -460,7 +462,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignContent: "center",
     width: "100%",
-    paddingHorizontal: 8,
+    paddingLeft: 8,
     borderRadius: 4,
   },
   seedTextContainer: {
