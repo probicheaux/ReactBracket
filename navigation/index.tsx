@@ -19,7 +19,7 @@ import ModalScreen from "../screens/ModalScreen";
 import LoginScreen from "../screens/LoginScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
 import BracketScreen from "../screens/BracketScreen";
-import TabTwoScreen from "../screens/TabTwoScreen";
+import AccountScreen from "../screens/AccountScreen";
 import {
   RootStackParamList,
   RootTabParamList,
@@ -101,8 +101,8 @@ function BottomTabNavigator() {
         })}
       />
       <BottomTab.Screen
-        name="TabTwo"
-        component={TabTwoScreen}
+        name="Account"
+        component={AccountScreen}
         options={({ navigation }) => ({
           headerShown: false,
           title: "Account",

@@ -8,7 +8,7 @@ import AppContext from "../components/AppContext";
 import { color } from "react-native-reanimated";
 import { setItem } from "../storage";
 
-export default function TabTwoScreen() {
+export default function AccountScreen() {
   const context = useContext(AppContext);
   const colorScheme = context.scheme;
   const setScheme = context.setScheme;
@@ -18,7 +18,7 @@ export default function TabTwoScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab Two</Text>
+      <Text style={styles.title}>Account</Text>
       <View
         style={styles.separator}
         lightColor="#eee"
@@ -59,8 +59,9 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
   },
   title: {
-    fontSize: 20,
+    fontSize: 30,
     fontWeight: "bold",
+    margin: 20,
   },
   separator: {
     marginVertical: 30,
