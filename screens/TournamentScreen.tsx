@@ -243,7 +243,10 @@ const CustomSeed = ({
         <View style={styles.seedItem}>
           <View style={styles.seedTeam}>
             <View style={styles.seedTextContainer}>
-              <Text style={topWin ? styles.scoreTextWin : styles.scoreTextLose}>
+              <Text
+                adjustsFontSizeToFit
+                style={topWin ? styles.scoreTextWin : styles.scoreTextLose}
+              >
                 {seed.teams[0]?.name || "NO TEAM "}
               </Text>
             </View>
@@ -252,7 +255,10 @@ const CustomSeed = ({
               darkColor={topWin ? darkWin : darkLose}
               lightColor={topWin ? lightWin : lightLose}
             >
-              <Text style={topWin ? styles.scoreTextWin : styles.scoreTextLose}>
+              <Text
+                adjustsFontSizeToFit
+                style={topWin ? styles.scoreTextWin : styles.scoreTextLose}
+              >
                 {seed.teams[0]?.game}
               </Text>
             </View>
@@ -264,7 +270,10 @@ const CustomSeed = ({
           />
           <View style={styles.seedTeam}>
             <View style={styles.seedTextContainer}>
-              <Text style={topWin ? styles.scoreTextLose : styles.scoreTextWin}>
+              <Text
+                adjustsFontSizeToFit
+                style={topWin ? styles.scoreTextLose : styles.scoreTextWin}
+              >
                 {seed.teams[1]?.name || "NO TEAM "}
               </Text>
             </View>
@@ -273,7 +282,10 @@ const CustomSeed = ({
               darkColor={topWin ? darkLose : darkWin}
               lightColor={topWin ? lightLose : lightWin}
             >
-              <Text style={topWin ? styles.scoreTextLose : styles.scoreTextWin}>
+              <Text
+                adjustsFontSizeToFit
+                style={topWin ? styles.scoreTextLose : styles.scoreTextWin}
+              >
                 {seed.teams[1]?.game}
               </Text>
             </View>
@@ -511,6 +523,8 @@ const styles = StyleSheet.create({
     alignContent: "center",
     justifyContent: "center",
     flexDirection: "column",
+    paddingTop: 4,
+    paddingBottom: 2,
   },
   separator: {
     height: 1,
@@ -525,23 +539,31 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     height: 20,
     width: 20,
+    paddingTop: 4,
+    paddingBottom: 2,
   },
   scoreTextWin: {
     textAlign: "center",
     textAlignVertical: "center",
     fontWeight: "bold",
-    includeFontPadding: false,
+    includeFontPadding: true,
+    paddingTop: 2,
+    paddingBottom: 2,
     alignContent: "center",
     alignItems: "center",
     justifyContent: "center",
+    flexShrink: 1,
   },
   scoreTextLose: {
     textAlign: "center",
     textAlignVertical: "center",
     alignContent: "center",
-    includeFontPadding: false,
+    includeFontPadding: true,
     alignItems: "center",
+    paddingTop: 2,
+    paddingBottom: 2,
     justifyContent: "center",
+    flexShrink: 1,
   },
   svgStyle: { width: svgWidth, height: seedHeight },
   text: {
@@ -551,5 +573,7 @@ const styles = StyleSheet.create({
     includeFontPadding: false,
     alignItems: "center",
     justifyContent: "center",
+    paddingTop: 0,
+    paddingBottom: 0,
   },
 });
