@@ -17,10 +17,12 @@ import { tournamentPath, postRequest } from "../constants/Api";
 
 const strokeColor = "#b00";
 const svgWidth = 30;
-const svgHeight = 60;
 const seedListWidth = 200;
 const seedHeight = 60;
 const seedSpacerHeight = 20;
+const titleHeight = 40;
+const titleMargin = 10;
+const bracketMargin = 50;
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
 type RoundProps = {
@@ -119,7 +121,7 @@ function Junction({
   let start = 0; //100 * (25 / total);
   let end = 100; //(100 * (total - 25)) / total;
   return (
-    <Svg style={{ ...styles.svgStyle, height: height, width: svgWidth }}>
+    <Svg style={[styles.svgStyle, { height: height, width: svgWidth }]}>
       <Line
         x1="0%"
         y1="0%"
@@ -178,10 +180,19 @@ const CustomSeed = ({
   } else {
     spacerHeight = 0;
   }
+
   let junctionHeight = spacerHeight;
   function LineComp() {
     if (roundIndex === 0) {
-      return <View style={{ width: svgWidth }} />;
+      return (
+        <BackgroundView
+          style={{
+            width: svgWidth,
+            height: seedHeight,
+            position: "relative",
+          }}
+        />
+      );
     } else {
       let isLineConnector: boolean =
         rounds[roundIndex - 1].seeds.length ===
@@ -195,9 +206,10 @@ const CustomSeed = ({
   // We want to pad to midpoint, not start of seed
   spacerHeight = spacerHeight - oneSpacerHeight / 2;
 
+  spacerHeight = spacerHeight - (junctionHeight - seedHeight) / 2;
+  spacerHeight = Math.max(spacerHeight, 0);
   // The spacer height already has the part of the junction
   // that isn't the seed accounted for
-  spacerHeight = spacerHeight - (junctionHeight - seedHeight) / 2;
   function EndComp() {
     if (roundIndex === rounds.length - 1) {
       return <View style={{ width: svgWidth }} />;
@@ -206,18 +218,28 @@ const CustomSeed = ({
     }
   }
 
+  let seedWithLinesHeight = Math.max(junctionHeight, seedHeight);
   let topWin = seed.teams[0]?.game > seed.teams[1]?.game;
 
   let darkWin = Colors["dark"]["winColor"];
   let darkLose = Colors["dark"]["loseColor"];
   let lightWin = Colors["light"]["winColor"];
   let lightLose = Colors["light"]["loseColor"];
+  let start =
+    spacerHeight +
+    seedSpacerHeight +
+    seedIndex * (2 * spacerHeight + seedWithLinesHeight + seedSpacerHeight);
   return (
-    <BackgroundView>
-      <BackgroundView style={{ height: spacerHeight }} />
-      <BackgroundView style={styles.seedWithLines}>
+    <BackgroundView
+      style={[
+        styles.seedWithLinesContainer,
+        { top: start, height: seedWithLinesHeight },
+      ]}
+    >
+      <BackgroundView
+        style={[styles.seedWithLines, { height: seedWithLinesHeight }]}
+      >
         <LineComp />
-        <View style={{ minHeight: junctionHeight }} />
         <View style={styles.seedItem}>
           <View style={styles.seedTeam}>
             <View style={styles.seedTextContainer}>
@@ -259,7 +281,6 @@ const CustomSeed = ({
         </View>
         <EndComp />
       </BackgroundView>
-      <BackgroundView style={{ height: spacerHeight }} />
     </BackgroundView>
   );
 };
@@ -282,15 +303,24 @@ function SingleElimination({
     return <BackgroundView />;
   }
 
+  let seedListHeight =
+    rounds[0].seeds.length * (seedSpacerHeight + seedHeight) + seedSpacerHeight;
+  let heightDict = { height: seedListHeight + titleHeight + bracketMargin };
   var Rounds = rounds.map((round, roundIdx) => {
     return (
-      <BackgroundView style={styles.round} key={roundIdx}>
+      <BackgroundView style={[styles.round, heightDict]} key={roundIdx}>
         <RoundTitleComponent title={round.title} roundIdx={roundIdx} />
-        <BackgroundView style={styles.seedList}>
+        <BackgroundView style={[styles.seedList, { height: seedListHeight }]}>
           {round.seeds.map((seed, idx) => {
             return (
-              <BackgroundView>
-                <BackgroundView style={styles.seedSpacer} />
+              <BackgroundView
+                style={{
+                  flex: 0,
+                  flexDirection: "row",
+                  width: 2 * svgWidth + seedListWidth,
+                  position: "relative",
+                }}
+              >
                 <RenderSeedComponent
                   seed={seed}
                   breakpoint={mobileBreakpoint}
@@ -305,7 +335,11 @@ function SingleElimination({
       </BackgroundView>
     );
   });
-  return <BackgroundView style={styles.bracket}>{Rounds}</BackgroundView>;
+  return (
+    <BackgroundView style={[styles.bracket, heightDict]}>
+      {Rounds}
+    </BackgroundView>
+  );
 }
 
 export default function TournamentScreen({
@@ -390,13 +424,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "column",
+    position: "relative",
     flex: 1,
   },
   titleContainer: {
-    marginVertical: 10,
     alignSelf: "flex-start",
     flexDirection: "row",
     alignItems: "center",
+    height: titleHeight,
   },
   titleTextContainer: {
     alignItems: "center",
@@ -419,30 +454,36 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "flex-start",
     justifyContent: "flex-start",
+    position: "relative",
   },
   round: {
     flexDirection: "column",
     alignItems: "flex-start",
     justifyContent: "flex-start",
     marginVertical: 10,
-    minWidth: seedListWidth + 2 * svgWidth,
-    maxWidth: seedListWidth + 2 * svgWidth,
-  },
-  seedSpacer: {
-    height: seedSpacerHeight,
-    width: "100%",
+    width: 2 * svgWidth + seedListWidth,
+    position: "relative",
   },
   seedList: {
     flexDirection: "column",
-    width: "100%",
     alignItems: "flex-start",
     justifyContent: "flex-start",
+    flex: 1,
+    width: 2 * svgWidth + seedListWidth,
+    position: "relative",
+  },
+  seedWithLinesContainer: {
+    position: "absolute",
+    width: 2 * svgWidth + seedListWidth,
+    left: 0,
+    flexDirection: "row",
+    alignItems: "center",
   },
   seedWithLines: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    width: "100%",
+    width: 2 * svgWidth + seedListWidth,
   },
   seedItem: {
     flexDirection: "column",
@@ -452,7 +493,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     width: seedListWidth,
     height: seedHeight,
-    minHeight: seedHeight,
     paddingVertical: 3,
     paddingHorizontal: 4,
   },
