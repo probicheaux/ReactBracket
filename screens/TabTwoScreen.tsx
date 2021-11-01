@@ -34,6 +34,7 @@ export default function TabTwoScreen() {
         style={styles.button}
         onPress={() => {
           setScheme(notColorScheme);
+          setItem("userTheme", notColorScheme);
         }}
       >
         <Text style={styles.title}>Toggle dark mode</Text>

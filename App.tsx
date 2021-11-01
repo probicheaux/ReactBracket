@@ -13,10 +13,17 @@ export default function App() {
   const colorScheme = useColorScheme();
 
   const [token, setToken] = useState("" as string | undefined | null);
+  const [scheme, setScheme] = useState(colorScheme);
   useEffect(() => {
     getItem("userToken").then((result) => setToken(result));
   }, []);
-  const [scheme, setScheme] = useState(colorScheme);
+  useEffect(() => {
+    getItem("userTheme").then((result) => {
+      if (result === "light" || result === "dark") {
+        setScheme(result);
+      }
+    });
+  }, []);
   const userSettings = {
     token: token,
     scheme: scheme,

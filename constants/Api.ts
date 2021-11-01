@@ -11,16 +11,14 @@ var localHostPath = null;
 if (hasManifest && manifest != null && manifest.debuggerHost != null) {
   localHostPath = manifest.debuggerHost.split(`:`).shift();
 }
-var baseUri =
+var apiPath =
   hasManifest && localHostPath != null
-    ? localHostPath.concat(`:8000`)
-    : `smus.club`;
+    ? "http://".concat(localHostPath.concat(`:8000`))
+    : "https://smus.club";
 
 if (Platform.OS === "web") {
-  baseUri = "127.0.0.1:8000";
+  apiPath = "http://127.0.0.1:8000";
 }
-
-let apiPath = "http://" + baseUri;
 
 export default apiPath;
 export type postRequestType = {
