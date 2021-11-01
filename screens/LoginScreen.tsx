@@ -4,6 +4,7 @@ import { Platform, StyleSheet } from "react-native";
 
 import { Text, View, TextInput, TouchableOpacity } from "../components/Themed";
 import { postRequest, loginPath } from "../constants/Api";
+import { setItem } from "../storage";
 
 export default function LoginScreen({ setToken }: { setToken: Function }) {
   const [username, setUserName] = useState("");
@@ -16,8 +17,9 @@ export default function LoginScreen({ setToken }: { setToken: Function }) {
     postRequest({
       path: loginPath,
       body: body,
-      callback: (json: JSON) => {
+      callback: (json: { token: string }) => {
         setToken(json.token);
+        setItem("userToken", json.token);
       },
     });
   }
@@ -70,6 +72,7 @@ const styles = StyleSheet.create({
     padding: 20,
     alignItems: "center",
     justifyContent: "center",
+    minWidth: 400,
   },
   button_text: {
     fontSize: 30,

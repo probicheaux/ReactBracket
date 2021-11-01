@@ -1,5 +1,8 @@
 import React from "react";
 
-const AppContext = React.createContext({ token: "", scheme: "" });
+const AppContext = React.createContext({
+  token: "" as string | null | undefined,
+  scheme: "",
+});
 
 export default AppContext;

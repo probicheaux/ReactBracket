@@ -6,12 +6,14 @@ import useColorScheme from "../hooks/useColorScheme";
 import { Text, View, TouchableOpacity } from "../components/Themed";
 import AppContext from "../components/AppContext";
 import { color } from "react-native-reanimated";
+import { setItem } from "../storage";
 
 export default function TabTwoScreen() {
   const context = useContext(AppContext);
   const colorScheme = context.scheme;
   const setScheme = context.setScheme;
   const token = context.token;
+  const setToken = context.setToken;
   const notColorScheme = colorScheme === "dark" ? "light" : "dark";
 
   return (
@@ -35,6 +37,15 @@ export default function TabTwoScreen() {
         }}
       >
         <Text style={styles.title}>Toggle dark mode</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => {
+          setToken("");
+          setItem("userToken", "");
+        }}
+      >
+        <Text style={styles.title}>Log out</Text>
       </TouchableOpacity>
     </View>
   );
@@ -60,5 +71,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     padding: 15,
     borderRadius: 5,
+    margin: 20,
+    minWidth: 300,
   },
 });

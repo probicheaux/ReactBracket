@@ -1,17 +1,21 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import useCachedResources from "./hooks/useCachedResources";
 import useColorScheme from "./hooks/useColorScheme";
 import Navigation from "./navigation";
 import AppContext from "./components/AppContext";
+import { getItem } from "./storage";
 
 export default function App() {
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
 
-  const [token, setToken] = useState("");
+  const [token, setToken] = useState("" as string | undefined | null);
+  useEffect(() => {
+    getItem("userToken").then((result) => setToken(result));
+  }, []);
   const [scheme, setScheme] = useState(colorScheme);
   const userSettings = {
     token: token,
