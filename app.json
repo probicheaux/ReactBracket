@@ -28,7 +28,8 @@
         "backgroundColor": "#ffffff"
       },
       "userInterfaceStyle": "dark",
-      "package": "club.smus.bracket"
+      "package": "club.smus.bracket",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/images/favicon.png"

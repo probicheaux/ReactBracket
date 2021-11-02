@@ -14,6 +14,7 @@ import {
   TouchableOpacity as DefaultTouchableOpacity,
 } from "react-native";
 
+import { SocialIcon as DefaultSocialIcon } from "react-native-elements";
 import { MaterialCommunityIcons as DefaultMaterialCommunityIcons } from "@expo/vector-icons";
 import Colors from "../constants/Colors";
 import AppContext from "../components/AppContext";
@@ -48,6 +49,7 @@ export type TouchableOpacityProps = ThemeProps &
   DefaultTouchableOpacity["props"];
 export type MaterialCommunityIconsProps = ThemeProps &
   DefaultMaterialCommunityIcons["props"];
+export type SocialIconProps = ThemeProps & DefaultSocialIcon["props"];
 
 export function Text(props: TextProps) {
   const { style, lightColor, darkColor, ...otherProps } = props;
@@ -110,6 +112,18 @@ export function TouchableOpacity(props: TouchableOpacityProps) {
       style={[{ backgroundColor }, style]}
       {...otherProps}
     />
+  );
+}
+
+export function SocialIcon(props: SocialIconProps) {
+  const { style, lightColor, darkColor, ...otherProps } = props;
+  const backgroundColor = useThemeColor(
+    { light: lightColor, dark: darkColor },
+    "socialColor"
+  );
+
+  return (
+    <DefaultSocialIcon style={[{ backgroundColor }, style]} {...otherProps} />
   );
 }
 

@@ -13,6 +13,8 @@ export default {
     touchableColor: altLight,
     winColor: "#f65a5a",
     loseColor: "#ccc",
+    socialText: "#fff",
+    socialColor: "#4285F4",
   },
   dark: {
     text: "#fff",
@@ -24,5 +26,7 @@ export default {
     touchableColor: altDark,
     winColor: "#702",
     loseColor: "#103545",
+    socialText: "#fff",
+    socialColor: "#4285F4",
   },
 };
