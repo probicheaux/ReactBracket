@@ -11,7 +11,7 @@ import Colors from "../constants/Colors";
 
 import { RootStackScreenProps } from "../types";
 
-import { tournamentPath, postRequest } from "../constants/Api";
+import { tournamentPath, postRequest, makeBracketPath } from "../constants/Api";
 
 // Need to test with non power of 2 number of entrants
 
@@ -382,8 +382,25 @@ export default function TournamentScreen({
     return;
   }, []);
 
+  function callback2(response: { rounds: TourneyProps }) {
+    console.log(response);
+  }
+  useEffect(() => {
+    postRequest({
+      path: makeBracketPath,
+      body: body2,
+      callback: callback2,
+    });
+    return;
+  }, []);
+
   let body = JSON.stringify({
     tourney_id: 69420,
+  });
+
+  let body2 = JSON.stringify({
+    players: ["blargh", "pete", "mmrp", "snap", "nathansandwich"],
+    date: undefined,
   });
 
   function SeedRenderer({
