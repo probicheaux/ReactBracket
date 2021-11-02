@@ -28,7 +28,6 @@
         "backgroundColor": "#ffffff"
       },
       "userInterfaceStyle": "dark",
-      "name": "ReactBracket",
       "package": "club.smus.bracket"
     },
     "web": {
