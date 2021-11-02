@@ -5,6 +5,7 @@ import { Platform, StyleSheet } from "react-native";
 import { Text, View, TextInput, TouchableOpacity } from "../components/Themed";
 import { postRequest, loginPath } from "../constants/Api";
 import { setItem } from "../storage";
+import auth from "@react-native-firebase/auth";
 
 export default function LoginScreen({ setToken }: { setToken: Function }) {
   const [username, setUserName] = useState("");

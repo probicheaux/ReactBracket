@@ -18,7 +18,7 @@ import { tournamentPath, postRequest, makeBracketPath } from "../constants/Api";
 const strokeColor = "#b00";
 const svgWidth = 30;
 const seedListWidth = 200;
-const seedHeight = 60;
+const seedHeight = 65;
 const seedSpacerHeight = 20;
 const titleHeight = 40;
 const titleMargin = 10;
@@ -255,10 +255,7 @@ const CustomSeed = ({
               darkColor={topWin ? darkWin : darkLose}
               lightColor={topWin ? lightWin : lightLose}
             >
-              <Text
-                adjustsFontSizeToFit
-                style={topWin ? styles.scoreTextWin : styles.scoreTextLose}
-              >
+              <Text style={topWin ? styles.scoreTextWin : styles.scoreTextLose}>
                 {seed.teams[0]?.game}
               </Text>
             </View>
@@ -282,10 +279,7 @@ const CustomSeed = ({
               darkColor={topWin ? darkLose : darkWin}
               lightColor={topWin ? lightLose : lightWin}
             >
-              <Text
-                adjustsFontSizeToFit
-                style={topWin ? styles.scoreTextLose : styles.scoreTextWin}
-              >
+              <Text style={topWin ? styles.scoreTextLose : styles.scoreTextWin}>
                 {seed.teams[1]?.game}
               </Text>
             </View>
@@ -373,18 +367,19 @@ export default function TournamentScreen({
   function callback(response: { rounds: TourneyProps }) {
     setTourney(response.rounds);
   }
-  useEffect(() => {
-    postRequest({
-      path: tournamentPath,
-      body: body,
-      callback: callback,
-    });
-    return;
-  }, []);
 
   function callback2(response: { rounds: TourneyProps }) {
     console.log(response);
   }
+  let body = JSON.stringify({
+    tourney_id: 69420,
+  });
+
+  let body2 = JSON.stringify({
+    players: ["blargh", "pete", "mmrp", "snap", "nathansandwich"],
+    data: null,
+  });
+
   useEffect(() => {
     postRequest({
       path: makeBracketPath,
@@ -393,15 +388,14 @@ export default function TournamentScreen({
     });
     return;
   }, []);
-
-  let body = JSON.stringify({
-    tourney_id: 69420,
-  });
-
-  let body2 = JSON.stringify({
-    players: ["blargh", "pete", "mmrp", "snap", "nathansandwich"],
-    date: undefined,
-  });
+  useEffect(() => {
+    postRequest({
+      path: tournamentPath,
+      body: body,
+      callback: callback,
+    });
+    return;
+  }, []);
 
   function SeedRenderer({
     seed,
@@ -519,7 +513,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     alignItems: "center",
     alignContent: "center",
-    justifyContent: "space-evenly",
+    justifyContent: "space-around",
     width: seedListWidth,
     height: seedHeight,
     paddingVertical: 3,
@@ -531,13 +525,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignContent: "center",
     width: "100%",
-    paddingLeft: 8,
-    borderRadius: 4,
+    paddingLeft: 6,
   },
   seedTextContainer: {
     flex: 1,
     alignItems: "flex-start",
-    alignContent: "center",
     justifyContent: "center",
     flexDirection: "column",
     paddingTop: 4,
@@ -546,7 +538,6 @@ const styles = StyleSheet.create({
   separator: {
     height: 1,
     width: "100%",
-    marginVertical: 3,
     marginHorizontal: 4,
   },
   scoreTextContainer: {
@@ -556,31 +547,23 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     height: 20,
     width: 20,
-    paddingTop: 4,
-    paddingBottom: 2,
   },
   scoreTextWin: {
     textAlign: "center",
     textAlignVertical: "center",
     fontWeight: "bold",
-    includeFontPadding: true,
-    paddingTop: 2,
-    paddingBottom: 2,
     alignContent: "center",
     alignItems: "center",
     justifyContent: "center",
-    flexShrink: 1,
+    fontSize: 14,
   },
   scoreTextLose: {
     textAlign: "center",
     textAlignVertical: "center",
     alignContent: "center",
-    includeFontPadding: true,
     alignItems: "center",
-    paddingTop: 2,
-    paddingBottom: 2,
     justifyContent: "center",
-    flexShrink: 1,
+    fontSize: 14,
   },
   svgStyle: { width: svgWidth, height: seedHeight },
   text: {
