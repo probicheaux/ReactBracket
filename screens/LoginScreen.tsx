@@ -5,11 +5,13 @@ import { Platform, StyleSheet } from "react-native";
 import { Text, View, TextInput, TouchableOpacity } from "../components/Themed";
 import { postRequest, loginPath } from "../constants/Api";
 import { setItem } from "../storage";
-import auth from "@react-native-firebase/auth";
+//import auth from "@react-native-firebase/auth";
+import { signIn } from "../google";
 
 export default function LoginScreen({ setToken }: { setToken: Function }) {
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
+  signIn();
   function getToken() {
     let body = JSON.stringify({
       username: username,
