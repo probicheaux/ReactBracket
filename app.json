@@ -24,7 +24,9 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "userInterfaceStyle": "dark"
+      "userInterfaceStyle": "dark",
+      "name": "ReactBracket",
+      "package": "club.smus.bracket"
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
