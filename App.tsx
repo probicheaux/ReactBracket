@@ -10,6 +10,7 @@ import { getItem } from "./storage";
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getFirestore, setDoc, doc } from "firebase/firestore";
+import { FIREBASE_KEY } from "@env";
 
 // Add a new document in collection "cities"
 // TODO: Add SDKs for Firebase products that you want to use
@@ -18,7 +19,7 @@ import { getFirestore, setDoc, doc } from "firebase/firestore";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "",
+  apiKey: FIREBASE_KEY,
   authDomain: "personal-261304.firebaseapp.com",
   projectId: "personal-261304",
   storageBucket: "personal-261304.appspot.com",
