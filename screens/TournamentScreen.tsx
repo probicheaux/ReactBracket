@@ -373,18 +373,19 @@ export default function TournamentScreen({
   function callback(response: { rounds: TourneyProps }) {
     setTourney(response.rounds);
   }
-  useEffect(() => {
-    postRequest({
-      path: tournamentPath,
-      body: body,
-      callback: callback,
-    });
-    return;
-  }, []);
 
   function callback2(response: { rounds: TourneyProps }) {
     console.log(response);
   }
+  let body = JSON.stringify({
+    tourney_id: 69420,
+  });
+
+  let body2 = JSON.stringify({
+    players: ["blargh", "pete", "mmrp", "snap", "nathansandwich"],
+    data: null,
+  });
+
   useEffect(() => {
     postRequest({
       path: makeBracketPath,
@@ -393,15 +394,14 @@ export default function TournamentScreen({
     });
     return;
   }, []);
-
-  let body = JSON.stringify({
-    tourney_id: 69420,
-  });
-
-  let body2 = JSON.stringify({
-    players: ["blargh", "pete", "mmrp", "snap", "nathansandwich"],
-    date: undefined,
-  });
+  useEffect(() => {
+    postRequest({
+      path: tournamentPath,
+      body: body,
+      callback: callback,
+    });
+    return;
+  }, []);
 
   function SeedRenderer({
     seed,

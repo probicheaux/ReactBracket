@@ -46,4 +46,4 @@ export async function postRequest({ path, body, callback }: postRequestType) {
 
 export var loginPath = "/api/login/";
 export var tournamentPath = "/api/tournament/";
-export var makeBracketPath = "/api/makeBracketFromEntrants/"
+export var makeBracketPath = "/api/makeBracketFromEntrants/";
