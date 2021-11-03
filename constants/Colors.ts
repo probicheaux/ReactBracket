@@ -1,7 +1,7 @@
 const tintColorLight = "#2f95dc";
 const tintColorDark = "#fff";
 const altLight = "#ddd";
-const altDark = "#002230";
+const altDark = "#002f42";
 export default {
   light: {
     text: "#000",
@@ -25,7 +25,7 @@ export default {
     placeholderTextColor: "#555",
     touchableColor: altDark,
     winColor: "#702",
-    loseColor: "#103545",
+    loseColor: "#05445e",
     socialText: "#fff",
     socialColor: "#4285F4",
   },
