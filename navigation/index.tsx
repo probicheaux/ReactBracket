@@ -17,6 +17,7 @@ import { ColorSchemeName, Pressable } from "react-native";
 import Colors from "../constants/Colors";
 import ModalScreen from "../screens/ModalScreen";
 import LoginScreen from "../screens/LoginScreen";
+import RegisterScreen from "../screens/RegisterScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
 import BracketScreen from "../screens/BracketScreen";
 import AccountScreen from "../screens/AccountScreen";
@@ -50,6 +51,24 @@ export default function Navigation({
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
+  const userContext = useContext(AppContext);
+  const colorScheme = userContext.scheme;
+  if (!userContext.token) {
+    return (
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Register"
+          component={RegisterScreen}
+          options={{ headerShown: false }}
+        />
+      </Stack.Navigator>
+    );
+  }
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -78,10 +97,6 @@ const BottomTab = createBottomTabNavigator<RootTabParamList>();
 function BottomTabNavigator() {
   const userContext = useContext(AppContext);
   const colorScheme = userContext.scheme;
-  if (!userContext.token) {
-    return <LoginScreen setToken={userContext.setToken} />;
-  }
-
   return (
     <BottomTab.Navigator
       initialRouteName="Brackets"

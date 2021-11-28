@@ -1,10 +1,5 @@
 import * as React from "react";
-import {
-  Text,
-  View,
-  TouchableOpacity,
-  MaterialCommunityIcons,
-} from "./Themed";
+import { Text, View, TouchableOpacity, MaterialCommunityIcons } from "./Themed";
 import { StyleSheet } from "react-native";
 import useColorScheme from "../hooks/useColorScheme";
 

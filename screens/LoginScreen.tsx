@@ -19,9 +19,13 @@ import {
   signInWithCredential,
 } from "firebase/auth";
 
+import { useContext } from "react";
+import AppContext from "../components/AppContext";
 WebBrowser.maybeCompleteAuthSession();
 
-export default function LoginScreen({ setToken }: { setToken: Function }) {
+export default function LoginScreen({ navigation }) {
+  const context = useContext(AppContext);
+  const setToken = context.setToken;
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
@@ -81,7 +85,12 @@ export default function LoginScreen({ setToken }: { setToken: Function }) {
         <Text style={styles.button_text}>Login</Text>
       </TouchableOpacity>
       <View style={styles.margin} />
-      <TouchableOpacity style={styles.button} onPress={() => {}}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => {
+          navigation.navigate("Register");
+        }}
+      >
         <Text style={styles.button_text}>Sign Up</Text>
       </TouchableOpacity>
       <View style={styles.margin} />
