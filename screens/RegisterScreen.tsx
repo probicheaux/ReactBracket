@@ -9,52 +9,31 @@ import {
   TouchableOpacity,
   SocialIcon,
 } from "../components/Themed";
-import { postRequest, loginPath } from "../constants/Api";
+import { postRequest, emailRegisterPath } from "../constants/Api";
 import { setItem } from "../storage";
-import * as WebBrowser from "expo-web-browser";
-import * as Google from "expo-auth-session/providers/google";
-import {
-  getAuth,
-  GoogleAuthProvider,
-  signInWithCredential,
-} from "firebase/auth";
 
 import { useContext } from "react";
 import AppContext from "../components/AppContext";
-WebBrowser.maybeCompleteAuthSession();
 
-export default function LoginScreen({ navigation }) {
+export default function RegisterScreen({ navigation }) {
   const context = useContext(AppContext);
-  const setToken = context.setToken;
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
-  const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
-    clientId:
-      "1076294747951-cpu07806albsljakortduvj8ol8mmcdj.apps.googleusercontent.com",
-  });
+  const [email, setEmail] = useState("");
 
-  useEffect(() => {
-    if (response?.type === "success") {
-      const { id_token } = response.params;
-
-      const auth = getAuth();
-      const provider = new GoogleAuthProvider();
-      const credential = GoogleAuthProvider.credential(id_token);
-      signInWithCredential(auth, credential);
-      setToken(id_token);
-    }
-  }, [response]);
-  function getToken() {
+  function register() {
     let body = JSON.stringify({
       username: username,
       password: password,
+      email: email,
     });
     postRequest({
-      path: loginPath,
+      path: emailRegisterPath,
       body: body,
-      callback: (json: { token: string }) => {
-        setToken(json.token);
-        setItem("userToken", json.token);
+      callback: (json: { success: boolean }) => {
+        if (json.success) {
+          navigation.navigate("Login");
+        }
       },
     });
   }
@@ -69,6 +48,12 @@ export default function LoginScreen({ navigation }) {
       <View style={styles.margin} />
       <TextInput
         style={styles.textField}
+        placeholder="Email"
+        onChangeText={(email) => setEmail(email)}
+      />
+      <View style={styles.margin} />
+      <TextInput
+        style={styles.textField}
         secureTextEntry={true}
         placeholder="Password"
         onChangeText={(password) => setPassword(password)}
@@ -78,34 +63,12 @@ export default function LoginScreen({ navigation }) {
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
-          getToken();
+          register();
           setPassword("");
         }}
       >
-        <Text style={styles.button_text}>Login</Text>
+        <Text style={styles.button_text}>Register</Text>
       </TouchableOpacity>
-      <View style={styles.margin} />
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => {
-          navigation.navigate("Register");
-        }}
-      >
-        <Text style={styles.button_text}>Sign Up</Text>
-      </TouchableOpacity>
-      <View style={styles.margin} />
-      <SocialIcon
-        title="Sign In With Google"
-        style={styles.goog}
-        fontStyle={styles.googText}
-        iconSize={30}
-        fontWeight="normal"
-        button
-        type="google"
-        onPress={() => {
-          promptAsync();
-        }}
-      />
 
       {/* Use a light status bar on iOS to account for the black space above the modal */}
       <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />

@@ -44,6 +44,8 @@ export async function postRequest({ path, body, callback }: postRequestType) {
     });
 }
 
-export var loginPath = "/api/login/";
+export var loginPath = "/api/user/login/";
+export var logoutPath = "/api/user/logout/";
+export var emailRegisterPath = "/api/user/register-from-email/";
 export var tournamentPath = "/api/tournament/";
 export var makeBracketPath = "/api/makeBracketFromEntrants/";

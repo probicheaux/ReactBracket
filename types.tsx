@@ -22,6 +22,8 @@ export type RootStackParamList = {
   NotFound: undefined;
   Tournament: { name: string } | undefined;
   BracketList: { name: string } | undefined;
+  Login: undefined;
+  Register: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
