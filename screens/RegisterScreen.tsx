@@ -7,16 +7,12 @@ import {
   View,
   TextInput,
   TouchableOpacity,
-  SocialIcon,
+  LinkButton,
 } from "../components/Themed";
 import { postRequest, emailRegisterPath } from "../constants/Api";
-import { setItem } from "../storage";
-
-import { useContext } from "react";
-import AppContext from "../components/AppContext";
+import ButtonStyles from "../components/ButtonStyles";
 
 export default function RegisterScreen({ navigation }) {
-  const context = useContext(AppContext);
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
@@ -61,14 +57,26 @@ export default function RegisterScreen({ navigation }) {
       />
       <View style={styles.bigMargin} />
       <TouchableOpacity
-        style={styles.button}
+        style={ButtonStyles.container}
         onPress={() => {
           register();
           setPassword("");
         }}
       >
-        <Text style={styles.button_text}>Register</Text>
+        <Text style={ButtonStyles.buttonText}>Register</Text>
       </TouchableOpacity>
+
+      <View style={{marginTop: 32, alignItems: 'center'}}>
+        <Text style={styles.body}>Already have an account?</Text>
+        <LinkButton
+        darkColor="#fff"
+        onPress={() => {
+          navigation.navigate("Login");
+        }}
+        title='Log in'
+      />
+
+      </View>
 
       {/* Use a light status bar on iOS to account for the black space above the modal */}
       <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
@@ -83,32 +91,12 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     flex: 1,
   },
-  button: {
-    borderRadius: 8,
-    alignItems: "center",
-    justifyContent: "center",
-    minWidth: 400,
-    minHeight: 75,
-  },
-  goog: {
-    borderRadius: 8,
-    alignItems: "center",
-    justifyContent: "center",
-    minWidth: 400,
-    minHeight: 75,
-  },
-  googText: {
-    fontSize: 30,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  button_text: {
-    fontSize: 30,
-    alignItems: "center",
-    justifyContent: "center",
+  body: {
+    fontSize: 20,
+    marginBottom: 12,
   },
   textField: {
-    fontSize: 40,
+    fontSize: 24,
   },
   separator: {
     marginVertical: 30,

@@ -47,6 +47,7 @@ export type ScrollViewProps = ThemeProps & DefaultScrollView["props"];
 export type FlatListProps = ThemeProps & DefaultFlatList["props"];
 export type TouchableOpacityProps = ThemeProps &
   DefaultTouchableOpacity["props"];
+export type LinkButtonProps = ThemeProps & { title: string, style?: TextProps, onPress: () => void }
 export type MaterialCommunityIconsProps = ThemeProps &
   DefaultMaterialCommunityIcons["props"];
 export type SocialIconProps = ThemeProps & DefaultSocialIcon["props"];
@@ -112,6 +113,23 @@ export function TouchableOpacity(props: TouchableOpacityProps) {
       style={[{ backgroundColor }, style]}
       {...otherProps}
     />
+  );
+}
+
+export function LinkButton(props: LinkButtonProps) {
+  const { style, lightColor, darkColor, title, onPress } = props;
+  const textColor = useThemeColor(
+    { light: lightColor, dark: darkColor },
+    "touchableColor"
+  );
+
+  return (
+    <DefaultTouchableOpacity onPress={onPress}>
+      <DefaultText style={[{color: textColor, fontSize: 24}, style]}>
+        {title}
+      </DefaultText>
+    </DefaultTouchableOpacity>
+
   );
 }
 

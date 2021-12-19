@@ -8,6 +8,7 @@ import {
   TextInput,
   TouchableOpacity,
   SocialIcon,
+  LinkButton,
 } from "../components/Themed";
 import { postRequest, loginPath } from "../constants/Api";
 import { setItem } from "../storage";
@@ -21,6 +22,7 @@ import {
 
 import { useContext } from "react";
 import AppContext from "../components/AppContext";
+import ButtonStyles from "../components/ButtonStyles";
 WebBrowser.maybeCompleteAuthSession();
 
 export default function LoginScreen({ navigation }) {
@@ -76,28 +78,27 @@ export default function LoginScreen({ navigation }) {
       />
       <View style={styles.bigMargin} />
       <TouchableOpacity
-        style={styles.button}
+        style={ButtonStyles.container}
         onPress={() => {
           getToken();
           setPassword("");
         }}
       >
-        <Text style={styles.button_text}>Login</Text>
+        <Text style={ButtonStyles.buttonText}>Login</Text>
       </TouchableOpacity>
       <View style={styles.margin} />
-      <TouchableOpacity
-        style={styles.button}
+      <LinkButton
+        darkColor="#fff"
         onPress={() => {
           navigation.navigate("Register");
         }}
-      >
-        <Text style={styles.button_text}>Sign Up</Text>
-      </TouchableOpacity>
+        title='Sign Up'
+      />
       <View style={styles.margin} />
       <SocialIcon
         title="Sign In With Google"
-        style={styles.goog}
-        fontStyle={styles.googText}
+        style={ButtonStyles.goog}
+        fontStyle={ButtonStyles.buttonText}
         iconSize={30}
         fontWeight="normal"
         button
@@ -119,33 +120,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     flexDirection: "column",
     flex: 1,
-  },
-  button: {
-    borderRadius: 8,
-    alignItems: "center",
-    justifyContent: "center",
-    minWidth: 400,
-    minHeight: 75,
-  },
-  goog: {
-    borderRadius: 8,
-    alignItems: "center",
-    justifyContent: "center",
-    minWidth: 400,
-    minHeight: 75,
-  },
-  googText: {
-    fontSize: 30,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  button_text: {
-    fontSize: 30,
-    alignItems: "center",
-    justifyContent: "center",
+    padding: 24,
   },
   textField: {
-    fontSize: 40,
+    fontSize: 32,
   },
   separator: {
     marginVertical: 30,
