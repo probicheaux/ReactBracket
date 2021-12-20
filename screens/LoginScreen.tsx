@@ -100,8 +100,8 @@ export default function LoginScreen({ navigation }) {
         onPress={() => promptAsync()}
       >
         <Image
-          style={{ width: "100%", height: "100%" }}
-          source={require("../assets/images/btn_google_signin_dark_normal_web@2x.png")}
+          style={styles.image}
+          source={require("../assets/images/btn_google_signin_dark_normal_web.png")}
         />
       </TouchableOpacity>
       {/* Use a light status bar on iOS to account for the black space above the modal */}
@@ -131,5 +131,9 @@ const styles = StyleSheet.create({
   },
   bigMargin: {
     height: 75,
+  },
+  image: {
+    height: "100%",
+    width: "100%",
   },
 });

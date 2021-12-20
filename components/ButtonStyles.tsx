@@ -5,14 +5,14 @@ const ButtonStyles = StyleSheet.create({
     borderRadius: 8,
     alignItems: "center",
     justifyContent: "center",
-    minWidth: 200,
-    minHeight: 52,
+    width: 200,
+    height: 52,
   },
   invisibleContainer: {
     alignItems: "center",
     justifyContent: "center",
-    minWidth: 200,
-    minHeight: 52,
+    width: 200,
+    height: 52,
     backgroundColor: "rgba(255, 255, 255, 0)",
   },
   buttonText: {
@@ -23,4 +23,3 @@ const ButtonStyles = StyleSheet.create({
 });
 
 export default ButtonStyles;
-
