@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
-import { Platform, StyleSheet } from "react-native";
+import { TouchableHighlight, Image, Platform, StyleSheet } from "react-native";
 
 import {
   Text,
@@ -92,22 +92,18 @@ export default function LoginScreen({ navigation }) {
         onPress={() => {
           navigation.navigate("Register");
         }}
-        title='Sign Up'
+        title="Sign Up"
       />
       <View style={styles.margin} />
-      <SocialIcon
-        title="Sign In With Google"
-        style={ButtonStyles.goog}
-        fontStyle={ButtonStyles.buttonText}
-        iconSize={30}
-        fontWeight="normal"
-        button
-        type="google"
-        onPress={() => {
-          promptAsync();
-        }}
-      />
-
+      <TouchableOpacity
+        style={ButtonStyles.invisibleContainer}
+        onPress={() => promptAsync()}
+      >
+        <Image
+          style={{ width: "100%", height: "100%" }}
+          source={require("../assets/images/btn_google_signin_dark_normal_web@2x.png")}
+        />
+      </TouchableOpacity>
       {/* Use a light status bar on iOS to account for the black space above the modal */}
       <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
     </View>
