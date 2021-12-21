@@ -22,7 +22,7 @@ const linking: LinkingOptions<RootStackParamList> = {
           },
           Account: {
             screens: {
-              AccountScreen: "two",
+              AccountScreen: "account",
             },
           },
         },
