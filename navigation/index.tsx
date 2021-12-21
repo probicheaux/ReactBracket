@@ -28,6 +28,7 @@ import {
 } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
 import AppContext from "../components/AppContext";
+import CreateTournamentScreen from "../screens/TournamentCreation/CreateTournamentScreen";
 
 export default function Navigation({
   colorScheme,
@@ -82,7 +83,13 @@ function RootNavigator() {
         options={{ title: "OH CHRIST!" }}
       />
       <Stack.Group screenOptions={{ presentation: "modal" }}>
-        <Stack.Screen name="Modal" component={ModalScreen} />
+        <Stack.Screen
+            name="CreateTournament"
+            component={CreateTournamentScreen}
+            options={{
+              title: "New Tournament",
+            }}
+          />
       </Stack.Group>
     </Stack.Navigator>
   );

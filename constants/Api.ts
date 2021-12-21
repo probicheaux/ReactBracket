@@ -49,3 +49,5 @@ export var logoutPath = "/api/user/logout/";
 export var emailRegisterPath = "/api/user/register-from-email/";
 export var tournamentPath = "/api/tournament/";
 export var makeBracketPath = "/api/makeBracketFromEntrants/";
+
+export const apiHost = `${apiPath}/v1`;
