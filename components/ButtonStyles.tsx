@@ -7,6 +7,7 @@ const ButtonStyles = StyleSheet.create({
     justifyContent: "center",
     width: 191,
     height: 46,
+    margin: 8,
   },
   invisibleContainer: {
     alignItems: "center",
