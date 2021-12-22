@@ -38,7 +38,7 @@ export default function CreateTournamentScreen({ navigation }: any) {
             />
 
             <View style={styles.footer}>
-              <TouchableOpacity style={ButtonStyles.container} onPress={submit}>
+              <TouchableOpacity accessibilityRole="button" style={ButtonStyles.container} onPress={submit}>
                   <Text style={ButtonStyles.buttonText}>Create</Text>
               </TouchableOpacity>
             </View>
