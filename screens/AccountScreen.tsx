@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useContext } from "react";
 import { StyleSheet } from "react-native";
+import ButtonStyles from "../components/ButtonStyles";
 import useColorScheme from "../hooks/useColorScheme";
 
 import { Text, View, TouchableOpacity } from "../components/Themed";
@@ -36,8 +37,9 @@ export default function AccountScreen() {
           setItem("userTheme", notColorScheme);
         }}
       >
-        <Text style={styles.title}>Toggle dark mode</Text>
+        <Text style={ButtonStyles.buttonText}>Toggle Dark Mode</Text>
       </TouchableOpacity>
+      <View style={styles.margin} />
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
@@ -45,7 +47,7 @@ export default function AccountScreen() {
           setItem("userToken", "");
         }}
       >
-        <Text style={styles.title}>Log out</Text>
+        <Text style={ButtonStyles.buttonText}>Log Out</Text>
       </TouchableOpacity>
     </View>
   );
@@ -68,11 +70,13 @@ const styles = StyleSheet.create({
     width: "80%",
   },
   button: {
+    borderRadius: 8,
     alignItems: "center",
-    justifyContent: "flex-start",
-    padding: 15,
-    borderRadius: 5,
-    margin: 20,
-    minWidth: 300,
+    justifyContent: "center",
+    width: 250,
+    height: 50,
+  },
+  margin: {
+    height: 25,
   },
 });

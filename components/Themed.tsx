@@ -12,6 +12,7 @@ import {
   ScrollView as DefaultScrollView,
   FlatList as DefaultFlatList,
   TouchableOpacity as DefaultTouchableOpacity,
+  SafeAreaView as DefaultSAView
 } from "react-native";
 
 import { SocialIcon as DefaultSocialIcon } from "react-native-elements";
@@ -101,6 +102,16 @@ export function View(props: ViewProps) {
   return <DefaultView style={[{ backgroundColor }, style]} {...otherProps} />;
 }
 
+export function SafeAreaView(props: ViewProps) {
+  const { style, lightColor, darkColor, ...otherProps } = props;
+  const backgroundColor = useThemeColor(
+    { light: lightColor, dark: darkColor },
+    "background"
+  );
+
+  return <DefaultSAView style={[{ backgroundColor }, style]} {...otherProps} />;
+}
+
 export function TouchableOpacity(props: TouchableOpacityProps) {
   const { style, lightColor, darkColor, ...otherProps } = props;
   const backgroundColor = useThemeColor(
@@ -120,12 +131,12 @@ export function LinkButton(props: LinkButtonProps) {
   const { style, lightColor, darkColor, title, onPress } = props;
   const textColor = useThemeColor(
     { light: lightColor, dark: darkColor },
-    "touchableColor"
+    "linkbuttonText"
   );
 
   return (
     <DefaultTouchableOpacity onPress={onPress}>
-      <DefaultText style={[{color: textColor, fontSize: 24}, style]}>
+      <DefaultText style={[{color: textColor, fontSize: 20}, style]}>
         {title}
       </DefaultText>
     </DefaultTouchableOpacity>

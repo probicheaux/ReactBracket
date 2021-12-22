@@ -15,6 +15,11 @@ const linking: LinkingOptions<RootStackParamList> = {
     screens: {
       Root: {
         screens: {
+          Home: {
+            screens: {
+              HomeScreen: "home",
+            },
+          },
           Brackets: {
             screens: {
               BracketScreen: "one",
@@ -22,7 +27,7 @@ const linking: LinkingOptions<RootStackParamList> = {
           },
           Account: {
             screens: {
-              AccountScreen: "two",
+              AccountScreen: "account",
             },
           },
         },
