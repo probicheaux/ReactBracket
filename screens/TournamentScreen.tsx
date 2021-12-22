@@ -11,8 +11,6 @@ import Colors from "../constants/Colors";
 
 import { RootStackScreenProps } from "../types";
 
-import { tournamentPath, postRequest, makeBracketPath } from "../constants/Api";
-
 // Need to test with non power of 2 number of entrants
 
 const strokeColor = "#b00";
@@ -363,39 +361,6 @@ export default function TournamentScreen({
     losers: [] as RoundProps[],
   };
   const [tourney, setTourney] = useState(emptyTourney);
-
-  function callback(response: { rounds: TourneyProps }) {
-    setTourney(response.rounds);
-  }
-
-  function callback2(response: { rounds: TourneyProps }) {
-    console.log(response);
-  }
-  let body = JSON.stringify({
-    tourney_id: 69420,
-  });
-
-  let body2 = JSON.stringify({
-    players: ["blargh", "pete", "mmrp", "snap", "nathansandwich"],
-    data: null,
-  });
-
-  useEffect(() => {
-    postRequest({
-      path: makeBracketPath,
-      body: body2,
-      callback: callback2,
-    });
-    return;
-  }, []);
-  useEffect(() => {
-    postRequest({
-      path: tournamentPath,
-      body: body,
-      callback: callback,
-    });
-    return;
-  }, []);
 
   function SeedRenderer({
     seed,
