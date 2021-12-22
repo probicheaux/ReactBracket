@@ -1,16 +1,15 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
-import { TouchableHighlight, Image, Platform, StyleSheet } from "react-native";
+import { Image, Platform, StyleSheet } from "react-native";
 
 import {
   Text,
   View,
   TextInput,
   TouchableOpacity,
-  SocialIcon,
   LinkButton,
 } from "../components/Themed";
-import { postRequest, loginPath } from "../constants/Api";
+import { loginPath } from "../constants/Api";
 import { setItem } from "../storage";
 import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
@@ -23,6 +22,7 @@ import {
 import { useContext } from "react";
 import AppContext from "../components/AppContext";
 import ButtonStyles from "../components/ButtonStyles";
+import { postRequest } from "../api/BaseRequests";
 WebBrowser.maybeCompleteAuthSession();
 
 export default function LoginScreen({ navigation }) {
@@ -46,19 +46,11 @@ export default function LoginScreen({ navigation }) {
       setToken(id_token);
     }
   }, [response]);
-  function getToken() {
-    let body = JSON.stringify({
-      username: username,
-      password: password,
-    });
-    postRequest({
-      path: loginPath,
-      body: body,
-      callback: (json: { token: string }) => {
-        setToken(json.token);
-        setItem("userToken", json.token);
-      },
-    });
+  
+  async function getToken() {
+    const resp = await postRequest(loginPath, { username, password });
+    setToken(resp.token);
+    setItem("userToken", resp.token);
   }
 
   return (
