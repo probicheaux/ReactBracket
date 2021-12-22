@@ -16,7 +16,8 @@ export default function CreateTournamentScreen({ navigation }: any) {
 
     const submit = async () => {
         try {
-            const createdTournament = await createTournament(user, data);
+            const newTournament = await createTournament(user, data);
+            navigation.navigate('TournamentDetails', {id: newTournament.id})
         } catch (e) {
             // TODO: Display error toast, but for now, just log
             console.log(`Error creating tournament: ${e}`)
@@ -30,14 +31,17 @@ export default function CreateTournamentScreen({ navigation }: any) {
             <Text style={styles.label}>Tournament Name</Text>
             <TextInput
                 value={data.name}
+                style={styles.input}
                 onChangeText={(n) => setData({...data, name: n})}
                 returnKeyType='done'
                 placeholder="Tournament Name"
             />
 
-            <TouchableOpacity style={ButtonStyles.container} onPress={submit}>
-                <Text style={ButtonStyles.buttonText}>Create</Text>
-            </TouchableOpacity>
+            <View style={styles.footer}>
+              <TouchableOpacity style={ButtonStyles.container} onPress={submit}>
+                  <Text style={ButtonStyles.buttonText}>Create</Text>
+              </TouchableOpacity>
+            </View>
         </View>
     );
 }
@@ -45,8 +49,7 @@ export default function CreateTournamentScreen({ navigation }: any) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    padding: 20,
   },
   headerContainer: {
     flexDirection: 'row',
@@ -55,6 +58,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: "bold",
+    marginBottom: 20,
   },
   separator: {
     marginVertical: 30,
@@ -67,6 +71,15 @@ const styles = StyleSheet.create({
   },
   label: {
       fontSize: 16,
-      fontWeight: '600',
+      fontWeight: '400',
+  },
+  input: {
+    fontSize: 24,
+    marginBottom: 20,
+  },
+  footer: {
+    marginTop: 40,
+    flexDirection: 'row',
+    justifyContent: 'center'
   }
 });

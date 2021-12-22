@@ -9,7 +9,7 @@ import { ScreenWithNavigation } from "../types";
 export default function HomeScreen({ navigation }: ScreenWithNavigation) {
 
     // TODO: Load user's tournaments from API
-    const [myTournaments, setMyTournaments] = useState([{name: 'test', id: 123}]);
+    const [myTournaments, setMyTournaments] = useState([]);
 
   return (
     <SafeAreaView style={styles.container}>
