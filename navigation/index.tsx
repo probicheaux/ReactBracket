@@ -28,6 +28,7 @@ import {
 } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
 import AppContext from "../components/AppContext";
+import HomeScreen from "../screens/HomeScreen";
 
 export default function Navigation({
   colorScheme,
@@ -53,7 +54,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 function RootNavigator() {
   const userContext = useContext(AppContext);
   const colorScheme = userContext.scheme;
-  if (!userContext.token) {
+  if (userContext.token) {
     return (
       <Stack.Navigator>
         <Stack.Screen
@@ -104,6 +105,17 @@ function BottomTabNavigator() {
         tabBarActiveTintColor: Colors[colorScheme].tint,
       }}
     >
+      <BottomTab.Screen
+        name="Home"
+        component={HomeScreen}
+        options={({ navigation }: RootTabScreenProps<"Home">) => ({
+          title: "Home",
+          headerShown: false,
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="home" color={color} />
+          ),
+        })}
+      />
       <BottomTab.Screen
         name="Brackets"
         component={BracketScreen}

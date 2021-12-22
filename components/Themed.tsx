@@ -131,7 +131,7 @@ export function LinkButton(props: LinkButtonProps) {
   const { style, lightColor, darkColor, title, onPress } = props;
   const textColor = useThemeColor(
     { light: lightColor, dark: darkColor },
-    "touchableColor"
+    "linkbuttonText"
   );
 
   return (
@@ -142,11 +142,6 @@ export function LinkButton(props: LinkButtonProps) {
     </DefaultTouchableOpacity>
 
   );
-}
-
-LinkButton.defaultProps = {
-  lightColor: '#2684FF',
-  darkColor: '#fff',
 }
 
 export function SocialIcon(props: SocialIconProps) {
