@@ -12,7 +12,9 @@ import {
   ScrollView as DefaultScrollView,
   FlatList as DefaultFlatList,
   TouchableOpacity as DefaultTouchableOpacity,
-  SafeAreaView as DefaultSAView
+  SafeAreaView as DefaultSAView,
+  ActivityIndicator as DefaultActivityIndicator,
+  ActivityIndicatorProps
 } from "react-native";
 
 import { SocialIcon as DefaultSocialIcon } from "react-native-elements";
@@ -183,5 +185,16 @@ export function FlatList(props: FlatListProps) {
       alwaysBounceVertical={true}
       {...otherProps}
     />
+  );
+}
+
+export function ActivityIndicator(props: ActivityIndicatorProps) {
+  const { size = "large", ...otherProps } = props
+  const color = useThemeColor(
+    {},
+    "touchableColor"
+  );
+  return (
+    <DefaultActivityIndicator size={size} color={color} {...otherProps} />
   );
 }

@@ -15,9 +15,10 @@ const linking: LinkingOptions<RootStackParamList> = {
     screens: {
       Root: {
         screens: {
-          Home: {
+          HomeTab: {
             screens: {
               HomeScreen: "home",
+              TournamentDetails: "TournamentDetails"
             },
           },
           Brackets: {

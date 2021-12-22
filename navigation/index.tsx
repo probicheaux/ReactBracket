@@ -30,6 +30,7 @@ import LinkingConfiguration from "./LinkingConfiguration";
 import AppContext from "../components/AppContext";
 import CreateTournamentScreen from "../screens/TournamentCreation/CreateTournamentScreen";
 import HomeScreen from "../screens/HomeScreen";
+import TournamentDetailsScreen from "../screens/TournamentDetails";
 
 export default function Navigation({
   colorScheme,
@@ -96,6 +97,28 @@ function RootNavigator() {
   );
 }
 
+function HomeStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
+          title: "Home",
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="TournamentDetails"
+        component={TournamentDetailsScreen}
+        options={{
+          title: "Tournament",
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
+
 /**
  * A bottom tab navigator displays tab buttons on the bottom of the display to switch screens.
  * https://reactnavigation.org/docs/bottom-tab-navigator
@@ -113,15 +136,15 @@ function BottomTabNavigator() {
       }}
     >
       <BottomTab.Screen
-        name="Home"
-        component={HomeScreen}
-        options={({ navigation }: RootTabScreenProps<"Home">) => ({
+        name="HomeTab"
+        component={HomeStack}
+        options={{
           title: "Home",
           headerShown: false,
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="home" color={color} />
           ),
-        })}
+        }}
       />
       <BottomTab.Screen
         name="Brackets"

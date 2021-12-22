@@ -25,6 +25,9 @@ export type RootStackParamList = {
   Login: undefined;
   Register: undefined;
 
+  Home: undefined
+  TournamentDetails: undefined
+
   // Modal views:
   CreateTournament: undefined;
 };
@@ -33,7 +36,7 @@ export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
   NativeStackScreenProps<RootStackParamList, Screen>;
 
 export type RootTabParamList = {
-  Home: undefined;
+  HomeTab: undefined;
   Brackets: undefined;
   Account: undefined;
 };
