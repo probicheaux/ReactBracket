@@ -5,9 +5,9 @@ import ButtonStyles from "../../components/ButtonStyles";
 
 import { Text, View, TouchableOpacity, TextInput } from "../../components/Themed";
 import { AuthUserContext } from "../../contexts/AuthContext";
-//import { ScreenWithNavigation } from "../../types";
+import { ScreenWithNavigation } from "../../types";
 
-export default function CreateTournamentScreen({ navigation }: any) {
+export default function CreateTournamentScreen({ navigation }: ScreenWithNavigation) {
 
     const { user } = useContext(AuthUserContext);
 
