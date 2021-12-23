@@ -9,22 +9,17 @@ import {
   TouchableOpacity,
   LinkButton,
 } from "../components/Themed";
-import { emailRegisterPath } from "../constants/Api";
 import ButtonStyles from "../components/ButtonStyles";
-import { postRequest } from "../api/BaseRequests";
+import { ScreenWithNavigation } from "../types";
+import { registerUser } from "../api/Requests";
 
-export default function RegisterScreen({ navigation }) {
+export default function RegisterScreen({ navigation }: ScreenWithNavigation) {
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
 
   async function register() {
-    const body = {
-      username,
-      password,
-      email,
-    };
-    const resp = await postRequest(emailRegisterPath, body);
+    const resp = await registerUser(email, username, password);
     if(resp.success) {
       navigation.navigate("Login");
     }
