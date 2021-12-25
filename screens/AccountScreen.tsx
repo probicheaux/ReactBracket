@@ -8,6 +8,7 @@ import { Text, View, TouchableOpacity } from "../components/Themed";
 import AppContext from "../components/AppContext";
 import { color } from "react-native-reanimated";
 import { setItem } from "../storage";
+import { getAuth } from "firebase/auth";
 
 export default function AccountScreen() {
   const context = useContext(AppContext);
@@ -45,6 +46,7 @@ export default function AccountScreen() {
         onPress={() => {
           setToken("");
           setItem("userToken", "");
+          getAuth().signOut();
         }}
       >
         <Text style={ButtonStyles.buttonText}>Log Out</Text>
