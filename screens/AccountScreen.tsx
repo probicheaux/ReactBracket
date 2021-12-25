@@ -14,8 +14,6 @@ export default function AccountScreen() {
   const context = useContext(AppContext);
   const colorScheme = context.scheme;
   const setScheme = context.setScheme;
-  const token = context.token;
-  const setToken = context.setToken;
   const notColorScheme = colorScheme === "dark" ? "light" : "dark";
 
   return (
@@ -44,7 +42,6 @@ export default function AccountScreen() {
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
-          setToken("");
           setItem("userToken", "");
           getAuth().signOut();
         }}

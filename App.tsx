@@ -6,39 +6,23 @@ import useCachedResources from "./hooks/useCachedResources";
 import useColorScheme from "./hooks/useColorScheme";
 import Navigation from "./navigation";
 import AppContext from "./components/AppContext";
-import { AuthUserContext } from "./contexts/AuthContext";
+import { auth, AuthUserContext } from "./contexts/AuthContext";
 import { getItem } from "./storage";
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAuth, User } from "firebase/auth";
+import { User } from "firebase/auth";
 
 import { getFirestore, setDoc, doc } from "firebase/firestore";
-import { FIREBASE_KEY } from "@env";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: FIREBASE_KEY,
-  authDomain: "personal-261304.firebaseapp.com",
-  projectId: "personal-261304",
-  storageBucket: "personal-261304.appspot.com",
-  messagingSenderId: "1076294747951",
-  appId: "1:1076294747951:web:e9dc5db7f65cdfaa3343da",
-  measurementId: "G-KGZGCMVZKM",
-};
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth();
-
 export default function App() {
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
 
-  const [token, setToken] = useState("" as string | undefined | null);
   const [scheme, setScheme] = useState(colorScheme);
   const [user, setUser] = useState(null as User | null);
   useEffect(() => {
-    getItem("userToken").then((result) => setToken(result));
+    getItem("userToken").then(() => {});
   }, []);
   useEffect(() => {
     getItem("userTheme").then((result) => {
@@ -48,16 +32,17 @@ export default function App() {
     });
   }, []);
   useEffect(() => {
-    auth.onAuthStateChanged(setUser);
+    auth.onAuthStateChanged((user) => {
+      setUser(user);
+      console.log(user);
+    });
   }, []);
   const userSettings = {
-    token: token,
     scheme: scheme,
     setScheme: setScheme,
-    setToken: setToken,
   };
 
-  const firebaseUser = { user, setUser };
+  const authContext = { user, setUser, auth };
 
   if (!isLoadingComplete) {
     return null;
@@ -65,7 +50,7 @@ export default function App() {
     return (
       <SafeAreaProvider>
         <AppContext.Provider value={userSettings}>
-          <AuthUserContext.Provider value={firebaseUser}>
+          <AuthUserContext.Provider value={authContext}>
             <Navigation colorScheme={scheme} />
             <StatusBar />
           </AuthUserContext.Provider>
