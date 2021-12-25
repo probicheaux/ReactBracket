@@ -3,7 +3,7 @@ import React from "react";
 type ColorScheme = "light" | "dark";
 
 const AppContext = React.createContext({
-  scheme: "dark" as ColorScheme,
+  scheme: "light" as ColorScheme,
   setScheme: (scheme: ColorScheme) => {},
 });
 
