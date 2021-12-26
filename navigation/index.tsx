@@ -58,7 +58,7 @@ function RootNavigator() {
   const userContext = useContext(AppContext);
   const { user } = useContext(AuthUserContext);
   const colorScheme = userContext.scheme;
-  if (!authUserContext.user) {
+  if (!user) {
     return (
       <Stack.Navigator>
         <Stack.Screen
