@@ -26,5 +26,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'yarn'
+    - run: echo FIREBASE_KEY=${{ secrets.FIREBASE_KEY }} >> .env
     - run: yarn
     - run: yarn test
+    - run: rm .env

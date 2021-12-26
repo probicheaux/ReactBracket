@@ -28,6 +28,7 @@ import {
 } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
 import AppContext from "../components/AppContext";
+import { AuthUserContext } from "../contexts/AuthContext";
 import CreateTournamentScreen from "../screens/TournamentCreation/CreateTournamentScreen";
 import HomeScreen from "../screens/HomeScreen";
 import TournamentDetailsScreen from "../screens/TournamentDetails";
@@ -55,8 +56,9 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
   const userContext = useContext(AppContext);
+  const { user } = useContext(AuthUserContext);
   const colorScheme = userContext.scheme;
-  if (!userContext.token) {
+  if (!authUserContext.user) {
     return (
       <Stack.Navigator>
         <Stack.Screen
@@ -86,12 +88,12 @@ function RootNavigator() {
       />
       <Stack.Group screenOptions={{ presentation: "modal" }}>
         <Stack.Screen
-            name="CreateTournament"
-            component={CreateTournamentScreen}
-            options={{
-              title: "New Tournament",
-            }}
-          />
+          name="CreateTournament"
+          component={CreateTournamentScreen}
+          options={{
+            title: "New Tournament",
+          }}
+        />
       </Stack.Group>
     </Stack.Navigator>
   );
@@ -141,9 +143,7 @@ function BottomTabNavigator() {
         options={{
           title: "Home",
           headerShown: false,
-          tabBarIcon: ({ color }) => (
-            <TabBarIcon name="home" color={color} />
-          ),
+          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
         }}
       />
       <BottomTab.Screen

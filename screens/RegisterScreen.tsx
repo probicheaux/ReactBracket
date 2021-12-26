@@ -11,18 +11,24 @@ import {
 } from "../components/Themed";
 import ButtonStyles from "../components/ButtonStyles";
 import { ScreenWithNavigation } from "../types";
-import { registerUser } from "../api/Requests";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+} from "firebase/auth";
 
+const auth = getAuth();
 export default function RegisterScreen({ navigation }: ScreenWithNavigation) {
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
 
   async function register() {
-    const resp = await registerUser(email, username, password);
-    if(resp.success) {
-      navigation.navigate("Login");
-    }
+    createUserWithEmailAndPassword(auth, email, password).then(
+      (userCredential) => {
+        sendEmailVerification(userCredential.user);
+      }
+    );
   }
 
   return (
@@ -57,16 +63,15 @@ export default function RegisterScreen({ navigation }: ScreenWithNavigation) {
         <Text style={ButtonStyles.buttonText}>Register</Text>
       </TouchableOpacity>
 
-      <View style={{marginTop: 32, alignItems: 'center'}}>
+      <View style={{ marginTop: 32, alignItems: "center" }}>
         <Text style={styles.body}>Already have an account?</Text>
         <LinkButton
-        darkColor="#fff"
-        onPress={() => {
-          navigation.navigate("Login");
-        }}
-        title='Log in'
-      />
-
+          darkColor="#fff"
+          onPress={() => {
+            navigation.navigate("Login");
+          }}
+          title="Log in"
+        />
       </View>
 
       {/* Use a light status bar on iOS to account for the black space above the modal */}

@@ -6,47 +6,23 @@ import useCachedResources from "./hooks/useCachedResources";
 import useColorScheme from "./hooks/useColorScheme";
 import Navigation from "./navigation";
 import AppContext from "./components/AppContext";
+import { auth, AuthUserContext } from "./contexts/AuthContext";
 import { getItem } from "./storage";
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getFirestore, setDoc, doc } from "firebase/firestore";
-import { FIREBASE_KEY } from "@env";
+import { User } from "firebase/auth";
 
-// Add a new document in collection "cities"
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { getFirestore, setDoc, doc } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: FIREBASE_KEY,
-  authDomain: "personal-261304.firebaseapp.com",
-  projectId: "personal-261304",
-  storageBucket: "personal-261304.appspot.com",
-  messagingSenderId: "1076294747951",
-  appId: "1:1076294747951:web:e9dc5db7f65cdfaa3343da",
-  measurementId: "G-KGZGCMVZKM",
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-
-const db = getFirestore();
 export default function App() {
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
 
-  const [token, setToken] = useState("" as string | undefined | null);
   const [scheme, setScheme] = useState(colorScheme);
+  const [user, setUser] = useState(null as User | null);
   useEffect(() => {
-    setDoc(doc(db, "cities", "LA"), {
-      name: "Los Angeles",
-      state: "CA",
-      country: "USA",
-    });
-  }, []);
-  useEffect(() => {
-    getItem("userToken").then((result) => setToken(result));
+    getItem("userToken").then(() => {});
   }, []);
   useEffect(() => {
     getItem("userTheme").then((result) => {
@@ -55,20 +31,29 @@ export default function App() {
       }
     });
   }, []);
+  useEffect(() => {
+    auth.onAuthStateChanged((user) => {
+      setUser(user);
+      console.log(user);
+    });
+  }, []);
   const userSettings = {
-    token: token,
     scheme: scheme,
     setScheme: setScheme,
-    setToken: setToken,
   };
+
+  const authContext = { user, setUser, auth };
+
   if (!isLoadingComplete) {
     return null;
   } else {
     return (
       <SafeAreaProvider>
         <AppContext.Provider value={userSettings}>
-          <Navigation colorScheme={scheme} />
-          <StatusBar />
+          <AuthUserContext.Provider value={authContext}>
+            <Navigation colorScheme={scheme} />
+            <StatusBar />
+          </AuthUserContext.Provider>
         </AppContext.Provider>
       </SafeAreaProvider>
     );

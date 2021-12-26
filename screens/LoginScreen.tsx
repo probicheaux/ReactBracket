@@ -1,5 +1,6 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { AuthUserContext } from "../contexts/AuthContext";
 import { Image, Platform, StyleSheet } from "react-native";
 
 import {
@@ -13,23 +14,19 @@ import { setItem } from "../storage";
 import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
 import {
-  getAuth,
   GoogleAuthProvider,
   signInWithCredential,
+  signInWithEmailAndPassword,
 } from "firebase/auth";
 
-import { useContext } from "react";
-import AppContext from "../components/AppContext";
 import ButtonStyles from "../components/ButtonStyles";
-import { loginUser } from "../api/Requests";
 import { ScreenWithNavigation } from "../types";
 
 WebBrowser.maybeCompleteAuthSession();
 
 export default function LoginScreen({ navigation }: ScreenWithNavigation) {
-  const context = useContext(AppContext);
-  const setToken = context.setToken;
-  const [username, setUserName] = useState("");
+  const authContext = useContext(AuthUserContext);
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
     clientId:
@@ -39,27 +36,21 @@ export default function LoginScreen({ navigation }: ScreenWithNavigation) {
   useEffect(() => {
     if (response?.type === "success") {
       const { id_token } = response.params;
-
-      const auth = getAuth();
-      const provider = new GoogleAuthProvider();
       const credential = GoogleAuthProvider.credential(id_token);
-      signInWithCredential(auth, credential);
-      setToken(id_token);
+      signInWithCredential(authContext.auth, credential);
     }
   }, [response]);
-  
-  async function getToken() {
-    const respToken = await loginUser(username, password);
-    setToken(respToken);
-    setItem("userToken", respToken);
+
+  async function submitLogin() {
+    signInWithEmailAndPassword(authContext.auth, email, password);
   }
 
   return (
     <View style={styles.container}>
       <TextInput
         style={styles.textField}
-        placeholder="Username"
-        onChangeText={(username) => setUserName(username)}
+        placeholder="Email"
+        onChangeText={(email) => setEmail(email)}
       />
       <View style={styles.margin} />
       <TextInput
@@ -73,7 +64,7 @@ export default function LoginScreen({ navigation }: ScreenWithNavigation) {
       <TouchableOpacity
         style={ButtonStyles.container}
         onPress={() => {
-          getToken();
+          submitLogin();
           setPassword("");
         }}
       >
