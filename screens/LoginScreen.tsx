@@ -41,7 +41,7 @@ export default function LoginScreen({ navigation }: ScreenWithNavigation) {
     }
   }, [response]);
 
-  async function getToken() {
+  async function submitLogin() {
     signInWithEmailAndPassword(authContext.auth, email, password);
   }
 
@@ -64,7 +64,7 @@ export default function LoginScreen({ navigation }: ScreenWithNavigation) {
       <TouchableOpacity
         style={ButtonStyles.container}
         onPress={() => {
-          getToken();
+          submitLogin();
           setPassword("");
         }}
       >
