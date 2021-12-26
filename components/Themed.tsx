@@ -8,13 +8,14 @@ import {
   Text as DefaultText,
   View as DefaultView,
   Button as DefaultButton,
+  ViewStyle,
   TextInput as DefaultTextInput,
   ScrollView as DefaultScrollView,
   FlatList as DefaultFlatList,
   TouchableOpacity as DefaultTouchableOpacity,
   SafeAreaView as DefaultSAView,
   ActivityIndicator as DefaultActivityIndicator,
-  ActivityIndicatorProps
+  ActivityIndicatorProps,
 } from "react-native";
 
 import { SocialIcon as DefaultSocialIcon } from "react-native-elements";
@@ -50,7 +51,12 @@ export type ScrollViewProps = ThemeProps & DefaultScrollView["props"];
 export type FlatListProps = ThemeProps & DefaultFlatList["props"];
 export type TouchableOpacityProps = ThemeProps &
   DefaultTouchableOpacity["props"];
-export type LinkButtonProps = ThemeProps & { title: string, style?: TextProps, onPress: () => void }
+export type LinkButtonProps = ThemeProps & {
+  title: string;
+  style?: ViewStyle;
+  textStyle?: TextProps;
+  onPress: () => void;
+};
 export type MaterialCommunityIconsProps = ThemeProps &
   DefaultMaterialCommunityIcons["props"];
 export type SocialIconProps = ThemeProps & DefaultSocialIcon["props"];
@@ -130,19 +136,25 @@ export function TouchableOpacity(props: TouchableOpacityProps) {
 }
 
 export function LinkButton(props: LinkButtonProps) {
-  const { style, lightColor, darkColor, title, onPress } = props;
+  const { style, textStyle, lightColor, darkColor, title, onPress } = props;
   const textColor = useThemeColor(
     { light: lightColor, dark: darkColor },
     "linkbuttonText"
   );
 
+  const touchableBorderColor = useThemeColor(
+    { light: undefined, dark: undefined },
+    "touchableColor"
+  );
   return (
-    <DefaultTouchableOpacity onPress={onPress}>
-      <DefaultText style={[{color: textColor, fontSize: 20}, style]}>
+    <DefaultTouchableOpacity
+      onPress={onPress}
+      style={[{ borderWidth: 1, borderColor: touchableBorderColor }, style]}
+    >
+      <DefaultText style={[{ color: textColor, fontSize: 20 }, textStyle]}>
         {title}
       </DefaultText>
     </DefaultTouchableOpacity>
-
   );
 }
 
@@ -189,12 +201,7 @@ export function FlatList(props: FlatListProps) {
 }
 
 export function ActivityIndicator(props: ActivityIndicatorProps) {
-  const { size = "large", ...otherProps } = props
-  const color = useThemeColor(
-    {},
-    "touchableColor"
-  );
-  return (
-    <DefaultActivityIndicator size={size} color={color} {...otherProps} />
-  );
+  const { size = "large", ...otherProps } = props;
+  const color = useThemeColor({}, "touchableColor");
+  return <DefaultActivityIndicator size={size} color={color} {...otherProps} />;
 }

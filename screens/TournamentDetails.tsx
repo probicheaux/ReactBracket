@@ -9,6 +9,7 @@ import { Text, View, LinkButton, TextInput } from "../components/Themed";
 import { AuthUserContext } from "../contexts/AuthContext";
 import { Tournament, Bracket } from "../models";
 import { ScreenWithNavigation } from "../types";
+import ButtonStyles from "../components/ButtonStyles";
 
 type DetailScreen = ScreenWithNavigation & { route: Route<any> };
 
@@ -74,10 +75,15 @@ export default function TournamentDetailsScreen({
               style={styles.textInput}
               onChangeText={(t) => setBracket({ ...bracket, name: t })}
             />
-            <LinkButton title="Add" onPress={() => submitAddBracket()} />
+            <LinkButton
+              title="Add"
+              onPress={() => submitAddBracket()}
+              style={ButtonStyles.container}
+            />
             <LinkButton
               title="Cancel"
               onPress={() => setShowAddBracketModal(!showAddBracket)}
+              style={ButtonStyles.container}
             />
           </View>
         </View>
@@ -105,7 +111,7 @@ export default function TournamentDetailsScreen({
       <LinkButton
         title="Add Bracket"
         onPress={() => setShowAddBracketModal(true)}
-        style={{ marginTop: 24 }}
+        style={ButtonStyles.container}
       />
     </View>
   );
@@ -115,6 +121,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    alignItems: "center",
   },
   headerContainer: {
     flexDirection: "row",
@@ -182,5 +189,6 @@ const styles = StyleSheet.create({
   },
   textInput: {
     fontSize: 20,
+    alignItems: "center",
   },
 });
