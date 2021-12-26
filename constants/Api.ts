@@ -20,12 +20,11 @@ if (Platform.OS === "web") {
   apiPath = "http://127.0.0.1:8000";
 }
 
-export default apiPath;
-
 export var loginPath = "/api/user/login/";
 export var logoutPath = "/api/user/logout/";
 export var emailRegisterPath = "/api/user/register-from-email/";
 export var tournamentPath = "/api/tournament/";
 export var makeBracketPath = "/api/makeBracketFromEntrants/";
 
-export const apiHost = `${apiPath}/v1`;
+export const apiHost = `${apiPath}/api/v1`;
+export const apiUnversionedHost = `${apiPath}/api`;

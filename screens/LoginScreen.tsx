@@ -9,7 +9,6 @@ import {
   TouchableOpacity,
   LinkButton,
 } from "../components/Themed";
-import { loginPath } from "../constants/Api";
 import { setItem } from "../storage";
 import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
@@ -22,10 +21,12 @@ import {
 import { useContext } from "react";
 import AppContext from "../components/AppContext";
 import ButtonStyles from "../components/ButtonStyles";
-import { postRequest } from "../api/BaseRequests";
+import { loginUser } from "../api/Requests";
+import { ScreenWithNavigation } from "../types";
+
 WebBrowser.maybeCompleteAuthSession();
 
-export default function LoginScreen({ navigation }) {
+export default function LoginScreen({ navigation }: ScreenWithNavigation) {
   const context = useContext(AppContext);
   const setToken = context.setToken;
   const [username, setUserName] = useState("");
@@ -48,9 +49,9 @@ export default function LoginScreen({ navigation }) {
   }, [response]);
   
   async function getToken() {
-    const resp = await postRequest(loginPath, { username, password });
-    setToken(resp.token);
-    setItem("userToken", resp.token);
+    const respToken = await loginUser(username, password);
+    setToken(respToken);
+    setItem("userToken", respToken);
   }
 
   return (
