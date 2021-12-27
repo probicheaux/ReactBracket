@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import { Platform, StyleSheet } from "react-native";
 
 import {
@@ -10,27 +10,65 @@ import {
   LinkButton,
 } from "../components/Themed";
 import ButtonStyles from "../components/ButtonStyles";
-import { ScreenWithNavigation } from "../types";
+import { RootStackScreenProps } from "../types";
 import {
-  getAuth,
   createUserWithEmailAndPassword,
   sendEmailVerification,
+  User,
 } from "firebase/auth";
 
-const auth = getAuth();
-export default function RegisterScreen({ navigation }: ScreenWithNavigation) {
+import { createUser } from "../api/Requests";
+import { AuthUserContext } from "../contexts/AuthContext";
+
+export default function RegisterScreen({
+  navigation,
+  route,
+}: RootStackScreenProps<"Register">) {
+  const { fromGoogleFlow } = route.params;
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
+  const authUserContext = useContext(AuthUserContext);
 
   async function register() {
-    createUserWithEmailAndPassword(auth, email, password).then(
-      (userCredential) => {
-        sendEmailVerification(userCredential.user);
-      }
-    );
+    if (!fromGoogleFlow) {
+      let userCredential = await createUserWithEmailAndPassword(
+        authUserContext.auth,
+        email,
+        password
+      );
+      await createUser(userCredential.user, { username });
+      await sendEmailVerification(userCredential.user);
+    } else {
+      await createUser(authUserContext.user as User, { username });
+    }
+    authUserContext.setUserName(username);
   }
 
+  const renderEmailPassword = () => {
+    if (fromGoogleFlow) {
+      return <></>;
+    }
+
+    return (
+      <>
+        <View style={styles.margin} />
+        <TextInput
+          style={styles.textField}
+          placeholder="Email"
+          onChangeText={(email) => setEmail(email)}
+        />
+        <View style={styles.margin} />
+        <TextInput
+          style={styles.textField}
+          secureTextEntry={true}
+          placeholder="Password"
+          onChangeText={(password) => setPassword(password)}
+          value={password}
+        />
+      </>
+    );
+  };
   return (
     <View style={styles.container}>
       <TextInput
@@ -38,20 +76,7 @@ export default function RegisterScreen({ navigation }: ScreenWithNavigation) {
         placeholder="Username"
         onChangeText={(username) => setUserName(username)}
       />
-      <View style={styles.margin} />
-      <TextInput
-        style={styles.textField}
-        placeholder="Email"
-        onChangeText={(email) => setEmail(email)}
-      />
-      <View style={styles.margin} />
-      <TextInput
-        style={styles.textField}
-        secureTextEntry={true}
-        placeholder="Password"
-        onChangeText={(password) => setPassword(password)}
-        value={password}
-      />
+      {renderEmailPassword()}
       <View style={styles.bigMargin} />
       <TouchableOpacity
         style={ButtonStyles.container}

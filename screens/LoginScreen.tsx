@@ -17,10 +17,12 @@ import {
   GoogleAuthProvider,
   signInWithCredential,
   signInWithEmailAndPassword,
+  User,
 } from "firebase/auth";
 
 import ButtonStyles from "../components/ButtonStyles";
 import { ScreenWithNavigation } from "../types";
+import { getUser } from "../api/Requests";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -74,14 +76,23 @@ export default function LoginScreen({ navigation }: ScreenWithNavigation) {
       <LinkButton
         darkColor="#fff"
         onPress={() => {
-          navigation.navigate("Register");
+          navigation.navigate("Register", { fromGoogleFlow: false });
         }}
         title="Sign Up"
       />
       <View style={styles.margin} />
       <TouchableOpacity
         style={ButtonStyles.invisibleContainer}
-        onPress={() => promptAsync()}
+        onPress={() => {
+          promptAsync();
+          let user = authContext.user as User;
+          getUser(user).then(
+            () => {},
+            () => {
+              navigation.navigate("Register", { fromGoogleFlow: true });
+            }
+          );
+        }}
       >
         <Image
           style={styles.image}

@@ -20,5 +20,7 @@ export const auth = getAuth();
 export const AuthUserContext = createContext({
   user: null as User | null,
   setUser: (user: User) => {},
+  username: null as string | null,
+  setUserName: (username: string) => {},
   auth: auth,
 });
