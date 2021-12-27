@@ -1,7 +1,6 @@
 import { Route } from "@react-navigation/native";
 import React, { useContext, useEffect, useState } from "react";
 import { Modal, StyleSheet } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { getTournament, addBracket } from "../api/Requests";
 import Spinner from "../components/Spinner";
 
@@ -10,6 +9,7 @@ import { AuthUserContext } from "../contexts/AuthContext";
 import { Tournament, Bracket } from "../models";
 import { ScreenWithNavigation } from "../types";
 import ButtonStyles from "../components/ButtonStyles";
+import { User } from "firebase/auth";
 
 type DetailScreen = ScreenWithNavigation & { route: Route<any> };
 
@@ -18,9 +18,6 @@ export default function TournamentDetailsScreen({
   route,
 }: DetailScreen) {
   const { user } = useContext(AuthUserContext);
-  if (!user) {
-    throw new Error("User not defined");
-  }
   const { id: tournamentId } = route.params as { id: string };
 
   // TODO: Update data and send to API when done
@@ -33,7 +30,7 @@ export default function TournamentDetailsScreen({
   const [showAddBracket, setShowAddBracketModal] = useState(false);
 
   const fetchTournamentDetails = async () => {
-    const data = await getTournament(tournamentId, user);
+    const data = await getTournament(tournamentId, user as User);
     setTournament(data);
     setLoading(false);
   };
@@ -45,7 +42,7 @@ export default function TournamentDetailsScreen({
 
   const submitAddBracket = async () => {
     setLoading(true);
-    await addBracket(bracket, tournamentId, user);
+    await addBracket(bracket, tournamentId, user as User);
     setBracket({ name: "" });
     // Refresh w/ new bracket
     fetchTournamentDetails();

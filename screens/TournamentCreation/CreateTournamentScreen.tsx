@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { StyleSheet } from "react-native";
 import { createTournament } from "../../api/Requests";
 import ButtonStyles from "../../components/ButtonStyles";
+import { User } from "firebase/auth";
 
 import {
   Text,
@@ -22,10 +23,7 @@ export default function CreateTournamentScreen({
 
   const submit = async () => {
     try {
-      if (!user) {
-        throw new Error("User not logged in");
-      }
-      const newTournament = await createTournament(user, data);
+      const newTournament = await createTournament(user as User, data);
       navigation.navigate("TournamentDetails", { id: newTournament.id });
     } catch (e) {
       // TODO: Display error toast, but for now, just log
