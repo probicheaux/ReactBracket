@@ -1,7 +1,6 @@
 import { Route } from "@react-navigation/native";
 import React, { useContext, useEffect, useState } from "react";
 import { Modal, StyleSheet } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { getTournament, addBracket } from "../api/Requests";
 import Spinner from "../components/Spinner";
 
@@ -9,6 +8,8 @@ import { Text, View, LinkButton, TextInput } from "../components/Themed";
 import { AuthUserContext } from "../contexts/AuthContext";
 import { Tournament, Bracket } from "../models";
 import { ScreenWithNavigation } from "../types";
+import ButtonStyles from "../components/ButtonStyles";
+import { User } from "firebase/auth";
 
 type DetailScreen = ScreenWithNavigation & { route: Route<any> };
 
@@ -17,9 +18,6 @@ export default function TournamentDetailsScreen({
   route,
 }: DetailScreen) {
   const { user } = useContext(AuthUserContext);
-  if (!user) {
-    throw new Error("User not defined");
-  }
   const { id: tournamentId } = route.params as { id: string };
 
   // TODO: Update data and send to API when done
@@ -32,7 +30,7 @@ export default function TournamentDetailsScreen({
   const [showAddBracket, setShowAddBracketModal] = useState(false);
 
   const fetchTournamentDetails = async () => {
-    const data = await getTournament(tournamentId, user);
+    const data = await getTournament(tournamentId, user as User);
     setTournament(data);
     setLoading(false);
   };
@@ -44,7 +42,7 @@ export default function TournamentDetailsScreen({
 
   const submitAddBracket = async () => {
     setLoading(true);
-    await addBracket(bracket, tournamentId, user);
+    await addBracket(bracket, tournamentId, user as User);
     setBracket({ name: "" });
     // Refresh w/ new bracket
     fetchTournamentDetails();
@@ -74,10 +72,15 @@ export default function TournamentDetailsScreen({
               style={styles.textInput}
               onChangeText={(t) => setBracket({ ...bracket, name: t })}
             />
-            <LinkButton title="Add" onPress={() => submitAddBracket()} />
+            <LinkButton
+              title="Add"
+              onPress={() => submitAddBracket()}
+              style={ButtonStyles.container}
+            />
             <LinkButton
               title="Cancel"
               onPress={() => setShowAddBracketModal(!showAddBracket)}
+              style={ButtonStyles.container}
             />
           </View>
         </View>
@@ -105,7 +108,7 @@ export default function TournamentDetailsScreen({
       <LinkButton
         title="Add Bracket"
         onPress={() => setShowAddBracketModal(true)}
-        style={{ marginTop: 24 }}
+        style={ButtonStyles.container}
       />
     </View>
   );
@@ -115,6 +118,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    alignItems: "center",
   },
   headerContainer: {
     flexDirection: "row",
@@ -182,5 +186,6 @@ const styles = StyleSheet.create({
   },
   textInput: {
     fontSize: 20,
+    alignItems: "center",
   },
 });

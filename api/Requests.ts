@@ -45,7 +45,6 @@ export const getTournaments = async (user: User) => {
 // Get single tournmanet details
 export const getTournament = async (id: string, user: User) => {
   const url = `${apiHost}/tournaments/${id}`;
-  console.log("GET: ", url);
   const resp = await getRequest(url, user);
   return resp as Tournament;
 };

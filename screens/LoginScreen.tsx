@@ -72,11 +72,11 @@ export default function LoginScreen({ navigation }: ScreenWithNavigation) {
       </TouchableOpacity>
       <View style={styles.margin} />
       <LinkButton
-        darkColor="#fff"
         onPress={() => {
           navigation.navigate("Register");
         }}
         title="Sign Up"
+        style={ButtonStyles.container}
       />
       <View style={styles.margin} />
       <TouchableOpacity
