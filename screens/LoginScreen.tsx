@@ -44,7 +44,10 @@ export default function LoginScreen({ navigation }: ScreenWithNavigation) {
   }, [response]);
 
   async function submitLogin() {
-    signInWithEmailAndPassword(authContext.auth, email, password);
+    await signInWithEmailAndPassword(authContext.auth, email, password);
+    let user = authContext.user as User;
+    let { username } = await getUser(user);
+    authContext.setUserName(username);
   }
 
   return (
@@ -84,14 +87,19 @@ export default function LoginScreen({ navigation }: ScreenWithNavigation) {
       <TouchableOpacity
         style={ButtonStyles.invisibleContainer}
         onPress={() => {
-          promptAsync();
-          let user = authContext.user as User;
-          getUser(user).then(
-            () => {},
-            () => {
-              navigation.navigate("Register", { fromGoogleFlow: true });
-            }
-          );
+          promptAsync()
+            .then(async () => {
+              let user = authContext.user as User;
+              return getUser(user);
+            })
+            .then(
+              ({ username }) => {
+                authContext.setUserName(username);
+              },
+              () => {
+                navigation.navigate("Register", { fromGoogleFlow: true });
+              }
+            );
         }}
       >
         <Image

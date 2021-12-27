@@ -6,12 +6,13 @@ import useColorScheme from "../hooks/useColorScheme";
 
 import { Text, View, TouchableOpacity } from "../components/Themed";
 import AppContext from "../components/AppContext";
+import { AuthUserContext } from "../contexts/AuthContext";
 import { color } from "react-native-reanimated";
 import { setItem } from "../storage";
-import { getAuth } from "firebase/auth";
 
 export default function AccountScreen() {
   const context = useContext(AppContext);
+  const { auth, username } = useContext(AuthUserContext);
   const colorScheme = context.scheme;
   const setScheme = context.setScheme;
   const notColorScheme = colorScheme === "dark" ? "light" : "dark";
@@ -29,6 +30,7 @@ export default function AccountScreen() {
         lightColor="#eee"
         darkColor="rgba(255,255,255,0.1)"
       />
+      <Text style={styles.title}>Hello, {username}</Text>
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
@@ -43,7 +45,7 @@ export default function AccountScreen() {
         style={styles.button}
         onPress={() => {
           setItem("userToken", "");
-          getAuth().signOut();
+          auth.signOut();
         }}
       >
         <Text style={ButtonStyles.buttonText}>Log Out</Text>

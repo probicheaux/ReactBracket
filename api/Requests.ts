@@ -29,7 +29,7 @@ export const createUser = async (
 export const getUser = async (user: User) => {
   const url = `${apiHost}/users`;
   const resp = await getRequest(url, user);
-  return resp as User;
+  return resp as UserInterface;
 };
 
 // Tournament Requests ---------------
