@@ -3,47 +3,60 @@ import { StyleSheet } from "react-native";
 import { createTournament } from "../../api/Requests";
 import ButtonStyles from "../../components/ButtonStyles";
 
-import { Text, View, TouchableOpacity, TextInput } from "../../components/Themed";
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  TextInput,
+} from "../../components/Themed";
 import { AuthUserContext } from "../../contexts/AuthContext";
 import { ScreenWithNavigation } from "../../types";
 
-export default function CreateTournamentScreen({ navigation }: ScreenWithNavigation) {
+export default function CreateTournamentScreen({
+  navigation,
+}: ScreenWithNavigation) {
+  const { user } = useContext(AuthUserContext);
 
-    const { user } = useContext(AuthUserContext);
+  // TODO: Update data and send to API when done
+  const [data, setData] = useState({ name: "" });
 
-    // TODO: Update data and send to API when done
-    const [data, setData] = useState({name: ''});
-
-    const submit = async () => {
-        try {
-            const newTournament = await createTournament(user, data);
-            navigation.navigate('TournamentDetails', {id: newTournament.id})
-        } catch (e) {
-            // TODO: Display error toast, but for now, just log
-            console.log(`Error creating tournament: ${e}`)
-        }
+  const submit = async () => {
+    try {
+      if (!user) {
+        throw new Error("User not logged in");
+      }
+      const newTournament = await createTournament(user, data);
+      navigation.navigate("TournamentDetails", { id: newTournament.id });
+    } catch (e) {
+      // TODO: Display error toast, but for now, just log
+      console.log(`Error creating tournament: ${e}`);
     }
+  };
 
-    return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Create Tournament</Text>
-            
-            <Text style={styles.label}>Tournament Name</Text>
-            <TextInput
-                value={data.name}
-                style={styles.input}
-                onChangeText={(n) => setData({...data, name: n})}
-                returnKeyType='done'
-                placeholder="Tournament Name"
-            />
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Create Tournament</Text>
 
-            <View style={styles.footer}>
-              <TouchableOpacity accessibilityRole="button" style={ButtonStyles.container} onPress={submit}>
-                  <Text style={ButtonStyles.buttonText}>Create</Text>
-              </TouchableOpacity>
-            </View>
-        </View>
-    );
+      <Text style={styles.label}>Tournament Name</Text>
+      <TextInput
+        value={data.name}
+        style={styles.input}
+        onChangeText={(n) => setData({ ...data, name: n })}
+        returnKeyType="done"
+        placeholder="Tournament Name"
+      />
+
+      <View style={styles.footer}>
+        <TouchableOpacity
+          accessibilityRole="button"
+          style={ButtonStyles.container}
+          onPress={submit}
+        >
+          <Text style={ButtonStyles.buttonText}>Create</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -52,8 +65,8 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   headerContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between'
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   title: {
     fontSize: 20,
@@ -66,12 +79,12 @@ const styles = StyleSheet.create({
     width: "80%",
   },
   tournamentListContainer: {
-    height: '40%',
+    height: "40%",
     margin: 20,
   },
   label: {
-      fontSize: 16,
-      fontWeight: '400',
+    fontSize: 16,
+    fontWeight: "400",
   },
   input: {
     fontSize: 24,
@@ -79,7 +92,7 @@ const styles = StyleSheet.create({
   },
   footer: {
     marginTop: 40,
-    flexDirection: 'row',
-    justifyContent: 'center'
-  }
+    flexDirection: "row",
+    justifyContent: "center",
+  },
 });
