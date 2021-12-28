@@ -23,7 +23,7 @@ export const createUser = async (
 ) => {
   const url = `${apiHost}/users`;
   const resp = await postRequest(url, userData, user);
-  return resp as User;
+  return resp as UserInterface;
 };
 
 export const getUser = async (user: User) => {
