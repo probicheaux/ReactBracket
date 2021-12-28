@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 import { StyleSheet } from "react-native";
 import ButtonStyles from "../components/ButtonStyles";
 import { AuthUserContext } from "../contexts/AuthContext";
@@ -15,14 +16,17 @@ import {
 import TournamentList from "../components/Tournaments/TournamentList";
 import { ScreenWithNavigation } from "../types";
 import { Tournament } from "../models";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function HomeScreen({ navigation }: ScreenWithNavigation) {
   const [myTournaments, setMyTournaments] = useState([] as Tournament[]);
-
+  const isFocused = useIsFocused();
   const { user } = useContext(AuthUserContext);
   useEffect(() => {
-    getTournaments(user as User).then(setMyTournaments);
-  }, []);
+    if (isFocused) {
+      getTournaments(user as User).then(setMyTournaments);
+    }
+  }, [isFocused]);
 
   return (
     <SafeAreaView style={styles.container}>
