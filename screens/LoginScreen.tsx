@@ -23,6 +23,7 @@ import {
 import ButtonStyles from "../components/ButtonStyles";
 import { ScreenWithNavigation } from "../types";
 import { getUser } from "../api/Requests";
+import { BadStatusError } from "../api/BaseRequests";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -39,7 +40,20 @@ export default function LoginScreen({ navigation }: ScreenWithNavigation) {
     if (response?.type === "success") {
       const { id_token } = response.params;
       const credential = GoogleAuthProvider.credential(id_token);
-      signInWithCredential(authContext.auth, credential);
+      signInWithCredential(authContext.auth, credential)
+        .then(async ({ user }) => {
+          return getUser(user);
+        })
+        .then(
+          ({ username }) => {
+            authContext.setUserName(username);
+          },
+          (e) => {
+            if (e instanceof BadStatusError && e.code == 404) {
+              navigation.navigate("Register", { fromGoogleFlow: true });
+            }
+          }
+        );
     }
   }, [response]);
 
@@ -87,19 +101,7 @@ export default function LoginScreen({ navigation }: ScreenWithNavigation) {
       <TouchableOpacity
         style={ButtonStyles.invisibleContainer}
         onPress={() => {
-          promptAsync()
-            .then(async () => {
-              let user = authContext.user as User;
-              return getUser(user);
-            })
-            .then(
-              ({ username }) => {
-                authContext.setUserName(username);
-              },
-              () => {
-                navigation.navigate("Register", { fromGoogleFlow: true });
-              }
-            );
+          promptAsync();
         }}
       >
         <Image

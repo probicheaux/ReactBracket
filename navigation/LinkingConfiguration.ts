@@ -18,12 +18,12 @@ const linking: LinkingOptions<RootStackParamList> = {
           HomeTab: {
             screens: {
               HomeScreen: "home",
-              TournamentDetails: "TournamentDetails"
+              TournamentDetails: "TournamentDetails",
             },
           },
           Brackets: {
             screens: {
-              BracketScreen: "one",
+              BracketScreen: "bracket",
             },
           },
           Account: {
