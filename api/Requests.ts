@@ -1,6 +1,6 @@
 import { User } from "firebase/auth";
 import { apiHost, apiUnversionedHost } from "../constants/Api";
-import { Tournament, Bracket } from "../models";
+import { Tournament, Bracket, User as UserInterface } from "../models";
 import { getRequest, postRequest } from "./BaseRequests";
 
 type LoginResponse = {
@@ -17,16 +17,19 @@ export const loginUser = async (username: string, password: string) => {
   return resp.token;
 };
 
-export const registerUser = async (
-  email: string,
-  username: string,
-  password: string
+export const createUser = async (
+  user: User,
+  userData: Partial<UserInterface>
 ) => {
-  const resp = await postRequest(
-    `${apiUnversionedHost}/user/register-from-email/`,
-    { email, username, password }
-  );
-  return resp.data;
+  const url = `${apiHost}/users`;
+  const resp = await postRequest(url, userData, user);
+  return resp as UserInterface;
+};
+
+export const getUser = async (user: User) => {
+  const url = `${apiHost}/users`;
+  const resp = await getRequest(url, user);
+  return resp as UserInterface;
 };
 
 // Tournament Requests ---------------

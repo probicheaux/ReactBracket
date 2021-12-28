@@ -21,6 +21,7 @@ export default function App() {
 
   const [scheme, setScheme] = useState(colorScheme);
   const [user, setUser] = useState(null as User | null);
+  const [username, setUserName] = useState(null as string | null);
   useEffect(() => {
     getItem("userToken").then(() => {});
   }, []);
@@ -42,7 +43,7 @@ export default function App() {
     setScheme: setScheme,
   };
 
-  const authContext = { user, setUser, auth };
+  const authContext = { user, setUser, auth, username, setUserName };
 
   if (!isLoadingComplete) {
     return null;

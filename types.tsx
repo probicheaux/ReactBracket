@@ -23,10 +23,10 @@ export type RootStackParamList = {
   Tournament: { name: string } | undefined;
   BracketList: { name: string } | undefined;
   Login: undefined;
-  Register: undefined;
+  Register: { fromGoogleFlow: boolean };
 
-  Home: undefined
-  TournamentDetails: undefined
+  Home: undefined;
+  TournamentDetails: undefined;
 
   // Modal views:
   CreateTournament: undefined;
@@ -43,8 +43,8 @@ export type RootTabParamList = {
 
 // For those many cases where you have a screen that only needs a navigation prop
 export type ScreenWithNavigation = {
-  navigation: NavigationProp<any>
-}
+  navigation: NavigationProp<any>;
+};
 
 export type RootTabScreenProps<Screen extends keyof RootTabParamList> =
   CompositeScreenProps<

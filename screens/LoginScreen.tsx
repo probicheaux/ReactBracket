@@ -17,10 +17,12 @@ import {
   GoogleAuthProvider,
   signInWithCredential,
   signInWithEmailAndPassword,
+  User,
 } from "firebase/auth";
 
 import ButtonStyles from "../components/ButtonStyles";
 import { ScreenWithNavigation } from "../types";
+import { getUser } from "../api/Requests";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -42,7 +44,10 @@ export default function LoginScreen({ navigation }: ScreenWithNavigation) {
   }, [response]);
 
   async function submitLogin() {
-    signInWithEmailAndPassword(authContext.auth, email, password);
+    await signInWithEmailAndPassword(authContext.auth, email, password);
+    let user = authContext.user as User;
+    let { username } = await getUser(user);
+    authContext.setUserName(username);
   }
 
   return (
@@ -73,7 +78,7 @@ export default function LoginScreen({ navigation }: ScreenWithNavigation) {
       <View style={styles.margin} />
       <LinkButton
         onPress={() => {
-          navigation.navigate("Register");
+          navigation.navigate("Register", { fromGoogleFlow: false });
         }}
         title="Sign Up"
         style={ButtonStyles.container}
@@ -81,7 +86,21 @@ export default function LoginScreen({ navigation }: ScreenWithNavigation) {
       <View style={styles.margin} />
       <TouchableOpacity
         style={ButtonStyles.invisibleContainer}
-        onPress={() => promptAsync()}
+        onPress={() => {
+          promptAsync()
+            .then(async () => {
+              let user = authContext.user as User;
+              return getUser(user);
+            })
+            .then(
+              ({ username }) => {
+                authContext.setUserName(username);
+              },
+              () => {
+                navigation.navigate("Register", { fromGoogleFlow: true });
+              }
+            );
+        }}
       >
         <Image
           style={styles.image}
