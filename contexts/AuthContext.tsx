@@ -16,11 +16,19 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth();
 
+interface AuthContext {
+  user?: User
+  setUser: (user: User) => void
+  username?: String
+  setUserName: (username: string) => void
+  auth: Auth
+}
+
 // TODO: Subscribe to auth state using firebase and update this context accordingly!
-export const AuthUserContext = createContext({
-  user: null as User | null,
+export const AuthUserContext = createContext<AuthContext>({
+  user: undefined,
   setUser: (user: User) => {},
-  username: null as string | null,
+  username: undefined,
   setUserName: (username: string) => {},
   auth: auth,
 });
