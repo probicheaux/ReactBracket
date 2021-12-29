@@ -1,19 +1,22 @@
 import { NavigationProp } from '@react-navigation/native';
 import React from 'react'
 import { ViewStyle, StyleSheet } from 'react-native';
+import { TouchableHighlight } from 'react-native-gesture-handler';
 import { Tournament } from '../../models';
 import { FlatList, View, Text, LinkButton } from '../Themed'
 
 interface TournamentListProps {
-    navigation: NavigationProp<any>
-    tournaments: Tournament[]
+    navigation: NavigationProp<any>;
+    tournaments: Tournament[];
+    emptyStateText?: string;
+    onPressTournament: (t: Tournament) => void;
 }
 
-const TournamentList = ({ tournaments, navigation }: TournamentListProps) => {
+const TournamentList = ({ tournaments, navigation, emptyStateText, onPressTournament }: TournamentListProps) => {
 
     const renderItem = ({item}: {item: Tournament}) => {
         return (
-            <View style={styles.row}>
+            <TouchableHighlight style={styles.row} activeOpacity={0.8} onPress={() => onPressTournament(item)}>
                 <View style={styles.left}>
                     <Text style={styles.nameText}>{item.name}</Text>
                 </View>
@@ -21,14 +24,14 @@ const TournamentList = ({ tournaments, navigation }: TournamentListProps) => {
                     {/* TODO: Replace with a "right arrow button" whenever we add it */}
                     <LinkButton title='View' onPress={() => navigation.navigate('TournamentDetails', {id: item.id })}/>
                 </View>
-            </View>
+            </TouchableHighlight>
         );
     }
 
-    if (tournaments.length === 0) {
+    if (tournaments.length === 0 && emptyStateText) {
         return (
             <View style={{ marginBottom: 32 }}>
-                <Text style={styles.body}>Tournaments you join will show up here.</Text>
+                <Text style={styles.body}>{emptyStateText}</Text>
             </View>
         );
     }

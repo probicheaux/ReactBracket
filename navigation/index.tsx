@@ -32,6 +32,7 @@ import { AuthUserContext } from "../contexts/AuthContext";
 import CreateTournamentScreen from "../screens/TournamentCreation/CreateTournamentScreen";
 import HomeScreen from "../screens/HomeScreen";
 import TournamentDetailsScreen from "../screens/TournamentDetails";
+import JoinTournamentScreen from "../screens/TournamentDiscovery/JoinTournamentScreen";
 
 export default function Navigation({
   colorScheme,
@@ -58,7 +59,7 @@ function RootNavigator() {
   const userContext = useContext(AppContext);
   const { user, username } = useContext(AuthUserContext);
   const colorScheme = userContext.scheme;
-  if (!user || !username) {
+  if (false) {
     return (
       <Stack.Navigator>
         <Stack.Screen
@@ -92,6 +93,15 @@ function RootNavigator() {
           component={CreateTournamentScreen}
           options={{
             title: "New Tournament",
+          }}
+        />
+      </Stack.Group>
+      <Stack.Group screenOptions={{ presentation: "modal" }}>
+        <Stack.Screen
+          name="JoinTournament"
+          component={JoinTournamentScreen}
+          options={{
+            title: "Join Tournament",
           }}
         />
       </Stack.Group>
@@ -132,7 +142,7 @@ function BottomTabNavigator() {
   const colorScheme = userContext.scheme;
   return (
     <BottomTab.Navigator
-      initialRouteName="Brackets"
+      initialRouteName="HomeTab"
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme].tint,
       }}

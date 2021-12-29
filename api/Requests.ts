@@ -71,3 +71,21 @@ export const addBracket = async (
   const resp = await postRequest(url, bracket, user);
   return resp as Bracket;
 };
+
+type SearchData = {
+  code?: string;
+  name?: string;
+}
+
+type SearchResponse = {
+  results: Tournament[]
+}
+// Searching for tournaments
+export const searchForTournament = async (
+  user: User,
+  searchData: SearchData
+) => {
+  const url = `${apiHost}/tournaments/search`;
+  const resp = await postRequest(url, searchData, user);
+  return (resp as SearchResponse).results;
+}

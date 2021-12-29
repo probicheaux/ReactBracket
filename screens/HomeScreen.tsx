@@ -34,7 +34,11 @@ export default function HomeScreen({ navigation }: ScreenWithNavigation) {
         <Text style={styles.title}>Tournaments</Text>
       </View>
 
-      <TournamentList navigation={navigation} tournaments={myTournaments} />
+      <TournamentList 
+        navigation={navigation}
+        tournaments={myTournaments}
+        emptyStateText="Tournaments you join will show up here" 
+      />
 
       <TouchableOpacity
         onPress={() => navigation.navigate("CreateTournament")}
@@ -43,7 +47,7 @@ export default function HomeScreen({ navigation }: ScreenWithNavigation) {
         <Text style={ButtonStyles.buttonText}>Create</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => navigation.navigate("SearchTournaments")}
+        onPress={() => navigation.navigate("JoinTournament")}
         style={[ButtonStyles.container, { width: "50%" }]}
       >
         <Text style={ButtonStyles.buttonText}>Join</Text>
@@ -59,6 +63,7 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     flexDirection: "row",
+    marginTop: 40,
     alignContent: "flex-start",
     width: "100%",
   },
