@@ -1,21 +1,7 @@
 import { User } from "firebase/auth";
-import { apiHost, apiUnversionedHost } from "../constants/Api";
+import { apiHost } from "../constants/Api";
 import { Tournament, Bracket, User as UserInterface } from "../models";
 import { getRequest, postRequest } from "./BaseRequests";
-
-type LoginResponse = {
-  token: string;
-};
-
-// Authentication Requests
-// TODO: Replace with direct to firebase funcs
-export const loginUser = async (username: string, password: string) => {
-  const resp = await postRequest(`${apiUnversionedHost}/user/login`, {
-    username,
-    password,
-  });
-  return resp.token;
-};
 
 export const createUser = async (
   user: User,

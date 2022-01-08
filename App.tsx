@@ -37,6 +37,9 @@ export default function App() {
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
       setUser(user);
+      if (!user) {
+        setUserName(null);
+      }
     });
   }, []);
   const userSettings = {
