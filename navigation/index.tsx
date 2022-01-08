@@ -58,8 +58,9 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 function RootNavigator() {
   const userContext = useContext(AppContext);
   const { user, username } = useContext(AuthUserContext);
+  user?.getIdToken().then(token => console.log(token))
   const colorScheme = userContext.scheme;
-  if (false) {
+  if (!user || !username) {
     return (
       <Stack.Navigator>
         <Stack.Screen

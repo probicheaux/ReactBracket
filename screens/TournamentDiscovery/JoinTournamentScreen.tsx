@@ -24,10 +24,11 @@ export default function JoinTournamentScreen({
 
   const [data, setData] = useState({ name: "", code: ""});
   const [results, setResults] = useState<Tournament[]>([]);
-  const [submitted, setSubmitted] = useState(true);
+  const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const submit = async () => {
+    Keyboard.dismiss();
     try {
       setSubmitted(true);
       setLoading(true)
@@ -56,11 +57,14 @@ export default function JoinTournamentScreen({
     }
     else if (submitted && !loading && results) {
       return (
-        <TournamentList
-          navigation={navigation}
-          tournaments={results}
-          onPressTournament={joinTournament}
-        />
+        <View style={{ minHeight: 400 }}>
+          <Text style={styles.label}>Results</Text>
+          <TournamentList
+            navigation={navigation}
+            tournaments={results}
+            onPressTournament={joinTournament}
+          />
+        </View>
       )
     }
   }
@@ -76,7 +80,7 @@ export default function JoinTournamentScreen({
         onChangeText={(n) => setData({ ...data, name: n })}
         returnKeyType="search"
         placeholder="Tournament Name"
-        onSubmitEditing={() => Keyboard.dismiss()}
+        onSubmitEditing={submit}
       />
 
       <View style={styles.resultsContainer}>

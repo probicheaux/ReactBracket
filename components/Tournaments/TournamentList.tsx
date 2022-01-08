@@ -16,13 +16,11 @@ const TournamentList = ({ tournaments, navigation, emptyStateText, onPressTourna
 
     const renderItem = ({item}: {item: Tournament}) => {
         return (
-            <TouchableHighlight style={styles.row} activeOpacity={0.8} onPress={() => onPressTournament(item)}>
-                <View style={styles.left}>
-                    <Text style={styles.nameText}>{item.name}</Text>
-                </View>
-                <View style={styles.right}>
-                    {/* TODO: Replace with a "right arrow button" whenever we add it */}
-                    <LinkButton title='View' onPress={() => navigation.navigate('TournamentDetails', {id: item.id })}/>
+            <TouchableHighlight style={styles.row} activeOpacity={0.4} underlayColor={'#fff'} onPress={() => onPressTournament(item)}>
+                <View>
+                    <View style={styles.left}>
+                        <Text style={styles.nameText}>{item.name}</Text>
+                    </View>
                 </View>
             </TouchableHighlight>
         );
@@ -55,6 +53,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         padding: 8,
+        borderRadius: 8,
         marginHorizontal: 20,
     },
     left: {

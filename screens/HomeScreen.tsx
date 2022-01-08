@@ -37,6 +37,7 @@ export default function HomeScreen({ navigation }: ScreenWithNavigation) {
       <TournamentList 
         navigation={navigation}
         tournaments={myTournaments}
+        onPressTournament={(t) => navigation.navigate('TournamentDetails', {id: t.id })}
         emptyStateText="Tournaments you join will show up here" 
       />
 
