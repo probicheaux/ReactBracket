@@ -53,7 +53,7 @@ export const addBracket = async (
   tournamentId: string,
   user: User
 ) => {
-  const url = `${apiHost}/tournaments/${tournamentId}/brackets`;
+  const url = `${apiHost}/brackets`;
   const resp = await postRequest(url, bracket, user);
   return resp as Bracket;
 };
