@@ -60,9 +60,11 @@ export default function JoinTournamentScreen({
         <View style={{ minHeight: 400 }}>
           <Text style={styles.label}>Results</Text>
           <TournamentList
-            navigation={navigation}
             tournaments={results}
             onPressTournament={joinTournament}
+            rightContent={
+              <Text>Join</Text>
+            }
           />
         </View>
       )

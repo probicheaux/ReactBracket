@@ -1,8 +1,17 @@
+import { User as FBUser } from 'firebase/auth'
+
+export interface User extends FBUser {
+  firebase_id: string;
+  username: string;
+}
+
 export interface Tournament {
   name: string;
   id: number;
   shortId: string;
   brackets?: Bracket[];
+  status?: string;
+  owner?: User;
 }
 
 export interface Bracket {
@@ -11,9 +20,3 @@ export interface Bracket {
   tournament: number;
   // TODO: other stuff about brackets?
 }
-
-export interface User {
-  firebase_id: string;
-  username: string;
-}
-
