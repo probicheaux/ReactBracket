@@ -16,6 +16,9 @@ import {
   SafeAreaView as DefaultSAView,
   ActivityIndicator as DefaultActivityIndicator,
   ActivityIndicatorProps,
+  StatusBar as DefaultStatusBar,
+  StatusBarProps,
+  StatusBarStyle,
 } from "react-native";
 
 import { SocialIcon as DefaultSocialIcon } from "react-native-elements";
@@ -204,4 +207,9 @@ export function ActivityIndicator(props: ActivityIndicatorProps) {
   const { size = "large", ...otherProps } = props;
   const color = useThemeColor({}, "touchableColor");
   return <DefaultActivityIndicator size={size} color={color} {...otherProps} />;
+}
+
+export function StatusBar(props: StatusBarProps) {
+  const content = useThemeColor({}, "barContent") as StatusBarStyle;
+  return <DefaultStatusBar barStyle={content} {...props} />
 }
