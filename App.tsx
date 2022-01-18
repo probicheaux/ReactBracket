@@ -1,4 +1,3 @@
-import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
@@ -12,6 +11,7 @@ import { getItem } from "./storage";
 import { User } from "firebase/auth";
 
 import { getFirestore, setDoc, doc } from "firebase/firestore";
+import { StatusBar } from "./components/Themed";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
