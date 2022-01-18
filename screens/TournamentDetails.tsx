@@ -6,7 +6,9 @@ import Spinner from "../components/Spinner";
 
 import { Text, View, LinkButton, TextInput, Button } from "../components/Themed";
 import { AuthUserContext } from "../contexts/AuthContext";
-import { Tournament, Bracket, User } from "../models";
+import { Tournament, Bracket, BracketUser } from "../models";
+import { User } from "firebase/auth";
+
 import { ScreenWithNavigation } from "../types";
 import ButtonStyles from "../components/ButtonStyles";
 
@@ -22,7 +24,7 @@ export default function TournamentDetailsScreen({
 
   // TODO: Update data and send to API when done
   const [tournament, setTournament] = useState<Tournament | undefined>();
-  const [owner, setOwner] = useState<User | undefined>();
+  const [owner, setOwner] = useState<BracketUser | undefined>();
   const [loading, setLoading] = useState(true);
 
   const [bracket, setBracket] = useState<Bracket>({ name: "", tournament: parseInt(tournamentId)});
