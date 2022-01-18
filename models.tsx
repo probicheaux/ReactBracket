@@ -8,6 +8,7 @@ export interface Tournament {
 export interface Bracket {
   id?: number;
   name: string;
+  tournament: number;
   // TODO: other stuff about brackets?
 }
 

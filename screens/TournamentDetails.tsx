@@ -1,6 +1,6 @@
 import { Route } from "@react-navigation/native";
 import React, { useContext, useEffect, useState } from "react";
-import { Modal, StyleSheet } from "react-native";
+import { Modal, StyleSheet, ViewStyle } from "react-native";
 import { getTournament, addBracket } from "../api/Requests";
 import Spinner from "../components/Spinner";
 
@@ -24,7 +24,7 @@ export default function TournamentDetailsScreen({
   const [tournament, setTournament] = useState<Tournament | undefined>();
   const [loading, setLoading] = useState(true);
 
-  const [bracket, setBracket] = useState<Bracket>({ name: "" });
+  const [bracket, setBracket] = useState<Bracket>({ name: "", tournament: parseInt(tournamentId)});
 
   // For Adding brackets
   const [showAddBracket, setShowAddBracketModal] = useState(false);
@@ -43,9 +43,9 @@ export default function TournamentDetailsScreen({
   const submitAddBracket = async () => {
     setLoading(true);
     await addBracket(bracket, tournamentId, user as User);
-    setBracket({ name: "" });
-    // Refresh w/ new bracket
+    setBracket({ name: "", tournament: parseInt(tournamentId)});
     fetchTournamentDetails();
+    setShowAddBracketModal(false);
   };
 
   if (loading || tournament === undefined) {
@@ -64,8 +64,11 @@ export default function TournamentDetailsScreen({
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>
+            <Text style={styles.modalHeader}>
               Add a Bracket to {tournament.name}
+            </Text>
+            <Text style={styles.modalLabel}>
+              Bracket name
             </Text>
             <TextInput
               placeholder="Bracket name"
@@ -97,9 +100,13 @@ export default function TournamentDetailsScreen({
       <Text style={styles.value}>{tournament.shortId}</Text>
 
       <Text style={styles.label}>Brackets</Text>
-      {tournament.brackets?.map((b) => {
+      {tournament.brackets?.map((b, i) => {
+        const extraStyle: ViewStyle = {}
+        if (tournament.brackets && i === tournament.brackets.length - 1) {
+          extraStyle.marginBottom = 16;
+        }
         return (
-          <View key={`bracket-${b.id}`}>
+          <View key={`bracket-${b.id}`} style={extraStyle}>
             <Text style={styles.value}>{b.name}</Text>
           </View>
         );
@@ -118,7 +125,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    alignItems: "center",
+    textAlign: "left",
   },
   headerContainer: {
     flexDirection: "row",
@@ -143,7 +150,7 @@ const styles = StyleSheet.create({
     margin: 20,
   },
   label: {
-    fontSize: 18,
+    fontSize: 22,
     fontWeight: "600",
     marginTop: 20,
   },
@@ -162,9 +169,8 @@ const styles = StyleSheet.create({
   },
   centeredView: {
     flex: 1,
-    justifyContent: "center",
     alignItems: "center",
-    marginTop: 22,
+    marginTop: "30%"
   },
   modalView: {
     margin: 20,
@@ -180,12 +186,17 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
-  modalText: {
-    marginBottom: 15,
-    textAlign: "center",
+  modalHeader: {
+    marginBottom: 12,
+    textAlign: "left",
+    fontSize: 20,
+  },
+  modalLabel: {
+    marginTop: 12,
   },
   textInput: {
     fontSize: 20,
     alignItems: "center",
+    marginBottom: 20,
   },
 });
