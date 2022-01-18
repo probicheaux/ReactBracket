@@ -1,15 +1,17 @@
 import { Route } from "@react-navigation/native";
 import React, { useContext, useEffect, useState } from "react";
 import { Modal, StyleSheet, ViewStyle } from "react-native";
-import { getTournament, addBracket } from "../api/Requests";
+import { getTournament, addBracket, startTournament } from "../api/Requests";
 import Spinner from "../components/Spinner";
 
-import { Text, View, LinkButton, TextInput } from "../components/Themed";
+import { Text, View, LinkButton, TextInput, Button } from "../components/Themed";
 import { AuthUserContext } from "../contexts/AuthContext";
-import { Tournament, Bracket } from "../models";
+import { Tournament, Bracket, BracketUser } from "../models";
+import { User } from "firebase/auth";
+
 import { ScreenWithNavigation } from "../types";
 import ButtonStyles from "../components/ButtonStyles";
-import { User } from "firebase/auth";
+
 
 type DetailScreen = ScreenWithNavigation & { route: Route<any> };
 
@@ -22,6 +24,7 @@ export default function TournamentDetailsScreen({
 
   // TODO: Update data and send to API when done
   const [tournament, setTournament] = useState<Tournament | undefined>();
+  const [owner, setOwner] = useState<BracketUser | undefined>();
   const [loading, setLoading] = useState(true);
 
   const [bracket, setBracket] = useState<Bracket>({ name: "", tournament: parseInt(tournamentId)});
@@ -48,9 +51,17 @@ export default function TournamentDetailsScreen({
     setShowAddBracketModal(false);
   };
 
+  const submitStartTournament = async () => {
+    setLoading(true);
+    await startTournament(tournamentId, user as User);
+    fetchTournamentDetails();
+  }
+
   if (loading || tournament === undefined) {
     return <Spinner />;
   }
+
+  const isOwner = owner?.firebase_id === user?.uid;
 
   const renderAddBracketModal = () => {
     return (
@@ -112,11 +123,25 @@ export default function TournamentDetailsScreen({
         );
       })}
 
-      <LinkButton
-        title="Add Bracket"
-        onPress={() => setShowAddBracketModal(true)}
-        style={ButtonStyles.container}
-      />
+      { isOwner && (
+        <LinkButton
+          title="Add Bracket"
+          onPress={() => setShowAddBracketModal(true)}
+          style={ButtonStyles.container}
+        />
+      )}
+
+      { isOwner && tournament.status === 'pending' && 
+        (
+          <View style={styles.footer}>
+            <Button
+              title="Start Tournament"
+              onPress={() => submitStartTournament()}
+            />
+          </View>
+        )
+      }
+
     </View>
   );
 }

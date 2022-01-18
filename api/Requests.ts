@@ -47,6 +47,15 @@ export const createTournament = async (
   return resp as Tournament;
 };
 
+export const startTournament = async (
+  tournamentId: string,
+  user: User,
+) => {
+  const url = `${apiHost}/tournaments/${tournamentId}/start`;
+  const resp = await postRequest(url, {}, user);
+  return resp;
+}
+
 // Editing a specific tournament
 export const addBracket = async (
   bracket: Bracket,

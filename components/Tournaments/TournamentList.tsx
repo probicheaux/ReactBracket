@@ -1,18 +1,17 @@
-import { NavigationProp } from '@react-navigation/native';
 import React from 'react'
 import { ViewStyle, StyleSheet } from 'react-native';
 import { TouchableHighlight } from 'react-native-gesture-handler';
 import { Tournament } from '../../models';
-import { FlatList, View, Text, LinkButton } from '../Themed'
+import { FlatList, View, Text } from '../Themed'
 
 interface TournamentListProps {
-    navigation: NavigationProp<any>;
     tournaments: Tournament[];
     emptyStateText?: string;
     onPressTournament: (t: Tournament) => void;
+    rightContent?: any
 }
 
-const TournamentList = ({ tournaments, navigation, emptyStateText, onPressTournament }: TournamentListProps) => {
+const TournamentList = ({ tournaments, emptyStateText, onPressTournament, rightContent }: TournamentListProps) => {
 
     const renderItem = ({item}: {item: Tournament}) => {
         return (
@@ -20,6 +19,9 @@ const TournamentList = ({ tournaments, navigation, emptyStateText, onPressTourna
                 <View>
                     <View style={styles.left}>
                         <Text style={styles.nameText}>{item.name}</Text>
+                    </View>
+                    <View style={styles.right}>
+                        {rightContent}
                     </View>
                 </View>
             </TouchableHighlight>
