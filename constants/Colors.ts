@@ -16,6 +16,7 @@ export default {
     loseColor: "#ccc",
     socialText: "#fff",
     socialColor: "#4285F4",
+    barContent: "dark-content",
   },
   dark: {
     text: "#fff",
@@ -30,5 +31,6 @@ export default {
     loseColor: "#05445e",
     socialText: "#fff",
     socialColor: "#4285F4",
+    barContent: "light-content",
   },
 };

@@ -1,7 +1,6 @@
-import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect, useContext } from "react";
 import { AuthUserContext } from "../contexts/AuthContext";
-import { Image, Platform, StyleSheet } from "react-native";
+import { Image, StyleSheet } from "react-native";
 
 import {
   Text,
@@ -109,8 +108,6 @@ export default function LoginScreen({ navigation }: ScreenWithNavigation) {
           source={require("../assets/images/btn_google_signin_dark_normal_web.png")}
         />
       </TouchableOpacity>
-      {/* Use a light status bar on iOS to account for the black space above the modal */}
-      <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
     </View>
   );
 }

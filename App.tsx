@@ -1,4 +1,3 @@
-import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
@@ -12,6 +11,7 @@ import { User } from "firebase/auth";
 
 import { AuthUserContext } from "./contexts/AuthContext";
 import { fireBaseAuth } from "./firebase/config";
+import { StatusBar } from "./components/Themed";
 
 const auth = fireBaseAuth.getAuth();
 
