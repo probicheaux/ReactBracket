@@ -47,13 +47,40 @@ export const createTournament = async (
   return resp as Tournament;
 };
 
+export const startTournament = async (
+  tournamentId: string,
+  user: User,
+) => {
+  const url = `${apiHost}/tournaments/${tournamentId}/start`;
+  const resp = await postRequest(url, {}, user);
+  return resp;
+}
+
 // Editing a specific tournament
 export const addBracket = async (
   bracket: Bracket,
   tournamentId: string,
   user: User
 ) => {
-  const url = `${apiHost}/tournaments/${tournamentId}/brackets`;
+  const url = `${apiHost}/brackets`;
   const resp = await postRequest(url, bracket, user);
   return resp as Bracket;
 };
+
+type SearchData = {
+  code?: string;
+  name?: string;
+}
+
+type SearchResponse = {
+  results: Tournament[]
+}
+// Searching for tournaments
+export const searchForTournament = async (
+  user: User,
+  searchData: SearchData
+) => {
+  const url = `${apiHost}/tournaments/search`;
+  const resp = await postRequest(url, searchData, user);
+  return (resp as SearchResponse).results;
+}

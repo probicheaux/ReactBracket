@@ -1,34 +1,37 @@
-import { NavigationProp } from '@react-navigation/native';
 import React from 'react'
 import { ViewStyle, StyleSheet } from 'react-native';
+import { TouchableHighlight } from 'react-native-gesture-handler';
 import { Tournament } from '../../models';
-import { FlatList, View, Text, LinkButton } from '../Themed'
+import { FlatList, View, Text } from '../Themed'
 
 interface TournamentListProps {
-    navigation: NavigationProp<any>
-    tournaments: Tournament[]
+    tournaments: Tournament[];
+    emptyStateText?: string;
+    onPressTournament: (t: Tournament) => void;
+    rightContent?: any
 }
 
-const TournamentList = ({ tournaments, navigation }: TournamentListProps) => {
+const TournamentList = ({ tournaments, emptyStateText, onPressTournament, rightContent }: TournamentListProps) => {
 
     const renderItem = ({item}: {item: Tournament}) => {
         return (
-            <View style={styles.row}>
-                <View style={styles.left}>
-                    <Text style={styles.nameText}>{item.name}</Text>
+            <TouchableHighlight style={styles.row} activeOpacity={0.4} underlayColor={'#fff'} onPress={() => onPressTournament(item)}>
+                <View>
+                    <View style={styles.left}>
+                        <Text style={styles.nameText}>{item.name}</Text>
+                    </View>
+                    <View style={styles.right}>
+                        {rightContent}
+                    </View>
                 </View>
-                <View style={styles.right}>
-                    {/* TODO: Replace with a "right arrow button" whenever we add it */}
-                    <LinkButton title='View' onPress={() => navigation.navigate('TournamentDetails', {id: item.id })}/>
-                </View>
-            </View>
+            </TouchableHighlight>
         );
     }
 
-    if (tournaments.length === 0) {
+    if (tournaments.length === 0 && emptyStateText) {
         return (
             <View style={{ marginBottom: 32 }}>
-                <Text style={styles.body}>Tournaments you join will show up here.</Text>
+                <Text style={styles.body}>{emptyStateText}</Text>
             </View>
         );
     }
@@ -52,6 +55,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         padding: 8,
+        borderRadius: 8,
         marginHorizontal: 20,
     },
     left: {
