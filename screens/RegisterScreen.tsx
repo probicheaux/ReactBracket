@@ -1,4 +1,3 @@
-import { StatusBar } from "expo-status-bar";
 import React, { useState, useContext } from "react";
 import { Platform, StyleSheet } from "react-native";
 
@@ -98,9 +97,6 @@ export default function RegisterScreen({
           title="Log in"
         />
       </View>
-
-      {/* Use a light status bar on iOS to account for the black space above the modal */}
-      <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
     </View>
   );
 }

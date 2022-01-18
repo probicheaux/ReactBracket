@@ -1,13 +1,10 @@
-import * as React from "react";
-import { useContext } from "react";
-import { StyleSheet } from "react-native";
+import React, { useContext, useState } from "react";
+import { StatusBarStyle, StyleSheet } from "react-native";
 import ButtonStyles from "../components/ButtonStyles";
-import useColorScheme from "../hooks/useColorScheme";
 
-import { Text, View, TouchableOpacity } from "../components/Themed";
+import { Text, View, TouchableOpacity, StatusBar } from "../components/Themed";
 import AppContext from "../components/AppContext";
 import { AuthUserContext } from "../contexts/AuthContext";
-import { color } from "react-native-reanimated";
 import { setItem } from "../storage";
 
 export default function AccountScreen() {
@@ -17,8 +14,18 @@ export default function AccountScreen() {
   const setScheme = context.setScheme;
   const notColorScheme = colorScheme === "dark" ? "light" : "dark";
 
+  const startStatusBarContent = colorScheme === "dark" ? "light-content" :  "dark-content";
+
+  const [statusBarStyle, setStatusBarStyle] = useState<StatusBarStyle>(startStatusBarContent)
+
+  const updateStatusBar = () => {
+    const statusBarContent = notColorScheme === "dark" ? "light-content" :  "dark-content";
+    setStatusBarStyle(statusBarContent) 
+  }
+
   return (
     <View style={styles.container}>
+      <StatusBar barStyle={statusBarStyle} />
       <View
         style={styles.separator}
         lightColor="#eee"
@@ -36,6 +43,9 @@ export default function AccountScreen() {
         onPress={() => {
           setScheme(notColorScheme);
           setItem("userTheme", notColorScheme);
+
+          // trigger updating status bar so it's style is maintained on other screens
+          updateStatusBar();
         }}
       >
         <Text style={ButtonStyles.buttonText}>Toggle Dark Mode</Text>
