@@ -32,7 +32,8 @@ import { AuthUserContext } from "../contexts/AuthContext";
 import CreateTournamentScreen from "../screens/TournamentCreation/CreateTournamentScreen";
 import HomeScreen from "../screens/HomeScreen";
 import TournamentDetailsScreen from "../screens/TournamentDetails";
-import JoinTournamentScreen from "../screens/TournamentDiscovery/JoinTournamentScreen";
+import SearchTournamentScreen from "../screens/TournamentDiscovery/SearchTournamentScreen";
+import { TouchableOpacity, Text } from "../components/Themed";
 
 export default function Navigation({
   colorScheme,
@@ -44,7 +45,10 @@ export default function Navigation({
       linking={LinkingConfiguration}
       theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
     >
-      <RootNavigator />
+      <Stack.Navigator>
+        <Stack.Screen name="Root" component={RootNavigator} />
+        <Stack.Screen name="SearchAndJoinStack" component={SearchAndJoinStack} options={{ headerShown: false }} />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }
@@ -96,17 +100,36 @@ function RootNavigator() {
           }}
         />
       </Stack.Group>
-      <Stack.Group screenOptions={{ presentation: "modal" }}>
-        <Stack.Screen
-          name="JoinTournament"
-          component={JoinTournamentScreen}
-          options={{
-            title: "Join Tournament",
-          }}
-        />
-      </Stack.Group>
     </Stack.Navigator>
   );
+}
+
+function SearchAndJoinStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="SearchTournament"
+        component={SearchTournamentScreen}
+        options={({ navigation }) => ({
+          title: "Join Tournament",
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+            >
+              <Text>Cancel</Text>
+            </TouchableOpacity>
+          ),
+        })}
+      />
+      <Stack.Screen
+        name="TournamentDetails"
+        component={TournamentDetailsScreen}
+        options={{
+          title: "Join Tournament",
+        }}
+      />
+    </Stack.Navigator>
+  )
 }
 
 function HomeStack() {

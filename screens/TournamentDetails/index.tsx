@@ -1,16 +1,18 @@
 import { Route } from "@react-navigation/native";
 import React, { useContext, useEffect, useState } from "react";
 import { Modal, StyleSheet, ViewStyle } from "react-native";
-import { getTournament, addBracket, startTournament } from "../api/Requests";
-import Spinner from "../components/Spinner";
+import { getTournament, addBracket, startTournament } from "../../api/Requests";
+import Spinner from "../../components/Spinner";
 
-import { Text, View, LinkButton, TextInput, Button } from "../components/Themed";
-import { AuthUserContext } from "../contexts/AuthContext";
-import { Tournament, Bracket, BracketUser } from "../models";
+import { Text, View, LinkButton, TextInput, Button } from "../../components/Themed";
+import { AuthUserContext } from "../../contexts/AuthContext";
+import { Tournament, Bracket, BracketUser } from "../../models";
 import { User } from "firebase/auth";
 
-import { ScreenWithNavigation } from "../types";
-import ButtonStyles from "../components/ButtonStyles";
+import { ScreenWithNavigation } from "../../types";
+import ButtonStyles from "../../components/ButtonStyles";
+
+import JoinDetails from "./JoinDetails";
 
 
 type DetailScreen = ScreenWithNavigation & { route: Route<any> };
@@ -20,7 +22,8 @@ export default function TournamentDetailsScreen({
   route,
 }: DetailScreen) {
   const { user } = useContext(AuthUserContext);
-  const { id: tournamentId } = route.params as { id: string };
+  
+  const { id: tournamentId, mode } = route.params as { id: string, mode?: string };
 
   // TODO: Update data and send to API when done
   const [tournament, setTournament] = useState<Tournament | undefined>();
@@ -102,7 +105,7 @@ export default function TournamentDetailsScreen({
     );
   };
 
-  return (
+  const ViewDetails = () => (
     <View style={styles.container}>
       {renderAddBracketModal()}
       <Text style={styles.title}>{tournament?.name}</Text>
@@ -143,6 +146,15 @@ export default function TournamentDetailsScreen({
       }
 
     </View>
+  );
+
+  if (mode === "join") {
+    return (
+      <JoinDetails tournament={tournament} onSubmitJoin={(bracket: Bracket) => console.log("JOINING: ", bracket)} />
+    )
+  }
+  return (
+    <ViewDetails />
   );
 }
 

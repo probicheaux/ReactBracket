@@ -17,7 +17,7 @@ import { Tournament } from "../../models";
 import Spinner from "../../components/Spinner";
 import TournamentList from "../../components/Tournaments/TournamentList";
 
-export default function JoinTournamentScreen({
+export default function SearchTournamentScreen({
   navigation,
 }: ScreenWithNavigation) {
   const { user } = useContext(AuthUserContext);
@@ -43,6 +43,7 @@ export default function JoinTournamentScreen({
 
   const joinTournament = (tournament: Tournament) => {
     // TODO: Navigate to tournament details page for joining?
+    navigation.navigate("TournamentDetails", { id: tournament.id, viewMode: "join" })
   }
 
 
@@ -82,6 +83,7 @@ export default function JoinTournamentScreen({
         onChangeText={(n) => setData({ ...data, name: n })}
         returnKeyType="search"
         placeholder="Tournament Name"
+        testID="searchTournamentNameInput"
         onSubmitEditing={submit}
       />
 
