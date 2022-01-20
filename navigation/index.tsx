@@ -12,7 +12,7 @@ import {
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React, { useContext } from "react";
-import { ColorSchemeName, Pressable } from "react-native";
+import { ColorSchemeName, TouchableHighlight } from "react-native";
 
 import Colors from "../constants/Colors";
 import ModalScreen from "../screens/ModalScreen";
@@ -113,11 +113,11 @@ function SearchAndJoinStack() {
         options={({ navigation }) => ({
           title: "Join Tournament",
           headerLeft: () => (
-            <TouchableOpacity
+            <TouchableHighlight
               onPress={() => navigation.goBack()}
             >
               <Text>Cancel</Text>
-            </TouchableOpacity>
+            </TouchableHighlight>
           ),
         })}
       />

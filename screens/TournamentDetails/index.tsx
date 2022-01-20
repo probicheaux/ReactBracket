@@ -1,7 +1,7 @@
 import { Route } from "@react-navigation/native";
 import React, { useContext, useEffect, useState } from "react";
 import { Modal, StyleSheet, ViewStyle } from "react-native";
-import { getTournament, addBracket, startTournament } from "../../api/Requests";
+import { getTournament, addBracket, startTournament, joinBracket } from "../../api/Requests";
 import Spinner from "../../components/Spinner";
 
 import { Text, View, LinkButton, TextInput, Button } from "../../components/Themed";
@@ -23,7 +23,7 @@ export default function TournamentDetailsScreen({
 }: DetailScreen) {
   const { user } = useContext(AuthUserContext);
   
-  const { id: tournamentId, mode } = route.params as { id: string, mode?: string };
+  const { id: tournamentId, viewMode } = route.params as { id: string, viewMode?: string };
 
   // TODO: Update data and send to API when done
   const [tournament, setTournament] = useState<Tournament | undefined>();
@@ -53,6 +53,13 @@ export default function TournamentDetailsScreen({
     fetchTournamentDetails();
     setShowAddBracketModal(false);
   };
+
+  const submitJoinBracket = async (bracketToJoin: Bracket) => {
+    setLoading(true);
+    // TODO: Display success toast
+    await joinBracket(bracketToJoin, user as User);
+    navigation.navigate("Home");
+  }
 
   const submitStartTournament = async () => {
     setLoading(true);
@@ -148,9 +155,9 @@ export default function TournamentDetailsScreen({
     </View>
   );
 
-  if (mode === "join") {
+  if (viewMode === "join") {
     return (
-      <JoinDetails tournament={tournament} onSubmitJoin={(bracket: Bracket) => console.log("JOINING: ", bracket)} />
+      <JoinDetails tournament={tournament} onSubmitJoin={(bracket: Bracket) => submitJoinBracket()} />
     )
   }
   return (

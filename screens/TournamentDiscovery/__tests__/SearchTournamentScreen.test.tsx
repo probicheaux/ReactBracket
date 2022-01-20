@@ -15,7 +15,9 @@ const mockSearchRequest = jest
     ]);
 
 
-const testNav = jest.fn();
+const testNav = {
+    navigate: jest.fn(),
+}
 
 describe("SearchTournamentScreen", () => {
     test("it renders header and search input", () => {
@@ -27,20 +29,28 @@ describe("SearchTournamentScreen", () => {
         expect(getByTestId("searchTournamentNameInput")).toBeDefined();
     });
 
-    test("it submits search request after user enters text", async () => {
-        const { getAllByText, getByTestId } = render(<SearchTournamentScreen navigation={testNav} />);
+    describe("search results", () => {
 
-        const input = getByTestId('searchTournamentNameInput');
-        
-        fireEvent.changeText(input, 'banana');
+        test("it submits search request after user enters text search", () => {
+            const { getAllByText, getByTestId } = render(<SearchTournamentScreen navigation={testNav} />);
+    
+            const input = getByTestId('searchTournamentNameInput');
+    
+            act(() => {
+                /* fire events that update state */
+                fireEvent.changeText(input, 'banana');
+                fireEvent(input, 'submitEditing');
+            });
+            
+            // Display the search "results"
+            const bananaElements = getAllByText('banana tournament');
+            expect(bananaElements).toHaveLength(1);
 
-        await act(() => {
-            /* fire events that update state */
-            fireEvent(input, 'submitEditing');
+            // Test navigation from tapping on a search result 
+            fireEvent.press(bananaElements[0]);
+            expect(testNav.navigate).toHaveBeenCalledWith("TournamentDetails", {mode: "join"});
         });
 
-        // Display the search "results"
-        const bananaElements = getAllByText('banana tournament');
-        expect(bananaElements).toHaveLength(1);
-    });
+    })
+
 })
