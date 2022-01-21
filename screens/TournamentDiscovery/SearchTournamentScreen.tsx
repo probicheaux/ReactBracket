@@ -59,7 +59,7 @@ export default function SearchTournamentScreen({
     else if (submitted && !loading && results) {
       return (
         <View style={{ minHeight: 400 }}>
-          <Text style={styles.label}>Results</Text>
+          <Text style={styles.label}>Results ({results.length})</Text>
           <TournamentList
             tournaments={results}
             onPressTournament={joinTournament}

@@ -27,21 +27,16 @@ const JoinDetails = ({ tournament, onSubmitJoin }: JoinDetailsProps) => {
     <Text style={styles.label}>Select a Bracket to join</Text>
 
     {tournament.brackets?.map((b, i) => {
-      const extraStyle: ViewStyle = {}
-      const textStyle: TextStyle = {
+      let extraStyle: ViewStyle = {}
+      let textStyle: TextStyle = {
         opacity: 0.75
       }
       if (tournament.brackets && i === tournament.brackets.length - 1) {
         extraStyle.marginBottom = 16;
       }
       if (selectedIndex === i) {
-        extraStyle.borderWidth = 2;
-        extraStyle.padding = 12;
-        extraStyle.borderRadius = 8;
-        extraStyle.margin = 8;
-        textStyle.fontSize = 24;
-        textStyle.fontWeight = "700";
-        textStyle.opacity = 1.0;
+        extraStyle = styles.selectedBracketStyle;
+        textStyle = styles.selectedBracketTextStyle;
       }
       return (
         <TouchableOpacity key={`bracket-${b.id}`} style={[styles.rowItem, extraStyle]} onPress={() => selectedIndex !== i ? setSelectedIndex(i) : setSelectedIndex(-1)}>
@@ -89,6 +84,17 @@ const styles = StyleSheet.create({
     paddingLeft: 12,
     margin: 8,
     borderRadius: 8,
+  },
+  selectedBracketStyle: {
+    borderWidth: 2,
+    padding: 12,
+    borderRadius: 8,
+    margin: 8,
+  },
+  selectedBracketTextStyle: {
+    fontSize: 24,
+    fontWeight: "700",
+    opacity: 1.0,
   },
   footer: {
     flexDirection: "row",

@@ -46,7 +46,7 @@ export default function Navigation({
       theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
     >
       <Stack.Navigator>
-        <Stack.Screen name="Root" component={RootNavigator} />
+        <Stack.Screen name="Root" component={RootNavigator} options={{ headerShown: false }} />
         <Stack.Screen name="SearchAndJoinStack" component={SearchAndJoinStack} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
