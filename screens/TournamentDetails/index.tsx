@@ -157,7 +157,7 @@ export default function TournamentDetailsScreen({
 
   if (viewMode === "join") {
     return (
-      <JoinDetails tournament={tournament} onSubmitJoin={(bracket: Bracket) => submitJoinBracket()} />
+      <JoinDetails tournament={tournament} onSubmitJoin={(bracket: Bracket) => submitJoinBracket(bracket)} />
     )
   }
   return (
