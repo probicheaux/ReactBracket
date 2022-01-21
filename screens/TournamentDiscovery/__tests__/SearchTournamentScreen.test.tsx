@@ -1,5 +1,5 @@
 import React from "react";
-import { render, fireEvent, act } from "@testing-library/react-native";
+import { render, fireEvent, waitFor } from "@testing-library/react-native";
 import SearchTournamentScreen from "../SearchTournamentScreen";
 
 import * as requests from "../../../api/Requests";
@@ -11,6 +11,11 @@ const mockSearchRequest = jest
             id: "123",
             name: "banana tournament",
             brackets: [{id: 0, name: "fun"}, {id: 1, name: "serious"}],
+        },
+        {
+            id: "12345",
+            name: "banana tournament 2",
+            brackets: [{id: 2, name: "fun"}, {id: 3, name: "serious"}],
         },
     ]);
 
@@ -31,26 +36,23 @@ describe("SearchTournamentScreen", () => {
 
     describe("search results", () => {
 
-        test("it submits search request after user enters text search", () => {
-            const { getAllByText, getByTestId } = render(<SearchTournamentScreen navigation={testNav} />);
+        test("it submits search request after user enters text search. Tap to navigate to details", async() => {
+            const { getByTestId, findByText, getByText } = render(<SearchTournamentScreen navigation={testNav} />);
     
             const input = getByTestId('searchTournamentNameInput');
-    
-            act(() => {
-                /* fire events that update state */
-                fireEvent.changeText(input, 'banana');
-                fireEvent(input, 'submitEditing');
-            });
+            fireEvent.changeText(input, 'banana');
+            fireEvent(input, 'submitEditing');
+
+            // Need to asyncronously wait for "finding" the results
+            await waitFor(() => findByText("banana tournament"));
+
+            expect(mockSearchRequest).toHaveBeenCalledTimes(1)
             
-            // Display the search "results"
-            const bananaElements = getAllByText('banana tournament');
-            expect(bananaElements).toHaveLength(1);
+            // No we can "get" the element since we've waited 
+            fireEvent.press(getByText("banana tournament"));
+            expect(testNav.navigate).toHaveBeenCalledWith("TournamentDetails", {id:"123", viewMode: "join"});
 
-            // Test navigation from tapping on a search result 
-            fireEvent.press(bananaElements[0]);
-            expect(testNav.navigate).toHaveBeenCalledWith("TournamentDetails", {mode: "join"});
         });
-
     })
 
 })
