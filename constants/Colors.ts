@@ -33,4 +33,7 @@ export default {
     socialColor: "#4285F4",
     barContent: "light-content",
   },
+  shared: {
+    blue: "#2684FF"
+  }
 };

@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { StyleSheet } from "react-native";
+import { Keyboard, StyleSheet } from "react-native";
 import { createTournament } from "../../api/Requests";
 import ButtonStyles from "../../components/ButtonStyles";
 import { User } from "firebase/auth";
@@ -12,6 +12,10 @@ import {
 } from "../../components/Themed";
 import { AuthUserContext } from "../../contexts/AuthContext";
 import { ScreenWithNavigation } from "../../types";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import DateTimePicker from '@react-native-community/datetimepicker';
+import Colors from "../../constants/Colors";
+
 
 export default function CreateTournamentScreen({
   navigation,
@@ -19,7 +23,7 @@ export default function CreateTournamentScreen({
   const { user } = useContext(AuthUserContext);
 
   // TODO: Update data and send to API when done
-  const [data, setData] = useState({ name: "" });
+  const [data, setData] = useState({ name: "", description: "", startDate: new Date()});
 
   const submit = async () => {
     try {
@@ -31,8 +35,14 @@ export default function CreateTournamentScreen({
     }
   };
 
+  const onChangeDate = (event: any, selectedDate: any) => {
+    const currentDate = selectedDate || data.startDate;
+    setData({ ...data, startDate: currentDate});
+  };
+
   return (
     <View style={styles.container}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <Text style={styles.title}>Create Tournament</Text>
 
       <Text style={styles.label}>Tournament Name</Text>
@@ -44,6 +54,29 @@ export default function CreateTournamentScreen({
         placeholder="Tournament Name"
       />
 
+      <Text style={styles.label}>Details</Text>
+      <TextInput
+        value={data.description}
+        style={[styles.input, {fontSize: 16, minHeight: 52}]}
+        multiline={true}
+        numberOfLines={3}
+        onChangeText={(t) => setData({ ...data, description: t })}
+        returnKeyType="done"
+        placeholder="Write about your tournament here"
+      />
+
+
+      <Text style={styles.label}>Start Date</Text>
+      <DateTimePicker
+          testID="dateTimePicker"
+          value={data.startDate}
+          is24Hour={true}
+          display="default"
+          textColor={Colors.shared.blue}
+          onChange={onChangeDate}
+          style={{marginTop: 8}}
+      />
+    
       <View style={styles.footer}>
         <TouchableOpacity
           accessibilityRole="button"
@@ -53,6 +86,7 @@ export default function CreateTournamentScreen({
           <Text style={ButtonStyles.buttonText}>Create</Text>
         </TouchableOpacity>
       </View>
+      </TouchableWithoutFeedback>
     </View>
   );
 }

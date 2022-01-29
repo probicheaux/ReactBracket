@@ -26,11 +26,13 @@ export type RootStackParamList = {
   Register: { fromGoogleFlow: boolean };
 
   Home: undefined;
+  SearchAndJoinStack: undefined;
   TournamentDetails: undefined;
 
   // Modal views:
   CreateTournament: undefined;
   SearchTournament: undefined;
+  TournamentDetailsSearch: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =

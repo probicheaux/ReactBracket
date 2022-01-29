@@ -64,14 +64,17 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     flexDirection: "row",
-    marginTop: 40,
     alignContent: "flex-start",
     width: "100%",
+    marginTop: 64,
+    marginLeft: 20,
   },
   title: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: "bold",
-    margin: 24,
     textAlign: "left",
   },
+  listContainer: {
+    marginLeft: 20,
+  }
 });
