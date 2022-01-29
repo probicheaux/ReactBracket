@@ -30,7 +30,7 @@ export type RootStackParamList = {
 
   // Modal views:
   CreateTournament: undefined;
-  JoinTournament: undefined;
+  SearchTournament: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =

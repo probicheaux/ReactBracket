@@ -84,3 +84,13 @@ export const searchForTournament = async (
   const resp = await postRequest(url, searchData, user);
   return (resp as SearchResponse).results;
 }
+
+
+export const joinBracket = async (
+  bracket: Bracket,
+  user: User,
+) => {
+  const url = `${apiHost}/brackets/${bracket.id}/join`;
+  const resp = await postRequest(url, {}, user);
+  return resp;
+}

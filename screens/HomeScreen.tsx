@@ -48,7 +48,7 @@ export default function HomeScreen({ navigation }: ScreenWithNavigation) {
         <Text style={ButtonStyles.buttonText}>Create</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => navigation.navigate("JoinTournament")}
+        onPress={() => navigation.navigate("SearchAndJoinStack")}
         style={[ButtonStyles.container, { width: "50%" }]}
       >
         <Text style={ButtonStyles.buttonText}>Join</Text>

@@ -15,8 +15,8 @@ const TournamentList = ({ tournaments, emptyStateText, onPressTournament, rightC
 
     const renderItem = ({item}: {item: Tournament}) => {
         return (
-            <TouchableHighlight style={styles.row} activeOpacity={0.4} underlayColor={'#fff'} onPress={() => onPressTournament(item)}>
-                <View>
+            <TouchableHighlight activeOpacity={0.8} onPress={() => onPressTournament(item)}>
+                <View style={styles.row}>
                     <View style={styles.left}>
                         <Text style={styles.nameText}>{item.name}</Text>
                     </View>
@@ -42,12 +42,14 @@ const TournamentList = ({ tournaments, emptyStateText, onPressTournament, rightC
             data={tournaments}
             renderItem={renderItem}
             keyExtractor={t => t.id}
+            showsVerticalScrollIndicator={false}
         />
     );
 }
 
 const styles = StyleSheet.create({
     wrapper: {
+        marginTop: 8,
         flex: 1,
         width: '100%',
     },
@@ -55,8 +57,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         padding: 8,
+        width: "100%",
         borderRadius: 8,
-        marginHorizontal: 20,
+        marginVertical: 12,
     },
     left: {
         flexDirection: 'column',
