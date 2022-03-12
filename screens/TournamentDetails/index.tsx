@@ -130,8 +130,8 @@ export default function TournamentDetailsScreen({
       {renderAddBracketModal()}
       <Text style={styles.title}>{tournament?.name}</Text>
       
-      <TouchableOpacity onPress={runDeleteTournament}>
-        <Text style={ButtonStyles.buttonText}>deleteTournament</Text>
+      <TouchableOpacity onPress={runDeleteTournament} style={[ButtonStyles.container, { width: "50%" }]}>
+        <Text style={ButtonStyles.buttonText}>Delete Tournament</Text>
       </TouchableOpacity>
 
       <Text style={styles.label}>Quick Join ID</Text>
