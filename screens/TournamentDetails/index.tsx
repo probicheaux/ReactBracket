@@ -1,10 +1,10 @@
 import { Route } from "@react-navigation/native";
 import React, { useContext, useEffect, useState } from "react";
 import { Modal, StyleSheet, ViewStyle } from "react-native";
-import { getTournament, addBracket, startTournament, joinBracket } from "../../api/Requests";
+import { getTournament, addBracket, startTournament, joinBracket, deleteTournament } from "../../api/Requests";
 import Spinner from "../../components/Spinner";
 
-import { Text, View, LinkButton, TextInput, Button } from "../../components/Themed";
+import { Text, View, LinkButton, TextInput, Button, TouchableOpacity } from "../../components/Themed";
 import { AuthUserContext } from "../../contexts/AuthContext";
 import { Tournament, Bracket, BracketUser } from "../../models";
 import { User } from "firebase/auth";
@@ -67,11 +67,22 @@ export default function TournamentDetailsScreen({
     fetchTournamentDetails();
   }
 
+  const runDeleteTournament = async () => {
+    const res = await deleteTournament(tournamentId, user as User);
+    console.log(res);
+    if (res){
+      alert("Deletion successful, redirecting to homepage")
+      navigation.navigate("Home");
+    }
+  }
+
   if (loading || tournament === undefined) {
     return <Spinner />;
   }
 
+  //currently is always false since setOwner is never called, I think -nick
   const isOwner = owner?.firebase_id === user?.uid;
+  //console.log(isOwner, owner, user)
 
   const renderAddBracketModal = () => {
     return (
@@ -112,10 +123,16 @@ export default function TournamentDetailsScreen({
     );
   };
 
+  // once the owner field works I'll encase the delete button in isOwner && ()
+
   const ViewDetails = () => (
     <View style={styles.container}>
       {renderAddBracketModal()}
       <Text style={styles.title}>{tournament?.name}</Text>
+      
+      <TouchableOpacity onPress={runDeleteTournament}>
+        <Text style={ButtonStyles.buttonText}>deleteTournament</Text>
+      </TouchableOpacity>
 
       <Text style={styles.label}>Quick Join ID</Text>
       <Text style={styles.value}>{tournament.shortId}</Text>

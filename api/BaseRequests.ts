@@ -39,6 +39,21 @@ export const putRequest = async (url = "", data = {}, user: User) => {
   return response.json();
 };
 
+export const deleteRequest = async (url = "", data = {}, user: User) => {
+  const response = await fetch(url, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${await user.getIdToken()}`,
+    },
+    body: JSON.stringify(data),
+  });
+  if (!response.ok) {
+    throw new BadStatusError(await response.text(), response.status);
+  }
+  return response.json();
+};
+
 export const getRequest = async (url = "", user: User) => {
   const response = await fetch(url, {
     headers: {

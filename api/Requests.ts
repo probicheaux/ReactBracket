@@ -1,7 +1,7 @@
 import { User } from "firebase/auth";
 import { apiHost } from "../constants/Api";
 import { Tournament, Bracket, User as UserInterface } from "../models";
-import { getRequest, postRequest } from "./BaseRequests";
+import { deleteRequest, getRequest, postRequest } from "./BaseRequests";
 
 export const createUser = async (
   user: User,
@@ -54,6 +54,12 @@ export const startTournament = async (
   const url = `${apiHost}/tournaments/${tournamentId}/start`;
   const resp = await postRequest(url, {}, user);
   return resp;
+}
+
+export const deleteTournament =async (tournamentId: string, user: User) => {
+  const url = `${apiHost}/tournaments`
+  const resp = await deleteRequest(url, {"id": tournamentId}, user)
+  return resp
 }
 
 // Editing a specific tournament
