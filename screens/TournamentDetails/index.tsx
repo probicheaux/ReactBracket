@@ -69,7 +69,6 @@ export default function TournamentDetailsScreen({
 
   const runDeleteTournament = async () => {
     const res = await deleteTournament(tournamentId, user as User);
-    console.log(res);
     if (res){
       alert("Deletion successful, redirecting to homepage")
       navigation.navigate("Home");
