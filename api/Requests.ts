@@ -56,7 +56,10 @@ export const startTournament = async (
   return resp;
 }
 
-export const deleteTournament =async (tournamentId: string, user: User) => {
+export const deleteTournament = async (
+  tournamentId: string, 
+  user: User
+) => {
   const url = `${apiHost}/tournaments/${tournamentId}`
   const resp = await deleteRequest(url, {}, user)
   return resp
