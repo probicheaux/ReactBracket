@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { AuthUserContext } from "../contexts/AuthContext";
-import { Image, StyleSheet } from "react-native";
+import { Image, StyleSheet, TouchableWithoutFeedback, Keyboard } from "react-native";
 
 import {
   Text,
@@ -64,51 +64,54 @@ export default function LoginScreen({ navigation }: ScreenWithNavigation) {
   }
 
   return (
-    <View style={styles.container}>
-      <TextInput
-        style={styles.textField}
-        placeholder="Email"
-        onChangeText={(email) => setEmail(email)}
-      />
-      <View style={styles.margin} />
-      <TextInput
-        style={styles.textField}
-        secureTextEntry={true}
-        placeholder="Password"
-        onChangeText={(password) => setPassword(password)}
-        value={password}
-      />
-      <View style={styles.bigMargin} />
-      <TouchableOpacity
-        style={ButtonStyles.container}
-        onPress={() => {
-          submitLogin();
-          setPassword("");
-        }}
-      >
-        <Text style={ButtonStyles.buttonText}>Login</Text>
-      </TouchableOpacity>
-      <View style={styles.margin} />
-      <LinkButton
-        onPress={() => {
-          navigation.navigate("Register", { fromGoogleFlow: false });
-        }}
-        title="Sign Up"
-        style={ButtonStyles.container}
-      />
-      <View style={styles.margin} />
-      <TouchableOpacity
-        style={ButtonStyles.invisibleContainer}
-        onPress={() => {
-          promptAsync();
-        }}
-      >
-        <Image
-          style={styles.image}
-          source={require("../assets/images/btn_google_signin_dark_normal_web.png")}
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.container}>
+        <Text style={styles.title}>Log In</Text>
+        <TextInput
+          style={styles.textField}
+          placeholder="Email"
+          onChangeText={(email) => setEmail(email)}
         />
-      </TouchableOpacity>
-    </View>
+        <View style={styles.margin} />
+        <TextInput
+          style={styles.textField}
+          secureTextEntry={true}
+          placeholder="Password"
+          onChangeText={(password) => setPassword(password)}
+          value={password}
+        />
+        <View style={styles.bigMargin} />
+        <TouchableOpacity
+          style={ButtonStyles.container}
+          onPress={() => {
+            submitLogin();
+            setPassword("");
+          }}
+        >
+          <Text style={ButtonStyles.buttonText}>Login</Text>
+        </TouchableOpacity>
+        <View style={styles.margin} />
+        <LinkButton
+          onPress={() => {
+            navigation.navigate("Register", { fromGoogleFlow: false });
+          }}
+          title="Sign Up"
+          style={ButtonStyles.container}
+        />
+        <View style={styles.margin} />
+        <TouchableOpacity
+          style={ButtonStyles.invisibleContainer}
+          onPress={() => {
+            promptAsync();
+          }}
+        >
+          <Image
+            style={styles.image}
+            source={require("../assets/images/btn_google_signin_dark_normal_web.png")}
+          />
+        </TouchableOpacity>
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 
@@ -122,6 +125,13 @@ const styles = StyleSheet.create({
   },
   textField: {
     fontSize: 32,
+    width: "100%",
+    textAlign: "center",
+  },
+  title: {
+    fontSize: 32,
+    fontWeight: '700',
+    marginBottom: 64,
   },
   separator: {
     marginVertical: 30,

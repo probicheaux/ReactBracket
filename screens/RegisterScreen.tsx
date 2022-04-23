@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Platform, StyleSheet } from "react-native";
+import { Platform, StyleSheet, TouchableWithoutFeedback, Keyboard } from "react-native";
 
 import {
   Text,
@@ -69,35 +69,39 @@ export default function RegisterScreen({
     );
   };
   return (
-    <View style={styles.container}>
-      <TextInput
-        style={styles.textField}
-        placeholder="Username"
-        onChangeText={(username) => setUserName(username)}
-      />
-      {renderEmailPassword()}
-      <View style={styles.bigMargin} />
-      <TouchableOpacity
-        style={ButtonStyles.container}
-        onPress={() => {
-          register();
-          setPassword("");
-        }}
-      >
-        <Text style={ButtonStyles.buttonText}>Register</Text>
-      </TouchableOpacity>
-
-      <View style={{ marginTop: 32, alignItems: "center" }}>
-        <Text style={styles.body}>Already have an account?</Text>
-        <LinkButton
-          darkColor="#fff"
-          onPress={() => {
-            navigation.navigate("Login");
-          }}
-          title="Log in"
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.container}>
+        <Text style={styles.title}>Register</Text>
+        <TextInput
+          style={styles.textField}
+          placeholder="Username"
+          onChangeText={(username) => setUserName(username)}
         />
+        {renderEmailPassword()}
+        <View style={styles.bigMargin} />
+        <TouchableOpacity
+          style={ButtonStyles.container}
+          onPress={() => {
+            register();
+            setPassword("");
+          }}
+        >
+          <Text style={ButtonStyles.buttonText}>Register</Text>
+        </TouchableOpacity>
+
+        <View style={{ marginTop: 32, alignItems: "center" }}>
+          <Text style={styles.body}>Already have an account?</Text>
+          <LinkButton
+            darkColor="#fff"
+            onPress={() => {
+              navigation.navigate("Login");
+            }}
+            style={ButtonStyles.container}
+            title="Log in"
+          />
+        </View>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 }
 
@@ -113,7 +117,14 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   textField: {
-    fontSize: 24,
+    fontSize: 32,
+    width: "100%",
+    textAlign: "center",
+  },
+  title: {
+    fontSize: 32,
+    fontWeight: '700',
+    marginBottom: 64,
   },
   separator: {
     marginVertical: 30,

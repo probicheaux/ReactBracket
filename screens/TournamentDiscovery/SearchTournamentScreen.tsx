@@ -43,7 +43,7 @@ export default function SearchTournamentScreen({
 
   const joinTournament = (tournament: Tournament) => {
     // TODO: Navigate to tournament details page for joining?
-    navigation.navigate("TournamentDetails", { id: tournament.id, viewMode: "join" })
+    navigation.navigate("TournamentDetailsSearch", { id: tournament.id, viewMode: "join" })
   }
 
 

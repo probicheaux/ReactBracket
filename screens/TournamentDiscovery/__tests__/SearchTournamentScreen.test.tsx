@@ -50,7 +50,7 @@ describe("SearchTournamentScreen", () => {
             
             // Now we can "get" the element since we've waited 
             fireEvent.press(getByText("banana tournament"));
-            expect(testNav.navigate).toHaveBeenCalledWith("TournamentDetails", {id:"123", viewMode: "join"});
+            expect(testNav.navigate).toHaveBeenCalledWith("TournamentDetailsSearch", {id:"123", viewMode: "join"});
 
         });
     })

@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { ReactElement } from 'react'
 import { ViewStyle, StyleSheet } from 'react-native';
 import { TouchableHighlight } from 'react-native-gesture-handler';
 import { Tournament } from '../../models';
-import { FlatList, View, Text } from '../Themed'
+import { FlatList, View, Text, useThemeColor } from '../Themed'
+
+import { FontAwesome } from '@expo/vector-icons'; 
 
 interface TournamentListProps {
     tournaments: Tournament[];
@@ -13,15 +15,28 @@ interface TournamentListProps {
 
 const TournamentList = ({ tournaments, emptyStateText, onPressTournament, rightContent }: TournamentListProps) => {
 
+    const RightContentComponent = () => {
+        if (rightContent) {
+            return (
+                <>
+                    {rightContent}
+                </>
+            )
+        }
+        return (
+            <FontAwesome name="angle-right" size={24} color={useThemeColor({}, "text")} />
+        )
+    }
+
     const renderItem = ({item}: {item: Tournament}) => {
         return (
             <TouchableHighlight activeOpacity={0.8} onPress={() => onPressTournament(item)}>
                 <View style={styles.row}>
                     <View style={styles.left}>
-                        <Text style={styles.nameText}>{item.name}</Text>
+                        <Text style={styles.nameText}>{item.name}</Text> 
                     </View>
                     <View style={styles.right}>
-                        {rightContent}
+                    <RightContentComponent />
                     </View>
                 </View>
             </TouchableHighlight>
@@ -41,7 +56,7 @@ const TournamentList = ({ tournaments, emptyStateText, onPressTournament, rightC
             style={styles.wrapper}
             data={tournaments}
             renderItem={renderItem}
-            keyExtractor={t => t.id}
+            keyExtractor={t => `${t.id}`}
             showsVerticalScrollIndicator={false}
         />
     );
@@ -49,15 +64,15 @@ const TournamentList = ({ tournaments, emptyStateText, onPressTournament, rightC
 
 const styles = StyleSheet.create({
     wrapper: {
-        marginTop: 8,
+        marginLeft: 32,
         flex: 1,
-        width: '100%',
     },
     row: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         padding: 8,
-        width: "100%",
+        width: '75%',
+        marginRight: 20,
         borderRadius: 8,
         marginVertical: 12,
     },
